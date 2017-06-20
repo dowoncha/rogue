@@ -43,7 +43,7 @@ impl<'a> System<'a> for RenderSystem {
 struct InputSystem;
 
 impl<'a> System<'a> for InputSystem {
-    
+    type SystemData = (Read)
 }
 
 pub struct RogueGame {
@@ -67,14 +67,23 @@ impl RogueGame {
         self.register_systems();
 
         // log!("Initilizing curses renderer");
-        // Start ncurses mode
+        self.init_ncurses();
+    } 
+
+    fn init_ncurses(&self) {
         ncurses::initscr();
         // Line buffering disabled
         // ncurses::raw();
 
+        // Enable mouse events
+        // ncurses::mousemask(ALL_MOUSE_EVENTS as mmask_t,)
+
+        // Enable F1, F2, arrow keys, etc
+        ncurses::keypad(ncurses::stdscr, true);
+
         // Disable key echo to screen
         ncurses::noecho();
-    } 
+    }
 
     fn register_components(&mut self) {
         self.world.register::<Position>();
@@ -100,8 +109,14 @@ impl RogueGame {
         loop {
             ncurses::refresh();
             
-            // Get input
-            let key = ncurses::getch();
+            // Wait for input
+            let key = ncurses::wget_wch(ncurses::stdscr());
+
+            match key {
+                None => {
+                    printw("\nNo char entered");
+                }
+            }
 
             // Update
             // dispatcher.dispatch(&mut self.world.res);
