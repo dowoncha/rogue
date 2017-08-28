@@ -17,3 +17,11 @@ mod dungeon;
 // mod renderer;
 
 pub use rogue::RogueGame;
+
+#[macro_use] extern crate cpython;
+
+use cpython::{PyResult, Python};
+
+py_module_initializer!(librogue, initlibrogue, PyInit__librogue, |py, m| {
+
+});

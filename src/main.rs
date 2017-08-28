@@ -2,6 +2,10 @@
 extern crate log;
 extern crate env_logger;
 
+extern crate cpython;
+
+use cpython::{Python, PyDict, PyResult};
+
 extern crate rogue;
 
 extern crate sdl2;

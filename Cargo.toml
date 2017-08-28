@@ -18,3 +18,7 @@ tcod = "0.11"
 [dependencies.sdl2]
 version = "0.30"
 features = ["image"]
+
+[dependencies.cpython]
+version = "0.1"
+features = ["extension-module"]
