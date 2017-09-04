@@ -16,11 +16,11 @@ use std::env;
 
 use std::collections::HashMap;
 
-use sdl2::{Sdl};
-use sdl2::image::{LoadTexture, INIT_PNG, INIT_JPG};
-use sdl2::keyboard::Keycode;
-use sdl2::pixels::Color;
-use sdl2::render::{Canvas, Texture, TextureCreator};
+// use sdl2::{Sdl};
+// use sdl2::image::{LoadTexture, INIT_PNG, INIT_JPG};
+// use sdl2::keyboard::Keycode;
+// use sdl2::pixels::Color;
+// use sdl2::render::{Canvas, Texture, TextureCreator};
 
 #[derive(Debug)]
 struct Position(i32, i32);

@@ -2,24 +2,38 @@
 extern crate log;
 extern crate env_logger;
 
-extern crate cpython;
-
-use cpython::{Python, PyDict, PyResult};
-
 extern crate rogue;
 
-extern crate sdl2;
+use rogue::{Game};
 
 use std::env;
+
+use rogue::errors::*;
 
 fn main() {
     // Initialize logging
     env_logger::init().unwrap();
 
-    // TODO: Handle command line arguments through clap
+    // Handle error chain
+    if let Err(ref e) = run() {
+        for e in e.iter().skip(1) {
+            error!("caused by: {}", e);
+        }
 
-    let args: Vec<_> = env::args().collect();
-    
-    let mut rogue = rogue::RogueGame::init().unwrap();
-    rogue.run();
+        if let Some(backtrace) = e.backtrace() {
+            error!("backtrace: {:?}", backtrace);
+        }
+
+        ::std::process::exit(1);
+    }
+}
+
+fn run() -> Result<()> {
+    // let args: Vec<_> = env::args().collect();
+
+    let mut game = Game::new();
+    game.init();
+    game.run();
+
+    Ok(())
 }

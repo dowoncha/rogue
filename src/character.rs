@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use std::sync::Arc;
 use std::cell::RefCell;
 
@@ -6,13 +8,23 @@ type SkillEntry = u32;
 
 // pub fn spawn_player(world)
 
+pub struct Attributes {
+    strength: u8,
+    dexterity: u8,
+    constitution: u8,
+    intelligence: u8,
+    wisdom: u8,
+    charisma: u8
+}
+
+struct Inventory {
+    // items: HashMap<>
+}
+
 pub struct Character {
     id: u32,
     level: u32,
-    attr_str: u32,
-    attr_dex: u32,
-    attr_luk: u32,
-    attr_int: u32,
+    attributes: Attributes,
     hp: u32,
     max_hp: u32,
     mp: u32,
@@ -30,5 +42,19 @@ pub struct Character {
 impl Character {
     pub fn new(client: &Client) -> Character {
         unimplemented!()
+    }
+}
+
+pub struct Player {
+    name: String,
+    level: u8
+}
+
+impl Player {
+    pub fn new() -> Player {
+        Player {
+            name: String::new(),
+            level: 1
+        }
     }
 }

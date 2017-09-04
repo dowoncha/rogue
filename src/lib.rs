@@ -1,27 +1,34 @@
+#![crate_name = "rogue"]
+#![crate_type = "lib"]
+
+#![feature(box_syntax)]
+
+#![recursion_limit = "1024"]
+
+#[macro_use]
+extern crate error_chain;
+
 #[macro_use]
 extern crate log;
 extern crate rand;
-extern crate shred;
-#[macro_use]
-extern crate shred_derive;
-extern crate specs;
 
 extern crate time;
 
-extern crate sdl2;
+extern crate ncurses;
 
-pub mod types;
-pub mod rogue;
+pub mod errors {
+    error_chain! {
+
+    }
+}
+
+mod types;
 mod character;
 mod dungeon;
-// mod renderer;
+mod game_state;
+mod engine;
+mod renderer;
 
-pub use rogue::RogueGame;
+pub use engine::Game;
 
-#[macro_use] extern crate cpython;
 
-use cpython::{PyResult, Python};
-
-py_module_initializer!(librogue, initlibrogue, PyInit__librogue, |py, m| {
-
-});
