@@ -9,6 +9,9 @@ use character::Player;
 
 use ncurses as nc;
 
+// Fixed timestep of 1 / ( 60 fps) = 16 ms
+// const MS_PER_UPDATE: Duration = Duration::from_millis(16);
+
 /// Main engine
 pub struct Game {
     renderer: Renderer,
@@ -34,19 +37,29 @@ impl Game {
     }
 
     pub fn run(&mut self) {
-        let mut last_time = Instant::now();
+        let mut previous = Instant::now();
+        // let mut lag = 0.0f64;
+        let mut game_time = 0u64;
 
         loop {
-            let current = Instant::now();
-            let elapsed = current.duration_since(last_time);
+            //let current = Instant::now();
+            // let elapsed = current.duration_since(current);
+            // previous = current;
+            // lag += elapsed;
 
             // Events
+            // handle_events();
             // Update
-            self.update();
+            /*
+            while game_time < current {
+                lag -= MS_PER_UPDATE;
+                
+                self.update();
+            }
+            */
+            
             // Render
             self.render();
-            //
-            last_time = current;
         }
     }
 
@@ -55,6 +68,8 @@ impl Game {
     }
 
     fn render(&self) {
+        // nc::printw(&format!("Framerate: {}", )
+
         self.state_manager.render();
     }
 
