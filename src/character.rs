@@ -3,10 +3,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use std::cell::RefCell;
 
-type Client = u32;
-type SkillEntry = u32;
-
-// pub fn spawn_player(world)
+use renderer::Renderer;
 
 pub struct Attributes {
     strength: u8,
@@ -39,12 +36,6 @@ pub struct Character {
     // quests: HashMap<Quest>,
 }
 
-impl Character {
-    pub fn new(client: &Client) -> Character {
-        unimplemented!()
-    }
-}
-
 pub struct Player {
     name: String,
     level: u8,
@@ -68,5 +59,9 @@ impl Player {
 
     pub fn set_y(&mut self, y: i32) {
         self.y = y;
+    }
+
+    pub fn render(&self, renderer: &Renderer) {
+        renderer.mvaddch(self.y, self.x, '@');
     }
 }

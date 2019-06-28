@@ -11,20 +11,47 @@ use ncurses as nc;
 
 // Fixed timestep of 1 / ( 60 fps) = 16 ms
 // const MS_PER_UPDATE: Duration = Duration::from_millis(16);
+struct Map {
+
+}
+
+impl Map {
+    pub fn new() -> Self {
+        Self {}
+    }
+
+    pub fn render(&self, renderer: &Renderer) {
+        renderer.mvprintw(30, 20, "#################");
+
+        for y in 21..30 {
+            renderer.mvprintw(30, y, "#               #");
+        }
+
+        renderer.mvprintw(30, 30, "#################");
+    }
+}
 
 /// Main engine
 pub struct Game {
     renderer: Renderer,
     player: Player,
+    map: Map,
     state_manager: GameStateManager,
+    event_sender: std::sync::mpsc::Sender<String>,
+    event_receiver: std::sync::mpsc::Receiver<String>
 }
 
 impl Game {
     pub fn new() -> Game {
+        let (sender, receiver) = std::sync::mpsc::channel::<String>();
+
         Game {
             renderer: Renderer::new(),
             player: Player::new(),
+            map: Map::new(),
             state_manager: GameStateManager::new(),
+            event_sender: sender,
+            event_receiver: receiver
         }
     }
 
@@ -41,8 +68,8 @@ impl Game {
         // let mut lag = 0.0f64;
         let mut game_time = 0u64;
 
-        self.player.set_x(20);
-        self.player.set_y(40);
+        self.player.set_x(32);
+        self.player.set_y(22);
 
         loop {
             //let current = Instant::now();
@@ -62,68 +89,78 @@ impl Game {
             */
             let input = self.renderer.getch();
 
+            self.event_sender.send(format!("key {}", input)).expect("Failed to send event");
 
-            match input {
-                119 => {
-                    let player_y = self.player.y;
-                    // 'w'
-                    self.player.set_y(player_y - 1);
-                },
-                115 => {
-                    // 'd'
-                    let player_y = self.player.y;
+            self.update();
 
-                    self.player.set_y(player_y + 1);
-                },
-                100 => {
-                    // 'd'
-                    let player_x = self.player.x;
-                    self.player.set_x(player_x + 1);
-                },
-                97 => {
-                    // 'a'
-                    let player_x = self.player.x;
-
-                    self.player.set_x(player_x - 1);
-                },
-                113 => {
-                    // 'q'
-                    return;
-                },
-                _ => {}
-            }
-
-            // match input {
-            //     Some(nc::WchResult::Char(ch)) => {
-            //         let ascii = std::char::from_u32(ch);
-
-            //         if let Some(ascii) = ascii {
-            //             match ascii {
-            //                 'w' => {
-            //                     player_y -= 1;
-            //                 },
-            //                 _ => {}
-            //             }
-            //         }
-            //     },
-            //     _ => {}
-            // }
-            
-            // Render
+                        // Render
             self.render();
 
-            self.renderer.mvprintw(1, 1, &format!("{}", input));
+            // self.renderer.mvprintw(1, 1, &format!("{}", input));
+        }
+    }
+
+    fn handle_input(&mut self, input: i32) {
+        self.renderer.mvprintw(1, 2, "Handling input");
+        match input {
+            119 => {
+                // 'w'
+                let player_y = self.player.y;
+                self.player.set_y(player_y - 1);
+            },
+            115 => {
+                // 'd'
+                let player_y = self.player.y;
+
+                self.player.set_y(player_y + 1);
+            },
+            100 => {
+                // 'd'
+                let player_x = self.player.x;
+                self.player.set_x(player_x + 1);
+            },
+            97 => {
+                // 'a'
+                let player_x = self.player.x;
+
+                self.player.set_x(player_x - 1);
+            },
+            113 => {
+                // 'q'
+                return;
+            },
+            _ => {}
         }
     }
 
     fn update(&mut self) {
-        self.state_manager.update();
+        let event = self.event_receiver.recv().unwrap();
+
+        self.renderer.mvprintw(1, 1, &format!("Event: {}", event));
+
+        let mut args = event.split_whitespace();
+
+        let command = args.nth(1).unwrap();
+
+        match command {
+            "key" => {
+                let input = args.nth(2).unwrap().parse::<i32>().unwrap();
+                self.handle_input(input);
+            },
+            _ => {
+                debug!("Unrecognized command {}", command);
+            }
+        }
+
+        // self.state_manager.update();
     }
 
     fn render(&self) {
-        self.renderer.clear();
+        // self.renderer.clear();
 
-        nc::mvaddch(self.player.y, self.player.x, '@' as u64);
+        self.map.render(&self.renderer);
+
+        self.player.render(&self.renderer);
 
         self.renderer.refresh();
 

@@ -75,8 +75,12 @@ impl Renderer {
         window
     }
 
-    pub fn mvprintw(&self, x: i32, y: i32, c: &str) {
-        nc::mvprintw(x, y, c);
+    pub fn mvprintw(&self, x: i32, y: i32, s: &str) {
+        nc::mvprintw(y, x, s);
+    }
+
+    pub fn mvaddch(&self, x: i32, y: i32, c: char) {
+        nc::mvaddch(y, x, c as u64);
     }
 }
 
