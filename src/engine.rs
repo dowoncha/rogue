@@ -92,7 +92,6 @@ impl Game {
             self.event_sender.send(format!("key {}", input)).expect("Failed to send event");
 
             self.update();
-
                         // Render
             self.render();
 
@@ -101,7 +100,8 @@ impl Game {
     }
 
     fn handle_input(&mut self, input: i32) {
-        self.renderer.mvprintw(1, 2, "Handling input");
+        self.renderer.mvprintw(1, 1, "Handling input");
+        debug!("Handling input");
         match input {
             119 => {
                 // 'w'
@@ -136,6 +136,7 @@ impl Game {
     fn update(&mut self) {
         let event = self.event_receiver.recv().unwrap();
 
+        info!("Event: {}", event);
         self.renderer.mvprintw(1, 1, &format!("Event: {}", event));
 
         let mut args = event.split_whitespace();
@@ -149,6 +150,7 @@ impl Game {
             },
             _ => {
                 debug!("Unrecognized command {}", command);
+                self.renderer.mvprintw(1, 1, &format!("Unrecognized command: {}", command));
             }
         }
 
@@ -163,10 +165,6 @@ impl Game {
         self.player.render(&self.renderer);
 
         self.renderer.refresh();
-
-        // nc::printw(&format!("Framerate: {}", )
-
-        // self.state_manager.render();
     }
 
     pub fn new_player(&mut self) {

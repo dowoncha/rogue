@@ -5,7 +5,7 @@ authors = ["dowon Cha <dowoncha@live.unc.edu>"]
 
 [dependencies]
 env_logger = "0.4.3"
-log = "0.3.8"
+log = "0.4.0"
 rand = "0.3.15"
 gl = "0.6.0"
 shred = "0.4.2"
@@ -13,6 +13,7 @@ shred-derive = "0.3"
 specs = "0.9.1"
 time = "0.1"
 error-chain = "*"
+lazy_static = "*"
 
 [dependencies.ncurses]
 version = "5.99.0"
