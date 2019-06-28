@@ -47,14 +47,26 @@ impl Character {
 
 pub struct Player {
     name: String,
-    level: u8
+    level: u8,
+    pub x: i32,
+    pub y: i32
 }
 
 impl Player {
     pub fn new() -> Player {
         Player {
             name: String::new(),
-            level: 1
+            level: 1,
+            x: 0,
+            y: 0
         }
+    }
+
+    pub fn set_x(&mut self, x: i32) {
+        self.x = x;
+    }
+
+    pub fn set_y(&mut self, y: i32) {
+        self.y = y;
     }
 }

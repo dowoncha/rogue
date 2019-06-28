@@ -33,13 +33,16 @@ impl Game {
         self.renderer.init();
 
         // First state is main menu
-        self.state_manager.change_state(box MainMenu::new())
+        // self.state_manager.change_state(Box::new(MainMenu::new()))
     }
 
     pub fn run(&mut self) {
         let mut previous = Instant::now();
         // let mut lag = 0.0f64;
         let mut game_time = 0u64;
+
+        self.player.set_x(20);
+        self.player.set_y(40);
 
         loop {
             //let current = Instant::now();
@@ -57,9 +60,59 @@ impl Game {
                 self.update();
             }
             */
+            let input = self.renderer.getch();
+
+
+            match input {
+                119 => {
+                    let player_y = self.player.y;
+                    // 'w'
+                    self.player.set_y(player_y - 1);
+                },
+                115 => {
+                    // 'd'
+                    let player_y = self.player.y;
+
+                    self.player.set_y(player_y + 1);
+                },
+                100 => {
+                    // 'd'
+                    let player_x = self.player.x;
+                    self.player.set_x(player_x + 1);
+                },
+                97 => {
+                    // 'a'
+                    let player_x = self.player.x;
+
+                    self.player.set_x(player_x - 1);
+                },
+                113 => {
+                    // 'q'
+                    return;
+                },
+                _ => {}
+            }
+
+            // match input {
+            //     Some(nc::WchResult::Char(ch)) => {
+            //         let ascii = std::char::from_u32(ch);
+
+            //         if let Some(ascii) = ascii {
+            //             match ascii {
+            //                 'w' => {
+            //                     player_y -= 1;
+            //                 },
+            //                 _ => {}
+            //             }
+            //         }
+            //     },
+            //     _ => {}
+            // }
             
             // Render
             self.render();
+
+            self.renderer.mvprintw(1, 1, &format!("{}", input));
         }
     }
 
@@ -68,9 +121,15 @@ impl Game {
     }
 
     fn render(&self) {
+        self.renderer.clear();
+
+        nc::mvaddch(self.player.y, self.player.x, '@' as u64);
+
+        self.renderer.refresh();
+
         // nc::printw(&format!("Framerate: {}", )
 
-        self.state_manager.render();
+        // self.state_manager.render();
     }
 
     pub fn new_player(&mut self) {

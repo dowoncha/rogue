@@ -14,8 +14,10 @@ impl Renderer {
     }
 
     pub fn init(&self) {
+        // Start ncurses
         nc::initscr();
-
+    
+        // Allow colors
         nc::start_color();
 
         // Line buffering disabled
@@ -33,16 +35,16 @@ impl Renderer {
         nc::curs_set(nc::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
     }
 
-    pub fn clear() {
+    pub fn clear(&self) {
         nc::clear();
     }
 
-    pub fn refresh() {
+    pub fn refresh(&self) {
         nc::refresh();
     }
 
     // Block until user input
-    pub fn getch() -> i32 {
+    pub fn getch(&self) -> i32 {
         nc::getch()
     }
 
@@ -71,6 +73,10 @@ impl Renderer {
         nc::wrefresh(window);
 
         window
+    }
+
+    pub fn mvprintw(&self, x: i32, y: i32, c: &str) {
+        nc::mvprintw(x, y, c);
     }
 }
 

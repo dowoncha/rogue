@@ -1,8 +1,6 @@
 #![crate_name = "rogue"]
 #![crate_type = "lib"]
 
-#![feature(box_syntax)]
-
 #![recursion_limit = "1024"]
 
 #[macro_use]

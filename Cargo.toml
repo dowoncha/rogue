@@ -15,7 +15,7 @@ time = "0.1"
 error-chain = "*"
 
 [dependencies.ncurses]
-version = "5.86.0"
+version = "5.99.0"
 features = ["menu"]
 
 [features]
