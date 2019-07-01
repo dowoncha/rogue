@@ -27,6 +27,6 @@ mod game_state;
 mod engine;
 mod renderer;
 
-pub use engine::Game;
+pub use engine::GameClient;
 
 

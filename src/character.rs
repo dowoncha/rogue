@@ -62,6 +62,6 @@ impl Player {
     }
 
     pub fn render(&self, renderer: &Renderer) {
-        renderer.mvaddch(self.y, self.x, '@');
+        renderer.mvaddch(self.x, self.y, '@');
     }
 }

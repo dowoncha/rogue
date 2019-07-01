@@ -7,7 +7,7 @@ extern crate log;
 
 extern crate rogue;
 
-use rogue::{Game};
+use rogue::{GameClient};
 
 use rogue::errors::*;
 
@@ -72,8 +72,10 @@ fn main() -> std::result::Result<(), Box<std::error::Error>> {
     file_logger::init()
         .expect("Failed to init file logger");
 
-    let mut game = Game::new();
+    let mut game = GameClient::new();
     game.init();
+
+    game.load_map("assets/test.map");
     game.run();
 
     Ok(())
