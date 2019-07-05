@@ -178,13 +178,39 @@ impl MapBuilder {
         for x in (room.x1 + 1)..room.x2 {
             for y in (room.y1 + 1)..room.y2 {
                 let mut cell = &mut cells[y as usize * self.width + x as usize];
-                cell.glyph = '.';
-                cell.blocked = false;
-                cell.block_sight = false;
+                MapBuilder::dig_cell(&mut cell);
             }
         }
 
         self
+    }
+
+    pub fn create_h_tunnel(mut self, x1: i32, x2: i32, y: i32) -> Self {
+        let cells = &mut self.map.cells;
+
+        for x in x1.min(x2)..(x1.max(x2) + 1) {
+            let mut cell = &mut cells[y as usize * self.width + x as usize];
+            MapBuilder::dig_cell(&mut cell);
+        }
+
+        self
+    }
+
+    pub fn create_v_tunnel(mut self, y1: i32, y2: i32, x: i32) -> Self {
+        let cells = &mut self.map.cells;
+
+        for y in y1.min(y2)..(y1.max(y2) + 1) {
+            let mut cell = &mut cells[y as usize * self.width + x as usize];
+            MapBuilder::dig_cell(&mut cell);
+        }
+
+        self
+    }
+
+    fn dig_cell(cell: &mut Cell) {
+        cell.glyph = '.';
+        cell.blocked = false;
+        cell.block_sight = false;
     }
 
     pub fn build(self) -> Map {

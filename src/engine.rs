@@ -103,6 +103,7 @@ impl Engine {
         let map = MapBuilder::new(width, height)
             .create_room(Rect::new(20, 15, 10, 15))
             .create_room(Rect::new(35, 15, 10, 15))
+            .create_h_tunnel(25, 40, 23)
             .build();
 
         self.current_map = Some(RefCell::new(map));
