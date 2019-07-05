@@ -28,6 +28,7 @@ pub enum ColorPair {
     WhiteBlack = 1,
     BlackWhite = 2,
     GreenBlack = 3,
+    RedBlack = 4
 }
 
 pub fn init() {
@@ -45,6 +46,7 @@ pub fn init() {
 
     nc::init_pair(ColorPair::WhiteBlack as i16, nc::COLOR_WHITE, nc::COLOR_BLACK);
     nc::init_pair(ColorPair::GreenBlack as i16, nc::COLOR_GREEN, nc::COLOR_BLACK);
+    nc::init_pair(ColorPair::RedBlack as i16, nc::COLOR_RED, nc::COLOR_BLACK);
 
     // debug!("{}", nc::pair_content(nc::COLOR_PAIR(1)));
 }

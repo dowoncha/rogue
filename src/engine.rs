@@ -106,7 +106,7 @@ impl Engine {
         room_max_size: usize, 
         map_width: usize, 
         map_height: usize
-    ) {
+    ) -> Vec<Rect> {
         let mut rng = rand::thread_rng();
 
         let mut map_builder = MapBuilder::new(map_width, map_height);
@@ -171,6 +171,8 @@ impl Engine {
         let map = map_builder.build();
 
         self.current_map = Some(RefCell::new(map));
+
+        rooms
     }
 
     pub fn register_entity(&self, id: &str, entity: Entity) {
