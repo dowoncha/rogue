@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use engine::{GameObject, Prop, Item};
 use entity::Entity;
-use types::{Dimension};
+use types::{Rect, Dimension};
 
 #[derive(Debug)]
 pub struct Cell {
@@ -50,18 +50,12 @@ impl Map {
         for y in 0..height {
             for x in 0..width {
                 cells.push(Cell::new(
-                    '.',
-                    false,
-                    false
+                    '#',
+                    true,
+                    true
                 ));
             }
         }
-
-        let index = |x: usize, y: usize| y * width + x;
-
-        cells[index(30, 22)] = Cell::new('#', true, true);
-        cells[index(31, 22)] = Cell::new('#', true, true);
-        cells[index(32, 22)] = Cell::new('#', true, true);
 
         cells
     }
@@ -160,6 +154,41 @@ impl Map {
 
     pub fn find_entity(&self, entity_id: &str) -> Option<&Entity> {
         None
+    }
+}
+
+pub struct MapBuilder {
+    width: usize,
+    height: usize,
+    map: Map
+}
+
+impl MapBuilder {
+    pub fn new(width: usize, height: usize) -> Self {
+        Self {
+            width: width,
+            height: height,
+            map: Map::new(width, height)
+        }
+    }
+
+    pub fn create_room(mut self, room: Rect) -> Self {
+        let cells = &mut self.map.cells;
+
+        for x in (room.x1 + 1)..room.x2 {
+            for y in (room.y1 + 1)..room.y2 {
+                let mut cell = &mut cells[y as usize * self.width + x as usize];
+                cell.glyph = '.';
+                cell.blocked = false;
+                cell.block_sight = false;
+            }
+        }
+
+        self
+    }
+
+    pub fn build(self) -> Map {
+        self.map
     }
 }
 

@@ -29,7 +29,7 @@ impl GameClient {
         );
 
         let player = Entity::new(screen_width as i32 / 2, screen_height as i32 / 2, '@', 0xff);
-        let npc = Entity::new(screen_width as i32 / 2 - 5, screen_height as i32 / 2, '@', 0x33);
+        let npc = Entity::new(screen_width as i32 / 2 - 4, screen_height as i32 / 2, '@', 0x33);
 
         engine.register_entity("player", player);
         engine.register_entity("npc", npc);

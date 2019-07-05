@@ -9,8 +9,8 @@ use command_manager::CommandManager;
 use config_manager::ConfigManager;
 use renderer::Renderer;
 use character::Player;
-use types::{Dimension, BoxResult};
-use map::{Map, Cell as MapCell};
+use types::{Dimension, BoxResult, Rect};
+use map::{Map, MapBuilder, Cell as MapCell};
 use entity::Entity;
 
 // Fixed timestep of 1 / ( 60 fps) = 16 ms
@@ -82,10 +82,7 @@ impl Engine {
 
         input_manager::init(self.event_sender.clone());
 
-        // Initialize the map
-        let map = Map::new(screen_w, screen_h);
-
-        self.current_map = Some(RefCell::new(map));
+        self.make_map(screen_w, screen_h);
 
         // self.player.set_x(32);
         // self.player.set_y(22);
@@ -98,6 +95,17 @@ impl Engine {
         
         // First state is main menu
         // self.state_manager.change_state(Box::new(MainMenu::new()))
+    }
+
+    fn make_map(&mut self, width: usize, height: usize) {
+        // Initialize the map
+        // let mut map = Map::new(screen_w, screen_h);
+        let map = MapBuilder::new(width, height)
+            .create_room(Rect::new(20, 15, 10, 15))
+            .create_room(Rect::new(35, 15, 10, 15))
+            .build();
+
+        self.current_map = Some(RefCell::new(map));
     }
 
     pub fn register_entity(&self, id: &str, entity: Entity) {

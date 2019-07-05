@@ -24,4 +24,22 @@ impl Color {
     }
 }
 
+pub struct Rect {
+    pub x1: i32,
+    pub y1: i32,
+    pub x2: i32,
+    pub y2: i32
+}
+
+impl Rect {
+    pub fn new(x: i32, y: i32, width: i32, height: i32) -> Self {
+        Self {
+            x1: x,
+            y1: y,
+            x2: x + width,
+            y2: y + height
+        }
+    }
+}
+
 pub type BoxResult<T> = Result<T, Box<dyn std::error::Error>>;
