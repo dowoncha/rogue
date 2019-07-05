@@ -73,12 +73,19 @@ impl Engine {
         }
     }
 
-    pub fn init(&self) {
-        // Renderer::init();
-
+    pub fn init(
+        &mut self, 
+        screen_w: usize, 
+        screen_h: usize
+    ) {
         self.renderer.init();
 
         input_manager::init(self.event_sender.clone());
+
+        // Initialize the map
+        let map = Map::new(screen_w, screen_h);
+
+        self.current_map = Some(RefCell::new(map));
 
         // self.player.set_x(32);
         // self.player.set_y(22);
@@ -97,7 +104,7 @@ impl Engine {
         self.entities.borrow_mut().insert(id.to_string(), entity);
     }
 
-    pub fn run(&mut self) {
+    pub fn run(&mut self) -> BoxResult<()> {
         // TODO/DECISION
         // Should time be handled in floating point or int
         let mut previous = Instant::now();
@@ -130,12 +137,17 @@ impl Engine {
             // Poll for events
             while let Some(event) = iter.next() {
                 match event {
-                    Event::Move(x, y) => {
+                    Event::Move(dx, dy) => {
                         let mut entities = self.entities.borrow_mut();
                         let player = entities.get_mut("player");
 
                         if let Some(player) = player {
-                            player._move(x, y);
+                            let map = self.current_map.as_ref()
+                                .expect("No current map in engine").borrow();
+                            let blocked = map.is_blocked(player.x + dx, player.y + dy);
+                            if !blocked {
+                                player._move(dx, dy);
+                            }
                         }
                     },
                     Event::Quit => {
@@ -146,6 +158,8 @@ impl Engine {
 
             previous = current;
         }
+
+        Ok(())
     }
 
     /**
@@ -159,10 +173,8 @@ impl Engine {
     }
 
     fn render(&self) {
-        // self.renderer.erase();
-
-        let viewport_x = 20;
-        let viewport_y = 20;
+        let viewport_x = 0;
+        let viewport_y = 0;
         
         if let Some(ref map) = self.current_map {
             let map = map.borrow();
@@ -175,7 +187,7 @@ impl Engine {
             for y in 0..map_dimensions.height {
                 for x in 0..map_dimensions.width {
                     let cell = map.get_cell_ref(x, y);
-                    self.renderer.mvaddch(viewport_x + x, viewport_y + y, cell.get_glyph())
+                    self.renderer.mvaddch(viewport_x + x, viewport_y + y, cell.glyph)
                 }
             }
         }
@@ -220,19 +232,6 @@ impl Engine {
         self.current_map = Some(RefCell::new(map));
 
         Ok(())
-    }
-
-    fn spawn_entity(&self, x: i32, y: i32, entity: Entity) -> BoxResult<()> {
-        match self.current_map {
-            Some(ref map) => {
-                map.borrow_mut().spawn_entity(x, y, entity);
-
-                return Ok(())
-            }
-            None => {
-                return Err(Box::new(EngineError::NoLoadedMap));
-            }
-        }
     }
 }
 

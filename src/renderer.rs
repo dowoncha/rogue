@@ -6,17 +6,17 @@ pub struct Window {
     pointer: nc::WINDOW
 }
 
-impl Window {
-    pub fn get_max_dimension(&self) -> Dimension {
-        let width = nc::getmaxx(self.pointer);
-        let height = nc::getmaxy(self.pointer);
+// impl Window {
+//     pub fn get_max_dimension(&self) -> Dimension {
+//         let width = nc::getmaxx(self.pointer);
+//         let height = nc::getmaxy(self.pointer);
 
-        Dimension {
-            width: width,
-            height: height
-        }
-    }
-}
+//         Dimension {
+//             width: width,
+//             height: height
+//         }
+//     }
+// }
 
 pub struct Renderer {
 
@@ -51,13 +51,13 @@ impl Renderer {
         nc::curs_set(nc::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
     }
 
-    pub fn erase(&self) {
-        nc::erase();
-    }
+    // pub fn erase(&self) {
+    //     nc::erase();
+    // }
 
-    pub fn clear(&self) {
-        nc::clear();
-    }
+    // pub fn clear(&self) {
+    //     nc::clear();
+    // }
 
     pub fn refresh(&self) {
         nc::refresh();

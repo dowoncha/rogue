@@ -5,8 +5,10 @@
 
 #![recursion_limit = "1024"]
 
-#[macro_use]
-extern crate error_chain;
+extern crate backtrace;
+
+// #[macro_use]
+// extern crate error_chain;
 
 #[macro_use]
 extern crate lazy_static;
@@ -19,12 +21,6 @@ extern crate rand_distr;
 extern crate time;
 
 extern crate ncurses;
-
-pub mod errors {
-    error_chain! {
-
-    }
-}
 
 mod entity;
 mod gen_map_1;

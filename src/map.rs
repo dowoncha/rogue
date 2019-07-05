@@ -7,36 +7,24 @@ use types::{Dimension};
 #[derive(Debug)]
 pub struct Cell {
     pub glyph: char,
-    prop: Option<Prop>,
-    item: Option<Item>,
-    entity: Option<Entity>
+    pub blocked: bool,
+    pub block_sight: bool
+    // prop: Option<Prop>,
+    // item: Option<Item>,
+    // entity: Option<Entity>
 }
 
 impl Cell {
-    pub fn new(glyph: char) -> Self {
+    pub fn new(glyph: char, blocked: bool, block_sight: bool) -> Self {
         Self {
+            blocked: blocked,
+            block_sight: block_sight,
             glyph: glyph,
-            prop: None,
-            item: None,
-            entity: None
+            // prop: None,
+            // item: None,
+            // entity: None
         }
     }
-
-    pub fn get_glyph(&self) -> char {
-        self.glyph
-    }
-
-    pub fn set_entity(&mut self, entity: Entity) {
-        self.entity = Some(entity);
-    }
-
-    pub fn get_entity_ref(&self) -> Option<&Entity> {
-        self.entity.as_ref()
-    }
-}
-
-impl GameObject for Cell {
-
 }
 
 // A map is a 2d grid of tiles
@@ -47,12 +35,35 @@ pub struct Map {
 }
 
 impl Map {
-    pub fn new() -> Self {
+    pub fn new(width: usize, height: usize) -> Self {
+        let cells = Map::init_cells(width, height);
+
         Self {
-            cells: Vec::new(),
-            width: 0,
-            height: 0,
+            width: width,
+            height: height,
+            cells: cells,
         }
+    }
+
+    pub fn init_cells(width: usize, height: usize) -> Vec<Cell> {
+        let mut cells = Vec::with_capacity(width * height);
+        for y in 0..height {
+            for x in 0..width {
+                cells.push(Cell::new(
+                    '.',
+                    false,
+                    false
+                ));
+            }
+        }
+
+        let index = |x: usize, y: usize| y * width + x;
+
+        cells[index(30, 22)] = Cell::new('#', true, true);
+        cells[index(31, 22)] = Cell::new('#', true, true);
+        cells[index(32, 22)] = Cell::new('#', true, true);
+
+        cells
     }
 
     pub fn open(filename: &str) -> std::io::Result<Self> {
@@ -61,7 +72,7 @@ impl Map {
         let mut file = File::open(filename)?;
         let mut buffer = String::new();
 
-        file.read_to_string(&mut buffer);
+        file.read_to_string(&mut buffer)?;
 
         let (width, height) = Map::get_buffer_dimensions(&buffer);
 
@@ -72,6 +83,17 @@ impl Map {
             width: width,
             height: height
         })
+    }
+
+    pub fn cell_index(&self, x: i32, y: i32) -> usize {
+        y as usize * self.width + x as usize
+    }
+
+    pub fn is_blocked(&self, x: i32, y: i32) -> bool {
+        let index = self.cell_index(x, y);
+        debug!("x, y, index, #cells, {}, {}, {}, {}", x, y, index, self.cells.len());
+        self.cells.get(index).unwrap().blocked 
+        // false
     }
 
     fn get_cells(&self) -> &[Cell] {
@@ -112,11 +134,15 @@ impl Map {
             let mut chars = line.chars();
 
             for _ in 0..width {
-                let glyph = chars.next();
+                let glyph = chars.next().unwrap_or(' ');
 
                 match glyph {
-                    Some(glyph) => cells.push(Cell::new(glyph)),
-                    None => cells.push(Cell::new(' '))
+                    '#' => {
+                        cells.push(Cell::new(glyph, true, true));
+                    }
+                    _ => {
+                        cells.push(Cell::new(glyph, false, false));
+                    }
                 }
             }
         }
@@ -130,11 +156,6 @@ impl Map {
 
     pub fn get_mut_cell_ref(&mut self, x: i32, y: i32) -> &mut Cell {
         &mut self.cells[y as usize * self.width + x as usize]
-    }
-
-    pub fn spawn_entity(&mut self, x: i32, y: i32, entity: Entity) {
-        let cell = self.get_mut_cell_ref(x, y);
-        cell.entity = Some(entity);
     }
 
     pub fn find_entity(&self, entity_id: &str) -> Option<&Entity> {

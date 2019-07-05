@@ -1,3 +1,40 @@
-DEBUG - Opening map assets/test.map
 INFO - Input manager thread started
-DEBUG - Load map buffer with dimensions (w, h): (45, 11)
+DEBUG - x, y, index, #cells, 39, 25, 2039, 4000
+DEBUG - x, y, index, #cells, 38, 25, 2038, 4000
+DEBUG - x, y, index, #cells, 38, 24, 1958, 4000
+DEBUG - x, y, index, #cells, 38, 23, 1878, 4000
+DEBUG - x, y, index, #cells, 37, 23, 1877, 4000
+DEBUG - x, y, index, #cells, 36, 23, 1876, 4000
+DEBUG - x, y, index, #cells, 36, 22, 1796, 4000
+DEBUG - x, y, index, #cells, 35, 22, 1795, 4000
+DEBUG - x, y, index, #cells, 34, 22, 1794, 4000
+DEBUG - x, y, index, #cells, 33, 22, 1793, 4000
+DEBUG - x, y, index, #cells, 32, 22, 1792, 4000
+DEBUG - x, y, index, #cells, 32, 22, 1792, 4000
+DEBUG - x, y, index, #cells, 32, 22, 1792, 4000
+DEBUG - x, y, index, #cells, 33, 21, 1713, 4000
+DEBUG - x, y, index, #cells, 32, 21, 1712, 4000
+DEBUG - x, y, index, #cells, 32, 22, 1792, 4000
+DEBUG - x, y, index, #cells, 32, 22, 1792, 4000
+DEBUG - x, y, index, #cells, 32, 22, 1792, 4000
+DEBUG - x, y, index, #cells, 31, 21, 1711, 4000
+DEBUG - x, y, index, #cells, 30, 21, 1710, 4000
+DEBUG - x, y, index, #cells, 29, 21, 1709, 4000
+DEBUG - x, y, index, #cells, 29, 22, 1789, 4000
+DEBUG - x, y, index, #cells, 30, 22, 1790, 4000
+DEBUG - x, y, index, #cells, 30, 22, 1790, 4000
+DEBUG - x, y, index, #cells, 30, 22, 1790, 4000
+DEBUG - x, y, index, #cells, 30, 22, 1790, 4000
+DEBUG - x, y, index, #cells, 30, 22, 1790, 4000
+DEBUG - x, y, index, #cells, 30, 22, 1790, 4000
+DEBUG - x, y, index, #cells, 28, 22, 1788, 4000
+DEBUG - x, y, index, #cells, 28, 23, 1868, 4000
+DEBUG - x, y, index, #cells, 29, 23, 1869, 4000
+DEBUG - x, y, index, #cells, 29, 24, 1949, 4000
+DEBUG - x, y, index, #cells, 30, 24, 1950, 4000
+DEBUG - x, y, index, #cells, 30, 25, 2030, 4000
+DEBUG - x, y, index, #cells, 31, 25, 2031, 4000
+DEBUG - x, y, index, #cells, 32, 25, 2032, 4000
+DEBUG - x, y, index, #cells, 32, 24, 1952, 4000
+DEBUG - x, y, index, #cells, 32, 23, 1872, 4000
+DEBUG - x, y, index, #cells, 32, 22, 1792, 4000
