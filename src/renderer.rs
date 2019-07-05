@@ -1,6 +1,22 @@
 use ncurses as nc;
 
-use types::{Menu, Window, MenuItem};
+use types::{Dimension, Menu, MenuItem};
+
+pub struct Window {
+    pointer: nc::WINDOW
+}
+
+impl Window {
+    pub fn get_max_dimension(&self) -> Dimension {
+        let width = nc::getmaxx(self.pointer);
+        let height = nc::getmaxy(self.pointer);
+
+        Dimension {
+            width: width,
+            height: height
+        }
+    }
+}
 
 pub struct Renderer {
 
@@ -35,6 +51,10 @@ impl Renderer {
         nc::curs_set(nc::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
     }
 
+    pub fn erase(&self) {
+        nc::erase();
+    }
+
     pub fn clear(&self) {
         nc::clear();
     }
@@ -56,9 +76,9 @@ impl Renderer {
         nc::new_menu(items)
     }
 
-    pub fn refresh_window(window: &Window) {
-        nc::wrefresh(*window);
-    }
+    // pub fn refresh_window(window: &Window) {
+    //     nc::wrefresh(*window);
+    // }
 
     // Allocate memory for window structure
     // to manipulate and update
@@ -72,7 +92,9 @@ impl Renderer {
         // Rfresh
         nc::wrefresh(window);
 
-        window
+        Window {
+            pointer: window
+        }
     }
 
     pub fn mvprintw(&self, x: i32, y: i32, s: &str) {
@@ -81,6 +103,12 @@ impl Renderer {
 
     pub fn mvaddch(&self, x: i32, y: i32, c: char) {
         nc::mvaddch(y, x, c as u64);
+    }
+
+    pub fn get_std_window(&self) -> Window {
+        Window {
+            pointer: nc::stdscr()
+        }
     }
 }
 

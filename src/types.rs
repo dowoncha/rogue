@@ -1,9 +1,12 @@
 use ncurses as nc;
 
+pub struct Dimension {
+    pub width: i32,
+    pub height: i32
+}
+
 pub type MenuItem = nc::ITEM;
 pub type Menu = nc::MENU;
-pub type Window = nc::WINDOW;
-
 #[derive(Debug)]
 pub struct Color {
     r: f32, 
@@ -20,3 +23,5 @@ impl Color {
         }
     }
 }
+
+pub type BoxResult<T> = Result<T, Box<std::error::Error>>;

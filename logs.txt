@@ -1,26 +1,3 @@
 DEBUG - Opening map assets/test.map
-DEBUG - Map height: 11
-INFO - Event: key 115
-DEBUG - Command: key
-INFO - Event: key 100
-DEBUG - Command: key
-INFO - Event: key 119
-DEBUG - Command: key
-INFO - Event: key 100
-DEBUG - Command: key
-INFO - Event: key 119
-DEBUG - Command: key
-INFO - Event: key 100
-DEBUG - Command: key
-INFO - Event: key 100
-DEBUG - Command: key
-INFO - Event: key 115
-DEBUG - Command: key
-INFO - Event: key 100
-DEBUG - Command: key
-INFO - Event: key 115
-DEBUG - Command: key
-INFO - Event: key 100
-DEBUG - Command: key
-INFO - Event: key 115
-DEBUG - Command: key
+INFO - Input manager thread started
+DEBUG - Load map buffer with dimensions (w, h): (45, 11)

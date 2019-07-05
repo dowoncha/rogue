@@ -1,56 +1,26 @@
 use std::fs::File;
 use std::cell::RefCell;
 use std::io::prelude::*;
-use std::borrow::BorrowMut;
-
 use std::time::{Duration, Instant};
 use std::collections::HashMap;
 
-use game_state::{GameStateManager, MainMenu};
-
+use command_manager::CommandManager;
+use config_manager::ConfigManager;
 use renderer::Renderer;
 use character::Player;
-
-use ncurses as nc;
+use types::{Dimension, BoxResult};
+use map::{Map, Cell as MapCell};
+use entity::Entity;
 
 // Fixed timestep of 1 / ( 60 fps) = 16 ms
 // const MS_PER_UPDATE: Duration = Duration::from_millis(16);
 
-trait GameObject {
+pub trait GameObject {
 
 }
 
-struct Cell {
-    glyph: char,
-    prop: Option<Prop>,
-    item: Option<Item>,
-    entity: Option<Entity>
-}
-
-impl Cell {
-    pub fn new(glyph: char) -> Self {
-        Self {
-            glyph: glyph,
-            prop: None,
-            item: None,
-            entity: None
-        }
-    }
-
-    pub fn set_entity(&mut self, entity: Entity) {
-        self.entity = Some(entity);
-    }
-
-    pub fn get_entity_ref(&self) -> Option<&Entity> {
-        self.entity.as_ref()
-    }
-}
-
-impl GameObject for Cell {
-
-}
-
-struct Prop {
+#[derive(Debug)]
+pub struct Prop {
 
 }
 
@@ -58,19 +28,9 @@ impl GameObject for Prop {
 
 }
 
-struct Entity {
-    inventory: Inventory
-}
 
-impl GameObject for Entity {
-
-}
-
-struct Inventory {
-    items: HashMap<Item, i32>
-}
-
-struct Item {
+#[derive(Debug)]
+pub struct Item {
 
 }
 
@@ -78,162 +38,37 @@ impl GameObject for Item {
 
 }
 
-// A map is a 2d grid of tiles
-struct Map {
-    cells: Vec<Cell>,
-    width: usize,
-    height: usize,
-}
-
-impl Map {
-    // Returns (width, height) of string grid buffer
-    fn get_buffer_dimensions(buffer: &str) -> (usize, usize) {
-        // Split each line by new line
-        let lines = buffer.lines();
-
-        // Count number of lines to get max_height
-        let height = lines.count();
-
-        debug!("Map height: {}", 
-            height);
-
-        // Potential optimization 
-        // The first lines iterator is consumed by count
-        // so have to create another one
-        let lines = buffer.lines();
-
-        let width = lines.max().unwrap().len();
-
-        (width, height)
-    }
-
-    pub fn open(filename: &str) -> std::io::Result<Self> {
-        debug!("Opening map {}", filename);
-
-        let mut file = File::open(filename)?;
-        let mut buffer = String::new();
-
-        file.read_to_string(&mut buffer);
-
-        let (width, height) = Map::get_buffer_dimensions(&buffer);
-
-        let lines = buffer.lines();
-
-        let mut cells = Vec::new();
-
-        for line in lines {
-            let mut chars = line.chars();
-
-            for _ in 0..width {
-                let glyph = chars.next();
-
-                match glyph {
-                    Some(glyph) => cells.push(Cell::new(glyph)),
-                    None => cells.push(Cell::new(' '))
-                }
-            }
-        }
-
-        Ok(Map {
-            cells: cells,
-            width: width,
-            height: height
-        })
-    }
-
-    pub fn get_cell_ref(&self, x: i32, y: i32) -> &Cell {
-        &self.cells[y as usize * self.height + x as usize]
-    }
-
-    pub fn get_mut_cell_ref(&mut self, x: i32, y: i32) -> &mut Cell {
-        &mut self.cells[y as usize * self.height + x as usize]
-    }
-
-    pub fn spawn_entity(&mut self, x: i32, y: i32, entity: Entity) {
-        let cell = self.get_mut_cell_ref(x, y);
-        cell.entity = Some(entity);
-    }
-}
-
-#[test]
-fn test_map_get_buffer_dimensions() {
-    let test = "###\n####\n#";
-
-    let (width, height) = Map::get_buffer_dimensions(test);
-
-    assert_eq!(width, 4);
-    assert_eq!(height, 3);
-}
-
-#[test]
-fn test_map_open() {
-    let test_filename = "assets/test.map";
-
-    let map_result = Map::open(test_filename);
-
-    assert!(map_result.is_ok());
-
-    let map = map_result.unwrap();
-
-    assert!(map.cells.len() > 0);
-    assert!(map.width > 0);
-    assert!(map.height > 0);
-}
-
-type BoxResult<T> = Result<T, Box<std::error::Error>>;
-
-pub struct GameClient {
-    engine: RefCell<Engine>
-}
-
-impl GameClient {
-    pub fn new() -> Self {
-        Self {
-            engine: RefCell::new(Engine::new())
-        }
-    }
-
-    pub fn init(&self) -> BoxResult<()> {
-        self.engine.borrow().init();
-
-        Ok(())
-    }
-
-    pub fn run(&self) -> BoxResult<()>  {
-        self.engine.borrow_mut().run();
-
-        Ok(())
-    }
-
-    pub fn load_map(&self, filename: &str) -> BoxResult<()> {
-        self.engine.borrow_mut().load_map(filename)
-    }
+pub enum Event {
+    Move(i32, i32),
+    Quit
 }
 
 /// Main engine
-struct Engine {
+pub struct Engine {
     renderer: Renderer,
-    player: Player,
+    config_manager: ConfigManager,
+    command_manager: CommandManager,
     current_map: Option<RefCell<Map>>,
-    state_manager: GameStateManager,
-    event_sender: std::sync::mpsc::Sender<String>,
-    event_receiver: std::sync::mpsc::Receiver<String>
+    event_sender: std::sync::mpsc::Sender<Event>,
+    event_receiver: std::sync::mpsc::Receiver<Event>,
+    entities: RefCell<HashMap<String, Entity>>
 }
 
 impl Engine {
     pub fn new() -> Self {
-        let (sender, receiver) = std::sync::mpsc::channel::<String>();
+        let (sender, receiver) = std::sync::mpsc::channel();
 
         let renderer = Renderer::new();
         let player = Player::new();
 
         Self {
             renderer: renderer,
-            player: player,
+            command_manager: CommandManager::new(),
+            config_manager: ConfigManager::new(),
             current_map: None,
-            state_manager: GameStateManager::new(),
             event_sender: sender,
-            event_receiver: receiver
+            event_receiver: receiver,
+            entities: RefCell::new(HashMap::new())
         }
     }
 
@@ -242,116 +77,80 @@ impl Engine {
 
         self.renderer.init();
 
+        InputManager::init(self.event_sender.clone());
+
+        // self.player.set_x(32);
+        // self.player.set_y(22);
+
+        // let main_window = self.renderer.get_std_window();
+        // let dimension = main_window.get_max_dimension();
+
+        // debug!("Main window size {} {}", dimension.width, dimension.height);
+        // Spawn input handler thread
+        
         // First state is main menu
         // self.state_manager.change_state(Box::new(MainMenu::new()))
     }
 
+    pub fn register_entity(&self, id: &str, entity: Entity) {
+        self.entities.borrow_mut().insert(id.to_string(), entity);
+    }
+
     pub fn run(&mut self) {
+        // TODO/DECISION
+        // Should time be handled in floating point or int
         let mut previous = Instant::now();
         // let mut lag = 0.0f64;
         let mut game_time = 0u64;
 
-        self.player.set_x(32);
-        self.player.set_y(22);
+        let mut lag = 0.0;
 
-        loop {
-            //let current = Instant::now();
-            // let elapsed = current.duration_since(current);
-            // previous = current;
-            // lag += elapsed;
+        'main: loop {
+            let current = Instant::now();
+            let elapsed = current.duration_since(previous);
+            previous = current;
+            lag += elapsed.as_secs_f64();
 
             // Events
             // handle_events();
             // Update
-            /*
-            while game_time < current {
-                lag -= MS_PER_UPDATE;
+            // while game_time < current {
+            //     lag -= MS_PER_UPDATE;
                 
-                self.update();
-            }
-            */
-            let input = self.renderer.getch();
+            //     self.update();
+            // }
 
-            let event = format!("key {}", input);
+            self.update(elapsed);
 
-            self.event_sender.send(event)
-                .expect("Failed to send event");
-
-            self.update();
-                        // Render
             self.render();
 
-            // self.renderer.mvprintw(1, 1, &format!("{}", input));
-        }
-    }
+            let mut iter = self.event_receiver.try_iter();
 
-    fn handle_input(&mut self, input: i32) {
-        match input {
-            119 => {
-                // 'w'
-                let player_y = self.player.y;
-                self.player.set_y(player_y - 1);
-            },
-            115 => {
-                // 'd'
-                let player_y = self.player.y;
+            // Poll for events
+            while let Some(event) = iter.next() {
+                match event {
+                    Event::Move(x, y) => {
+                        let mut entities = self.entities.borrow_mut();
+                        let player = entities.get_mut("player");
 
-                self.player.set_y(player_y + 1);
-            },
-            100 => {
-                // 'd'
-                let player_x = self.player.x;
-                self.player.set_x(player_x + 1);
-            },
-            97 => {
-                // 'a'
-                let player_x = self.player.x;
-
-                self.player.set_x(player_x - 1);
-            },
-            113 => {
-                // 'q'
-                return;
-            },
-            _ => {}
-        }
-    }
-
-    fn update(&mut self) -> Result<(), Box<std::error::Error>> {
-        let event = self.event_receiver.recv().unwrap();
-
-        info!("Event: {}", event);
-        // self.renderer.mvprintw(1, 1, &format!("Event: {}", event));
-
-        let mut args = event.split_whitespace();
-
-        let command = args.next().unwrap_or_else(|| {
-          error!("No command found in event");
-          ""
-        });
-
-        debug!("Command: {}", command);
-
-        match command {
-            "key" => {
-                let arg1 = args.next();
-
-                match arg1 {
-                    Some(keycode) => {
-                        let keycode = keycode.parse::<i32>().unwrap();
-
-                        self.handle_input(keycode);
+                        if let Some(player) = player {
+                            player._move(x, y);
+                        }
                     },
-                    None => {
-                        warn!("No keycode found for key command");
+                    Event::Quit => {
+                        break 'main;
                     }
                 }
             }
-            _ => {
-                debug!("Unrecognized command {}", command);
-                // self.renderer.mvprintw(1, 1, &format!("Unrecognized command: {}", command));
-            }
-        };
+
+            previous = current;
+        }
+    }
+
+    /**
+     * Update UI state and game logic
+     */
+    fn update(&mut self, dt: Duration) -> Result<(), Box<std::error::Error>> {
 
         // self.state_manager.update();
 
@@ -359,19 +158,59 @@ impl Engine {
     }
 
     fn render(&self) {
-        self.renderer.clear();
+        // self.renderer.erase();
 
-        self.renderer.mvprintw(30, 20, "#################");
+        let viewport_x = 20;
+        let viewport_y = 20;
+        
+        if let Some(ref map) = self.current_map {
+            let map = map.borrow();
+            // Render the map
+            // For each cell in the map
+            let map_dimensions = map.get_dimensions();
 
-        for y in 21..30 {
-            self.renderer.mvprintw(30, y, "#               #");
+            // debug!("{:?}", map.get_cells().iter().map(|cell| cell.glyph).collect::<String>());
+
+            for y in 0..map_dimensions.height {
+                for x in 0..map_dimensions.width {
+                    let cell = map.get_cell_ref(x, y);
+                    self.renderer.mvaddch(viewport_x + x, viewport_y + y, cell.get_glyph())
+                }
+            }
         }
 
-        self.renderer.mvprintw(30, 30, "#################");
+        // Render props
 
-        self.player.render(&self.renderer);
+        // Render items
+
+        // Render entitys
+        for (id, entity) in self.entities.borrow().iter() {
+            self.render_entity(entity)
+        }
+
+        // self.renderer.mvprintw(30, 20, "#################");
+
+        // for y in 21..30 {
+        //     self.renderer.mvprintw(30, y, "#               #");
+        // }
+
+        // self.renderer.mvprintw(30, 30, "#################");
+
+        // self.player.render(&self.renderer);
 
         self.renderer.refresh();
+    
+        for (id, entity) in self.entities.borrow().iter() {
+            self.clear_entity(entity);
+        }
+    }
+
+    fn render_entity(&self, entity: &Entity) {
+        self.renderer.mvaddch(entity.x, entity.y, entity.glyph);
+    }
+
+    fn clear_entity(&self, entity: &Entity) {
+        self.renderer.mvaddch(entity.x, entity.y, ' ');
     }
 
     pub fn load_map(&mut self, filename: &str) -> BoxResult<()> {
@@ -394,15 +233,61 @@ impl Engine {
             }
         }
     }
+}
 
-    // fn remove_entity(&self, x: i32, y: i32, entity: Entity) {
-    //     let cell = self.map.get_cell(x, y);
-    //     let entity = cell.get_entity();
+#[cfg(test)]
+mod tests {
+    use super::*;
+}
 
-    //     if let Some(entity) = entity {
-    //         cell.entity = None
-    //     }
-    // }
+mod InputManager {
+    use ncurses as nc;
+    use std::thread;
+    use engine::Event;
+
+    pub fn init(event_sender: std::sync::mpsc::Sender<Event>) {
+        // Input thread
+        let input_manager = thread::spawn(move || {
+            info!("Input manager thread started");
+
+            loop {
+                let input = nc::getch();
+
+                let event = handle_input(input);
+
+                if let Some(event) = event {
+                    event_sender.send(event)
+                        .expect("Failed to send event");
+                }
+            }
+        });
+    }
+
+    pub fn handle_input(input: i32) -> Option<Event> {
+        match input {
+            119 => {
+                // 'w
+                Some(Event::Move(0, -1))
+            }
+            115 => {
+                // 'd'
+                Some(Event::Move(0, 1))
+            }
+            100 => {
+                // 'd'
+                Some(Event::Move(1, 0))
+            }
+            97 => {
+                // 'a'
+                Some(Event::Move(-1, 0))
+            }
+            113 => {
+                // 'q'
+                Some(Event::Quit)
+            }
+            _ => None
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -420,6 +305,4 @@ impl std::fmt::Display for EngineError {
     }
 }
 
-impl std::error::Error for EngineError {
-
-}
+impl std::error::Error for EngineError { }
