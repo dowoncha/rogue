@@ -172,7 +172,7 @@ impl MapBuilder {
         }
     }
 
-    pub fn create_room(mut self, room: Rect) -> Self {
+    pub fn create_room(mut self, room: &Rect) -> Self {
         let cells = &mut self.map.cells;
 
         for x in (room.x1 + 1)..room.x2 {

@@ -34,6 +34,18 @@ impl GameClient {
         engine.register_entity("player", player);
         engine.register_entity("npc", npc);
 
+        let max_rooms = 20;
+        let room_min_size = 5;
+        let room_max_size = 20;
+
+        engine.make_map(
+            max_rooms,
+            room_min_size,
+            room_max_size,
+            screen_width, 
+            screen_height
+         );
+
         Ok(())
     }
 

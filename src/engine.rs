@@ -4,6 +4,8 @@ use std::io::prelude::*;
 use std::time::{Duration, Instant};
 use std::collections::HashMap;
 
+use rand::prelude::*;
+
 use input_manager;
 use command_manager::CommandManager;
 use config_manager::ConfigManager;
@@ -82,11 +84,6 @@ impl Engine {
 
         input_manager::init(self.event_sender.clone());
 
-        self.make_map(screen_w, screen_h);
-
-        // self.player.set_x(32);
-        // self.player.set_y(22);
-
         // let main_window = self.renderer.get_std_window();
         // let dimension = main_window.get_max_dimension();
 
@@ -97,14 +94,76 @@ impl Engine {
         // self.state_manager.change_state(Box::new(MainMenu::new()))
     }
 
-    fn make_map(&mut self, width: usize, height: usize) {
-        // Initialize the map
-        // let mut map = Map::new(screen_w, screen_h);
-        let map = MapBuilder::new(width, height)
-            .create_room(Rect::new(20, 15, 10, 15))
-            .create_room(Rect::new(35, 15, 10, 15))
-            .create_h_tunnel(25, 40, 23)
-            .build();
+    pub fn make_map(
+        &mut self, 
+        max_rooms: i32, 
+        room_min_size: usize, 
+        room_max_size: usize, 
+        map_width: usize, 
+        map_height: usize
+    ) {
+        let mut rng = rand::thread_rng();
+
+        let mut map_builder = MapBuilder::new(map_width, map_height);
+
+        let mut rooms = Vec::new();
+
+        for _ in 0..max_rooms {
+            let w = rng.gen_range(room_min_size, room_max_size) as i32;
+            let h = rng.gen_range(room_min_size, room_max_size) as i32;
+
+            let x = rng.gen_range(0, map_width as i32 - w - 1);
+            let y = rng.gen_range(0, map_height as i32 - h - 1 );
+
+            let new_room = Rect::new(x, y, w, h);
+
+            let mut intersected = false;
+
+            for other_room in &rooms {
+                if new_room.intersect(other_room) {
+                    intersected = true;
+                    break;
+                }
+            }
+
+            if !intersected {
+                map_builder = map_builder.create_room(&new_room);
+
+                let (new_room_center_x, new_room_center_y ) = new_room.center();
+
+
+                // TODO:
+                // this is a side effect and should be moved elsewhere
+                // If this the first room, put the player in it
+                if rooms.is_empty() {
+                    let mut entities = self.entities.borrow_mut();
+                    let player = entities.get_mut("player");
+                    if let Some(p) = player {
+                        p.x = new_room_center_x;
+                        p.y = new_room_center_y;
+                    }
+                } else {
+                    // All rooms after the first
+                    // connect it to the previous room with a tunnel
+                    let (prev_x, prev_y) = rooms[rooms.len() - 1].center();
+
+                    // flip a coin
+                    if rng.gen::<f32>() > 0.5 {
+                        map_builder = map_builder
+                            .create_h_tunnel(prev_x, new_room_center_x, prev_y)
+                            .create_v_tunnel(prev_y, new_room_center_y, new_room_center_x);
+                    } else {
+                        map_builder = map_builder
+                            .create_v_tunnel(prev_y, new_room_center_y, prev_x)
+                            .create_h_tunnel(prev_x, new_room_center_x, new_room_center_y);
+                    }
+                }
+
+                rooms.push(new_room);
+            }
+        }
+
+        let map = map_builder.build();
 
         self.current_map = Some(RefCell::new(map));
     }
