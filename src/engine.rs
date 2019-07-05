@@ -179,6 +179,16 @@ impl Engine {
         self.entities.borrow_mut().insert(id.to_string(), entity);
     }
 
+    fn get_blocking_entities_at_location(&self, x: i32, y: i32) -> Option<&Entity> { // &[&Entity] {
+        None 
+
+        // &self.entities.borrow()
+        //     .values()
+        //     .filter(|entity| entity.x == x && entity.y == y)
+        //     .collect::<Vec<&Entity>>()
+            // .for_each(|entity| found_entities.push(entity))
+    }
+
     pub fn run(&mut self) -> BoxResult<()> {
         // TODO/DECISION
         // Should time be handled in floating point or int
@@ -228,22 +238,47 @@ impl Engine {
     }
 
     fn move_entity(&self, entity_id: &str, dx: i32, dy: i32) {
-        let mut entities = self.entities.borrow_mut();
-        let entity = entities.get_mut(entity_id);
+        // Immutable checks
+        {
+            let entities = self.entities.borrow();
 
-        if let Some(entity) = entity {
-            if !self.is_entity_blocked(entity, dx, dy) {
+            let entity = entities.get(entity_id);
+
+            if let Some(entity) = entity {
+                let dest_x = entity.x + dx;
+                let dest_y = entity.y + dy;
+
+                // Check if cell is blocking
+                if self.is_cell_blocked(dest_x, dest_y) {
+                    return
+                }
+
+                // Check if destination cell is occupied
+                let target = entities.values().find(|&entity| entity.x == dest_x && entity.y == dest_y);
+                if let Some(target) = target {
+                    info!("You attack the {}", "monster");
+                    return
+                }
+            }
+        }
+
+        // Actual move
+        {
+            let mut entities = self.entities.borrow_mut();
+            let mut entity = entities.get_mut(entity_id);
+
+            if let Some(entity) = entity {
                 entity._move(dx, dy);
             }
         }
     }
 
-    fn is_entity_blocked(&self, entity: &Entity, dx: i32, dy: i32) -> bool {
+    fn is_cell_blocked(&self, x: i32, y: i32) -> bool {
         let map = self.current_map.as_ref()
                 .expect("No current map in engine")
                 .borrow();
 
-        map.is_blocked(entity.x + dx, entity.y + dy)
+        map.is_blocked(x, y)
     }
 
     /**
