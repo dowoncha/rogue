@@ -1,3 +1,5 @@
+use renderer::ColorPair;
+
 pub struct EntityBuilder {
     name: Option<String>
 }
@@ -22,7 +24,7 @@ impl EntityBuilder {
             x: 0,
             y: 0,
             glyph: ' ',
-            color: 0
+            color: ColorPair::WhiteBlack
         }
     }
 }
@@ -32,11 +34,13 @@ pub struct Entity {
     pub x: i32,
     pub y: i32,
     pub glyph: char,
-    color: u8
+    pub color: ColorPair
 }
 
 impl Entity {
-    pub fn new(x: i32, y: i32, glyph: char, color: u8) -> Self {
+    pub fn new(x: i32, y: i32, glyph: char, color: Option<ColorPair>) -> Self {
+        let color = color.unwrap_or(ColorPair::WhiteBlack);
+
         Self {
             x: x,
             y: y,

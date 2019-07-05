@@ -5,11 +5,12 @@ use std::time::{Duration, Instant};
 use std::collections::HashMap;
 
 use rand::prelude::*;
+use ncurses as nc;
 
 use input_manager;
 use command_manager::CommandManager;
 use config_manager::ConfigManager;
-use renderer::Renderer;
+use renderer::{TerminalRenderer, ColorPair};
 use character::Player;
 use types::{Dimension, BoxResult, Rect};
 use map::{Map, MapBuilder, Cell as MapCell};
@@ -17,6 +18,8 @@ use entity::Entity;
 
 // Fixed timestep of 1 / ( 60 fps) = 16 ms
 // const MS_PER_UPDATE: Duration = Duration::from_millis(16);
+
+
 
 pub trait GameObject {
 
@@ -48,7 +51,7 @@ pub enum Event {
 
 /// Main engine
 pub struct Engine {
-    renderer: Renderer,
+    renderer: TerminalRenderer,
     config_manager: ConfigManager,
     command_manager: CommandManager,
     current_map: Option<RefCell<Map>>,
@@ -61,7 +64,7 @@ impl Engine {
     pub fn new() -> Self {
         let (sender, receiver) = std::sync::mpsc::channel();
 
-        let renderer = Renderer::new();
+        let renderer = TerminalRenderer::new();
         let player = Player::new();
 
         Self {
@@ -83,6 +86,8 @@ impl Engine {
         self.renderer.init();
 
         input_manager::init(self.event_sender.clone());
+
+        let fov_radius = 10;
 
         // let main_window = self.renderer.get_std_window();
         // let dimension = main_window.get_max_dimension();
@@ -206,17 +211,7 @@ impl Engine {
             while let Some(event) = iter.next() {
                 match event {
                     Event::Move(dx, dy) => {
-                        let mut entities = self.entities.borrow_mut();
-                        let player = entities.get_mut("player");
-
-                        if let Some(player) = player {
-                            let map = self.current_map.as_ref()
-                                .expect("No current map in engine").borrow();
-                            let blocked = map.is_blocked(player.x + dx, player.y + dy);
-                            if !blocked {
-                                player._move(dx, dy);
-                            }
-                        }
+                        self.move_entity("player", dx, dy);
                     },
                     Event::Quit => {
                         break 'main;
@@ -230,6 +225,25 @@ impl Engine {
         Ok(())
     }
 
+    fn move_entity(&self, entity_id: &str, dx: i32, dy: i32) {
+        let mut entities = self.entities.borrow_mut();
+        let entity = entities.get_mut(entity_id);
+
+        if let Some(entity) = entity {
+            if !self.is_entity_blocked(entity, dx, dy) {
+                entity._move(dx, dy);
+            }
+        }
+    }
+
+    fn is_entity_blocked(&self, entity: &Entity, dx: i32, dy: i32) -> bool {
+        let map = self.current_map.as_ref()
+                .expect("No current map in engine")
+                .borrow();
+
+        map.is_blocked(entity.x + dx, entity.y + dy)
+    }
+
     /**
      * Update UI state and game logic
      */
@@ -241,9 +255,20 @@ impl Engine {
     }
 
     fn render(&self) {
+        self.render_map();
+
+        // Render entitys
+        self.render_entities();
+
+        self.renderer.refresh();
+
+        self.clear_entities();
+    }
+
+    fn render_map(&self) {
         let viewport_x = 0;
         let viewport_y = 0;
-        
+
         if let Some(ref map) = self.current_map {
             let map = map.borrow();
             // Render the map
@@ -255,39 +280,34 @@ impl Engine {
             for y in 0..map_dimensions.height {
                 for x in 0..map_dimensions.width {
                     let cell = map.get_cell_ref(x, y);
-                    self.renderer.mvaddch(viewport_x + x, viewport_y + y, cell.glyph)
+                    if (cell.glyph == '#') {
+                        // let attr = nc::COLOR_PAIR(colors::ColorPair::WhiteBlack as i16);
+                        // let attr = nc::COLOR_PAIR(1);
+                        // nc::attron(attr);
+                        self.renderer.mvaddch_color(viewport_x + x, viewport_y + y, cell.glyph, ColorPair::WhiteBlack);
+                        // nc::attroff(attr);
+                    } else {
+                        self.renderer.mvaddch(viewport_x + x, viewport_y + y, cell.glyph)
+                    }
                 }
             }
         }
+    }
 
-        // Render props
-
-        // Render items
-
-        // Render entitys
+    fn render_entities(&self) {
         for (id, entity) in self.entities.borrow().iter() {
             self.render_entity(entity)
-        }
-
-        // self.renderer.mvprintw(30, 20, "#################");
-
-        // for y in 21..30 {
-        //     self.renderer.mvprintw(30, y, "#               #");
-        // }
-
-        // self.renderer.mvprintw(30, 30, "#################");
-
-        // self.player.render(&self.renderer);
-
-        self.renderer.refresh();
-
-        for (id, entity) in self.entities.borrow().iter() {
-            self.clear_entity(entity);
         }
     }
 
     fn render_entity(&self, entity: &Entity) {
-        self.renderer.mvaddch(entity.x, entity.y, entity.glyph);
+        self.renderer.mvaddch_color(entity.x, entity.y, entity.glyph, entity.color);
+    }
+
+    fn clear_entities(&self) {
+        for (id, entity) in self.entities.borrow().iter() {
+            self.clear_entity(entity);
+        }
     }
 
     fn clear_entity(&self, entity: &Entity) {

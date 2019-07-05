@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use types::BoxResult;
 use engine::Engine;
+use renderer::ColorPair;
 use entity::Entity;
 
 pub struct GameClient {
@@ -28,11 +29,11 @@ impl GameClient {
             screen_height
         );
 
-        let player = Entity::new(screen_width as i32 / 2, screen_height as i32 / 2, '@', 0xff);
-        let npc = Entity::new(screen_width as i32 / 2 - 4, screen_height as i32 / 2, '@', 0x33);
+        let player = Entity::new(screen_width as i32 / 2, screen_height as i32 / 2, '@', Some(ColorPair::GreenBlack));
+        // let npc = Entity::new(screen_width as i32 / 2 - 4, screen_height as i32 / 2, '@', 0x33);
 
         engine.register_entity("player", player);
-        engine.register_entity("npc", npc);
+        // engine.register_entity("npc", npc);
 
         let max_rooms = 20;
         let room_min_size = 5;
@@ -55,5 +56,27 @@ impl GameClient {
 
     pub fn load_map(&self, filename: &str) -> BoxResult<()> {
         self.engine.borrow_mut().load_map(filename)
+    }
+}
+
+struct Message {
+    text: String,
+    // color: Color
+}
+
+struct MessageLog {
+    messages: Vec<Message>
+}
+
+impl MessageLog {
+    pub fn new() -> Self {
+        Self {
+            messages: Vec::new()
+        }
+    }
+
+    pub fn add_message(&mut self, message: Message) {
+        // Split the message if necessary, among multiple lines
+        self.messages.push(message);
     }
 }
