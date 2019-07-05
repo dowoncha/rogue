@@ -4,6 +4,7 @@ use std::io::prelude::*;
 use std::time::{Duration, Instant};
 use std::collections::HashMap;
 
+use input_manager;
 use command_manager::CommandManager;
 use config_manager::ConfigManager;
 use renderer::Renderer;
@@ -77,7 +78,7 @@ impl Engine {
 
         self.renderer.init();
 
-        InputManager::init(self.event_sender.clone());
+        input_manager::init(self.event_sender.clone());
 
         // self.player.set_x(32);
         // self.player.set_y(22);
@@ -199,7 +200,7 @@ impl Engine {
         // self.player.render(&self.renderer);
 
         self.renderer.refresh();
-    
+
         for (id, entity) in self.entities.borrow().iter() {
             self.clear_entity(entity);
         }
@@ -238,56 +239,6 @@ impl Engine {
 #[cfg(test)]
 mod tests {
     use super::*;
-}
-
-mod InputManager {
-    use ncurses as nc;
-    use std::thread;
-    use engine::Event;
-
-    pub fn init(event_sender: std::sync::mpsc::Sender<Event>) {
-        // Input thread
-        let input_manager = thread::spawn(move || {
-            info!("Input manager thread started");
-
-            loop {
-                let input = nc::getch();
-
-                let event = handle_input(input);
-
-                if let Some(event) = event {
-                    event_sender.send(event)
-                        .expect("Failed to send event");
-                }
-            }
-        });
-    }
-
-    pub fn handle_input(input: i32) -> Option<Event> {
-        match input {
-            119 => {
-                // 'w
-                Some(Event::Move(0, -1))
-            }
-            115 => {
-                // 'd'
-                Some(Event::Move(0, 1))
-            }
-            100 => {
-                // 'd'
-                Some(Event::Move(1, 0))
-            }
-            97 => {
-                // 'a'
-                Some(Event::Move(-1, 0))
-            }
-            113 => {
-                // 'q'
-                Some(Event::Quit)
-            }
-            _ => None
-        }
-    }
 }
 
 #[derive(Debug)]

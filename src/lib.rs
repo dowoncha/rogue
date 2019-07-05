@@ -30,6 +30,7 @@ mod entity;
 mod gen_map_1;
 mod command_manager;
 mod config_manager;
+mod input_manager;
 pub mod file_logger;
 mod types;
 mod map;
