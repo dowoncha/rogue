@@ -1,6 +1,6 @@
 use ncurses as nc;
 use std::thread;
-use engine::Event;
+use client::Event;
 
 pub fn init(event_sender: std::sync::mpsc::Sender<Event>) {
     // Input thread

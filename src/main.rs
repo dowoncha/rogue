@@ -17,13 +17,10 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     file_logger::init()
         .expect("Failed to init file logger");
 
-    let game = GameClient::new();
+    let mut game = GameClient::new();
     game.init(
         args
     ).expect("Failed to init game");
-
-    // game.load_map("assets/test.map")
-    //     .expect("Failed to load map");
 
     if let Err(error) = game.run() {
         error!("{}", error);

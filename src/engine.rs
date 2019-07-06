@@ -1,14 +1,16 @@
-use std::fs::File;
+// Fixed timestep of 1 / ( 60 fps) = 16 ms
+// const MS_PER_UPDATE: Duration = Duration::from_millis(16);
+
+
 use std::cell::RefCell;
 use std::io::prelude::*;
-use std::time::{Duration, Instant};
 use std::collections::HashMap;
+use std::rc::Rc;
 
 use rand::prelude::*;
 use ncurses as nc;
 
-use input_manager;
-use command_manager::CommandManager;
+use action::Action;
 use config_manager::ConfigManager;
 use renderer::{TerminalRenderer, ColorPair};
 use character::Player;
@@ -16,88 +18,75 @@ use types::{Dimension, BoxResult, Rect};
 use map::{Map, MapBuilder, Cell as MapCell};
 use entity::Entity;
 
-// Fixed timestep of 1 / ( 60 fps) = 16 ms
-// const MS_PER_UPDATE: Duration = Duration::from_millis(16);
-
-
-
-pub trait GameObject {
-
+pub struct World {
+    entities: Entities,
+    current_map: Option<Map>,
 }
 
-#[derive(Debug)]
-pub struct Prop {
+impl World {
+    pub fn new() -> Self {
+        Self {
+            entities: HashMap::new(),
+            current_map: None
+        }
+    }
 
+    pub fn is_tile_occupied(&self, x: i32, y: i32) -> Option<&dyn Entity> {
+        None
+    }
+
+    pub fn register_entity(&mut self, id: &str, mut entity: Box<dyn Entity>) {
+        // entity.set_world(self);
+        self.entities.insert(id.to_string(), entity);
+    }
+
+    fn is_cell_blocked(&self, x: i32, y: i32) -> bool {
+        if let Some(map) = self.current_map.as_ref() {
+            map.is_blocked(x, y) 
+        } else {
+            false
+        }
+    }
+
+    pub fn get_entities(&self) -> &Entities {
+        &self.entities
+    }
+
+    pub fn get_mut_entities(&mut self) -> &mut Entities {
+        &mut self.entities
+    }
+
+    pub fn get_entity(&self, entity_id: &str) -> Option<&Box<Entity>> {
+        self.entities.get(entity_id)
+    }
+
+    pub fn get_current_map(&self) -> Option<&Map> {
+        self.current_map.as_ref()
+    }
+
+    pub fn set_map(&mut self, map: Map) {
+        self.current_map = Some(map);
+    }
 }
 
-impl GameObject for Prop {
-
-}
-
-
-#[derive(Debug)]
-pub struct Item {
-
-}
-
-impl GameObject for Item {
-
-}
-
-pub enum Event {
-    Move(i32, i32),
-    Quit
-}
+pub type Entities = HashMap<String, Box<dyn Entity>>;
 
 /// Main engine
 pub struct Engine {
-    renderer: TerminalRenderer,
-    config_manager: ConfigManager,
-    command_manager: CommandManager,
-    current_map: Option<RefCell<Map>>,
-    event_sender: std::sync::mpsc::Sender<Event>,
-    event_receiver: std::sync::mpsc::Receiver<Event>,
-    entities: RefCell<HashMap<String, Entity>>
+    world: Box<World>
 }
 
 impl Engine {
     pub fn new() -> Self {
-        let (sender, receiver) = std::sync::mpsc::channel();
-
-        let renderer = TerminalRenderer::new();
-        let player = Player::new();
-
         Self {
-            renderer: renderer,
-            command_manager: CommandManager::new(),
-            config_manager: ConfigManager::new(),
-            current_map: None,
-            event_sender: sender,
-            event_receiver: receiver,
-            entities: RefCell::new(HashMap::new())
+            // renderer: renderer,
+            // config_manager: ConfigManager::new(),
+            // current_map: None,
+            // entities: HashMap::new(),
+            world: Box::new(World::new())
         }
     }
-
-    pub fn init(
-        &mut self, 
-        screen_w: usize, 
-        screen_h: usize
-    ) {
-        self.renderer.init();
-
-        input_manager::init(self.event_sender.clone());
-
-        let fov_radius = 10;
-
-        // let main_window = self.renderer.get_std_window();
-        // let dimension = main_window.get_max_dimension();
-
-        // debug!("Main window size {} {}", dimension.width, dimension.height);
-        // Spawn input handler thread
-        
-        // First state is main menu
-        // self.state_manager.change_state(Box::new(MainMenu::new()))
-    }
+    // POST /maps/generate
 
     pub fn make_map(
         &mut self, 
@@ -106,7 +95,7 @@ impl Engine {
         room_max_size: usize, 
         map_width: usize, 
         map_height: usize
-    ) -> Vec<Rect> {
+    ) -> (Vec<Rect>, Map) {
         let mut rng = rand::thread_rng();
 
         let mut map_builder = MapBuilder::new(map_width, map_height);
@@ -136,20 +125,10 @@ impl Engine {
 
                 let (new_room_center_x, new_room_center_y ) = new_room.center();
 
-
                 // TODO:
                 // this is a side effect and should be moved elsewhere
-                // If this the first room, put the player in it
-                if rooms.is_empty() {
-                    let mut entities = self.entities.borrow_mut();
-                    let player = entities.get_mut("player");
-                    if let Some(p) = player {
-                        p.x = new_room_center_x;
-                        p.y = new_room_center_y;
-                    }
-                } else {
-                    // All rooms after the first
-                    // connect it to the previous room with a tunnel
+                // connect it to the previous room with a tunnel
+                if !rooms.is_empty() {
                     let (prev_x, prev_y) = rooms[rooms.len() - 1].center();
 
                     // flip a coin
@@ -170,193 +149,15 @@ impl Engine {
 
         let map = map_builder.build();
 
-        self.current_map = Some(RefCell::new(map));
-
-        rooms
+        (rooms, map)
     }
 
-    pub fn register_entity(&self, id: &str, entity: Entity) {
-        self.entities.borrow_mut().insert(id.to_string(), entity);
+    pub fn get_world(&self) -> &World {
+        &self.world
     }
 
-    fn get_blocking_entities_at_location(&self, x: i32, y: i32) -> Option<&Entity> { // &[&Entity] {
-        None 
-
-        // &self.entities.borrow()
-        //     .values()
-        //     .filter(|entity| entity.x == x && entity.y == y)
-        //     .collect::<Vec<&Entity>>()
-            // .for_each(|entity| found_entities.push(entity))
-    }
-
-    pub fn run(&mut self) -> BoxResult<()> {
-        // TODO/DECISION
-        // Should time be handled in floating point or int
-        let mut previous = Instant::now();
-        // let mut lag = 0.0f64;
-        let mut game_time = 0u64;
-
-        let mut lag = 0.0;
-
-        'main: loop {
-            let current = Instant::now();
-            let elapsed = current.duration_since(previous);
-            previous = current;
-            lag += elapsed.as_secs_f64();
-
-            // Events
-            // handle_events();
-            // Update
-            // while game_time < current {
-            //     lag -= MS_PER_UPDATE;
-                
-            //     self.update();
-            // }
-
-            self.update(elapsed);
-
-            self.render();
-
-            let mut iter = self.event_receiver.try_iter();
-
-            // Poll for events
-            while let Some(event) = iter.next() {
-                match event {
-                    Event::Move(dx, dy) => {
-                        self.move_entity("player", dx, dy);
-                    },
-                    Event::Quit => {
-                        break 'main;
-                    }
-                }
-            }
-
-            previous = current;
-        }
-
-        Ok(())
-    }
-
-    fn move_entity(&self, entity_id: &str, dx: i32, dy: i32) {
-        // Immutable checks
-        {
-            let entities = self.entities.borrow();
-
-            let entity = entities.get(entity_id);
-
-            if let Some(entity) = entity {
-                let dest_x = entity.x + dx;
-                let dest_y = entity.y + dy;
-
-                // Check if cell is blocking
-                if self.is_cell_blocked(dest_x, dest_y) {
-                    return
-                }
-
-                // Check if destination cell is occupied
-                let target = entities.values().find(|&entity| entity.x == dest_x && entity.y == dest_y);
-                if let Some(target) = target {
-                    info!("You attack the {}", "monster");
-                    return
-                }
-            }
-        }
-
-        // Actual move
-        {
-            let mut entities = self.entities.borrow_mut();
-            let mut entity = entities.get_mut(entity_id);
-
-            if let Some(entity) = entity {
-                entity._move(dx, dy);
-            }
-        }
-    }
-
-    fn is_cell_blocked(&self, x: i32, y: i32) -> bool {
-        let map = self.current_map.as_ref()
-                .expect("No current map in engine")
-                .borrow();
-
-        map.is_blocked(x, y)
-    }
-
-    /**
-     * Update UI state and game logic
-     */
-    fn update(&mut self, dt: Duration) -> Result<(), Box<std::error::Error>> {
-
-        // self.state_manager.update();
-
-        Ok(())
-    }
-
-    fn render(&self) {
-        self.render_map();
-
-        // Render entitys
-        self.render_entities();
-
-        self.renderer.refresh();
-
-        self.clear_entities();
-    }
-
-    fn render_map(&self) {
-        let viewport_x = 0;
-        let viewport_y = 0;
-
-        if let Some(ref map) = self.current_map {
-            let map = map.borrow();
-            // Render the map
-            // For each cell in the map
-            let map_dimensions = map.get_dimensions();
-
-            // debug!("{:?}", map.get_cells().iter().map(|cell| cell.glyph).collect::<String>());
-
-            for y in 0..map_dimensions.height {
-                for x in 0..map_dimensions.width {
-                    let cell = map.get_cell_ref(x, y);
-                    if (cell.glyph == '#') {
-                        // let attr = nc::COLOR_PAIR(colors::ColorPair::WhiteBlack as i16);
-                        // let attr = nc::COLOR_PAIR(1);
-                        // nc::attron(attr);
-                        self.renderer.mvaddch_color(viewport_x + x, viewport_y + y, cell.glyph, ColorPair::WhiteBlack);
-                        // nc::attroff(attr);
-                    } else {
-                        self.renderer.mvaddch(viewport_x + x, viewport_y + y, cell.glyph)
-                    }
-                }
-            }
-        }
-    }
-
-    fn render_entities(&self) {
-        for (id, entity) in self.entities.borrow().iter() {
-            self.render_entity(entity)
-        }
-    }
-
-    fn render_entity(&self, entity: &Entity) {
-        self.renderer.mvaddch_color(entity.x, entity.y, entity.glyph, entity.color);
-    }
-
-    fn clear_entities(&self) {
-        for (id, entity) in self.entities.borrow().iter() {
-            self.clear_entity(entity);
-        }
-    }
-
-    fn clear_entity(&self, entity: &Entity) {
-        self.renderer.mvaddch(entity.x, entity.y, ' ');
-    }
-
-    pub fn load_map(&mut self, filename: &str) -> BoxResult<()> {
-        let map = Map::open(filename)?;
-
-        self.current_map = Some(RefCell::new(map));
-
-        Ok(())
+    pub fn get_mut_world(&mut self) -> &mut World {
+        &mut self.world
     }
 }
 

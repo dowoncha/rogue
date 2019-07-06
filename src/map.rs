@@ -1,10 +1,7 @@
 use std::fs::File;
 use std::io::prelude::*;
-use engine::{GameObject, Prop, Item};
 use entity::Entity;
 use types::{Rect, Dimension};
-
-
 
 #[derive(Debug)]
 pub struct Cell {

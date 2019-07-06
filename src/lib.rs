@@ -22,6 +22,7 @@ extern crate time;
 
 extern crate ncurses;
 
+mod action;
 mod entity;
 mod gen_map_1;
 mod command_manager;

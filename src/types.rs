@@ -1,5 +1,10 @@
 use ncurses as nc;
 
+pub struct Vector2<T> {
+    pub x: T,
+    pub y: T
+}
+
 pub struct Dimension {
     pub width: i32,
     pub height: i32

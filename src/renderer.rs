@@ -45,6 +45,7 @@ pub fn init() {
      */
 
     nc::init_pair(ColorPair::WhiteBlack as i16, nc::COLOR_WHITE, nc::COLOR_BLACK);
+    nc::init_pair(ColorPair::BlackWhite as i16, nc::COLOR_BLACK, nc::COLOR_WHITE);
     nc::init_pair(ColorPair::GreenBlack as i16, nc::COLOR_GREEN, nc::COLOR_BLACK);
     nc::init_pair(ColorPair::RedBlack as i16, nc::COLOR_RED, nc::COLOR_BLACK);
 

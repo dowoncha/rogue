@@ -16,9 +16,38 @@ enum ItemType {
 
 struct Item {
     name: String,
-    i_type: ItemType,
     rarity: Rarity,
     description: String
+    attack: Attack,
+    ranged: Attack,
+    defense: Defense,
+    _use: Box<Use>
+}
+
+struct Attack {
+    min_damange: i32,
+    max_damage: i32
+}
+
+impl Attack {
+    pub fn hit() {
+    }
+}
+
+trait Use {
+    fn use();
+}
+
+struct HealUse {
+
+}
+
+impl Use for HealUse {
+
+}
+
+struct Defense {
+
 }
 
 // enum WeaponSpee
