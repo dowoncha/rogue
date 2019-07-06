@@ -131,6 +131,7 @@ fn create_monsters(map: &Map, max_monsters_per_room: i32) -> Vec<Box<dyn Entity>
 
 pub enum PlayerTurnResultType {
     Move(i32, i32),
+    Message(Message),
     EndTurn
 }
 
@@ -164,10 +165,10 @@ impl GameClient {
         let screen_width = 80;
         let screen_height = 50;
 
-        init_input_thread(self.event_sender.clone());
-
         self.renderer.init()
             .expect("Failed to init renderer");
+
+        init_input_thread(self.event_sender.clone());
 
         let max_rooms = 20;
         let room_min_size = 5;
@@ -205,7 +206,7 @@ impl GameClient {
 
         let mut bottom_panel_console = console::Console::new(screen_width, 20);
 
-        let message_log = MessageLog::new();
+        let mut message_log = MessageLog::new();
 
         let mut player_turn_results = Vec::new();
 
@@ -270,8 +271,12 @@ impl GameClient {
                         let dest_x = player.get_x() + dx;
                         let dest_y = player.get_y() + dy;
 
-                        debug!("{} {}", dest_x, dest_y);
-                    },
+                        player.set_x(dest_x);
+                        player.set_y(dest_y);
+                    }
+                    PlayerTurnResultType::Message(message) => {
+                        message_log.add_message(message);
+                    }
                     _ => {}
                 }
             })
@@ -362,7 +367,7 @@ impl GameClient {
     fn render_entities(&self, entities: &Entities) {
         // Filter entities that have a render component
         for (id, entity) in entities {
-            info!("Rendering entity {}", id);
+            // info!("Rendering entity {}", id);
             self.render_entity(entity.borrow());
         }
     }
@@ -393,7 +398,10 @@ fn init_input_thread(event_sender: std::sync::mpsc::Sender<Event>) {
         loop {
             let user_input = nc::getch();
 
-            event_sender.send(Event::Input(user_input));
+            if user_input != -1 {
+                debug!("User input {}", user_input);
+                event_sender.send(Event::Input(user_input));
+            }
         }
     });
 }
