@@ -69,57 +69,48 @@ impl Entity for Hero {
 
         debug!("Keypress {}", input);
 
-        let action = match input {
-            119 => {
-                // 'w
-                Some(Box::new(WalkAction {
-                    direction: Direction {
-                        x: 0,
-                        y: -1
-                    }
-                }) as Box<Action>)
-            }
-            115 => {
-                // 's'
-                Some(Box::new(WalkAction {
-                    direction: Direction {
-                        x: 0, 
-                        y: 1
-                    }
-                }) as Box<Action>)
-            }
-            100 => {
-                // 'd'
-                Some(Box::new(WalkAction {
-                    direction: Direction {
-                        x: 1,
-                        y: 0
-                    }
-                }) as Box<Action>)
-            }
-            97 => {
-                // 'a'
-                Some(Box::new(WalkAction {
-                    direction: Direction {
-                        x: -1,
-                        y: 0
-                    }
-                }) as Box<Action>)
-            }
-            113 => {
-                // 'q'
-                None
-            }
-            _ => { None }
-        };
-
-        action
+        None
     }
 
     fn update(&mut self) {
         if let Some(action) = self.take_turn() {
             action.execute(self);
         }
+    }
+}
+
+pub enum InputType {
+    Move(i32, i32),
+    Pickup,
+    ShowInventory,
+    Exit
+    // DropInvetnryo,
+    // EquipInventory
+}
+
+pub fn handle_key(key: i32) -> Option<InputType> {
+    match key {
+        119 => {
+            // 'w
+            Some(InputType::Move(0, -1))
+        }
+        115 => {
+            // 's'
+            Some(InputType::Move(0, 1))
+        }
+        100 => {
+            // 'd'
+            Some(InputType::Move(1, 0))
+        }
+        97 => {
+            // 'a'
+            Some(InputType::Move(-1, 0))
+        }
+        113 => {
+            // 'q'
+            Some(InputType::Exit)
+        }
+        _ => { None }
     }
 }
 

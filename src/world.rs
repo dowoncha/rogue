@@ -39,8 +39,12 @@ impl World {
         &mut self.entities
     }
 
-    pub fn get_entity(&self, entity_id: &str) -> Option<&Box<Entity>> {
+    pub fn get_entity(&self, entity_id: &str) -> Option<&Box<dyn Entity>> {
         self.entities.get(entity_id)
+    }
+
+    pub fn get_mut_entity(&mut self, entity_id: &str) -> Option<&mut Box<dyn Entity>> {
+        self.entities.get_mut(entity_id)
     }
 
     pub fn get_current_map(&self) -> Option<&Map> {

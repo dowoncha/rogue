@@ -6,13 +6,15 @@ use std::borrow::{Borrow, BorrowMut};
 use rand::prelude::*;
 use ncurses as nc;
 
+use console;
+use console::Color;
 use game_state::GameState;
 use map::{Map, MapBuilder};
 use types::{BoxResult, Rect};
 use action::{Action, WalkAction};
 use engine::{Engine};
 use renderer::{TerminalRenderer, ColorPair};
-use entity::{Entity, Entities, Breed, Hero, Monster};
+use entity::{Entity, Entities, InputType, handle_key, Breed, Hero, Monster};
 use world::World;
 
 fn gen_entities(room: &Rect, max_monsters_per_room: i32) -> Vec<Box<dyn Entity>> {
@@ -127,9 +129,13 @@ fn create_monsters(map: &Map, max_monsters_per_room: i32) -> Vec<Box<dyn Entity>
     entities
 }
 
-pub enum Event {
+pub enum PlayerTurnResultType {
     Move(i32, i32),
-    Quit
+    EndTurn
+}
+
+pub enum Event {
+    Input(i32)
 }
 
 pub struct GameClient {
@@ -157,6 +163,8 @@ impl GameClient {
     ) -> BoxResult<()> {
         let screen_width = 80;
         let screen_height = 50;
+
+        init_input_thread(self.event_sender.clone());
 
         self.renderer.init()
             .expect("Failed to init renderer");
@@ -190,22 +198,91 @@ impl GameClient {
     }
 
     pub fn run(&mut self) -> BoxResult<()> {
+        let screen_width = 80;
+        let screen_height = 50;
+
+        let root_console = console::init_root(screen_width, screen_height);
+
+        let mut bottom_panel_console = console::Console::new(screen_width, 20);
+
+        let message_log = MessageLog::new();
+
+        let mut player_turn_results = Vec::new();
+
         let mut game_state = GameState::PlayerTurn;
         let mut previous_game_state = game_state;
 
-        let mut skip_user_input = true;
+        let mut skip_user_input = false;
 
         'main: loop {
-            let user_input;
+            // Recompute FOV
 
-            self.update();
-
+            // Render and display the dungeon
             self.render();
+
+            // Render the UI
+            message_log.render(&mut bottom_panel_console);
+
+            // Draw cursor
+
+            // Render any menus
+
+            // Advance animation frames
+
+            // Blit suboncoles to mian consoles and flush all rendering
+
+            // Clear all entities drawn to consoles
+            self.clear_entities();
+
+            let mut action = None;
 
             // Get user input
             if !skip_user_input {
-                user_input = get_user_input();
+                if let Ok(event) = self.event_receiver.try_recv() {
+                    match event {
+                        Event::Input(input) => {
+                            action = handle_key(input);
+                        }
+                    }
+                }
             }
+
+            // Handle Player action
+            if let Some(action) = action {
+                match action {
+                    InputType::Move(dx, dy) => {
+                        player_move_or_attack(
+                            &mut self.world, 
+                            dx, 
+                            dy,
+                            &mut player_turn_results
+                        );
+                    }
+                    _ => {}
+                }
+            }
+
+            player_turn_results.drain(..).for_each(|turn_result| {
+                match turn_result {
+                    PlayerTurnResultType::Move(dx, dy) => {
+                        let player = &mut self.world.get_mut_entity("player").unwrap();
+
+                        let dest_x = player.get_x() + dx;
+                        let dest_y = player.get_y() + dy;
+
+                        debug!("{} {}", dest_x, dest_y);
+                    },
+                    _ => {}
+                }
+            })
+
+            //     if let Some(action) = handle_key(input) {
+            //         if let Ok(walk_action) = action.downcast::<WalkAction>() {
+           //         }
+            //     }
+
+
+            // action = player.input_handler.handle_keys(user_input, game_state);
 
             // action = player.input_handler.handle_keys(user_input, game_state)
 
@@ -254,8 +331,6 @@ impl GameClient {
         self.render_entities(entities);
 
         self.renderer.refresh();
-
-        self.clear_entities(entities);
     }
 
     fn render_map(&self, map: &Map) {
@@ -287,7 +362,7 @@ impl GameClient {
     fn render_entities(&self, entities: &Entities) {
         // Filter entities that have a render component
         for (id, entity) in entities {
-            // info!("Rendering entity {}, {:?}", id, entity);
+            info!("Rendering entity {}", id);
             self.render_entity(entity.borrow());
         }
     }
@@ -300,7 +375,9 @@ impl GameClient {
             entity.get_color());
     }
 
-    fn clear_entities(&self, entities: &Entities) {
+    fn clear_entities(&self) {
+        let entities = self.world.get_entities();
+
         for (index, entity) in entities.iter() {
             self.clear_entity(entity.borrow());
         }
@@ -311,15 +388,42 @@ impl GameClient {
     }
 }
 
-fn get_user_input() -> Option<i32> {
-    let user_input = nc::getch();
+fn init_input_thread(event_sender: std::sync::mpsc::Sender<Event>) {
+    std::thread::spawn(move || {
+        loop {
+            let user_input = nc::getch();
 
-    Some(user_input)
+            event_sender.send(Event::Input(user_input));
+        }
+    });
+}
+
+fn player_move_or_attack(
+    world: &mut World,
+    dx: i32,
+    dy: i32,
+    player_turn_results: &mut Vec<PlayerTurnResultType>
+    // entity: &mut Box<dyn Entity>,
+    // map: &Map
+) {
+    // player.set_x(dest_x);
+    // player.set_y(dest_y);
+    player_turn_results.push(PlayerTurnResultType::Move(dx, dy));
 }
 
 struct Message {
     text: String,
-    // color: Color
+    color: console::Color
+}
+
+impl Message {
+    pub fn new(text: &str, color: Option<console::Color>) -> Self {
+        Self {
+            text: text.to_string(),
+            color: Color(255, 255, 255)
+            // color: color.unwrap_or(console::Color(255, 255, 255))
+        }
+    }
 }
 
 struct MessageLog {
@@ -336,5 +440,12 @@ impl MessageLog {
     pub fn add_message(&mut self, message: Message) {
         // Split the message if necessary, among multiple lines
         self.messages.push(message);
+    }
+
+    pub fn render(&self, console: &mut console::Console) {
+        let x = 10;
+        for (y, message) in self.messages.iter().enumerate() {
+            console.print(x, y, &message.text, Some(message.color), None);
+        }
     }
 }

@@ -12,6 +12,7 @@ use std::panic;
 
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
+    // println!("\u{001b}[31mHelloWorld");
     let args: Vec<_> = env::args().collect();
 
     file_logger::init()
