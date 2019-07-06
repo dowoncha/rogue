@@ -1,5 +1,7 @@
 use ncurses as nc;
 use std::thread;
+
+use game_state::GameState;
 use client::Event;
 
 pub fn init(event_sender: std::sync::mpsc::Sender<Event>) {
@@ -43,5 +45,15 @@ pub fn handle_input(input: i32) -> Option<Event> {
             Some(Event::Quit)
         }
         _ => None
+    }
+}
+
+struct PlayerInputHandler {
+
+}
+
+impl PlayerInputHandler {
+    pub fn handle_keys(&self, user_input: i32, game_state: GameState) {
+
     }
 }

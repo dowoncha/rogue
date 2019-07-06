@@ -4,14 +4,16 @@ use std::collections::HashMap;
 use std::borrow::{Borrow, BorrowMut};
 
 use rand::prelude::*;
+use ncurses as nc;
 
-use map::Map;
+use game_state::GameState;
+use map::{Map, MapBuilder};
 use types::{BoxResult, Rect};
 use action::{Action, WalkAction};
-use input_manager;
-use engine::{Engine, Entities};
+use engine::{Engine};
 use renderer::{TerminalRenderer, ColorPair};
-use entity::{Entity, Breed, Hero, Monster};
+use entity::{Entity, Entities, Breed, Hero, Monster};
+use world::World;
 
 fn gen_entities(room: &Rect, max_monsters_per_room: i32) -> Vec<Box<dyn Entity>> {
     let mut rng = thread_rng();
@@ -43,6 +45,88 @@ fn gen_entities(room: &Rect, max_monsters_per_room: i32) -> Vec<Box<dyn Entity>>
     entities
 }
 
+pub fn create_map(
+    max_rooms: i32, 
+    room_min_size: usize, 
+    room_max_size: usize, 
+    map_width: usize, 
+    map_height: usize
+) -> Map {
+    let mut rng = rand::thread_rng();
+
+    let mut map_builder = MapBuilder::new(map_width, map_height);
+
+    let mut rooms = Vec::new();
+
+    for _ in 0..max_rooms {
+        let w = rng.gen_range(room_min_size, room_max_size) as i32;
+        let h = rng.gen_range(room_min_size, room_max_size) as i32;
+
+        let x = rng.gen_range(0, map_width as i32 - w - 1);
+        let y = rng.gen_range(0, map_height as i32 - h - 1 );
+
+        let new_room = Rect::new(x, y, w, h);
+
+        let mut intersected = false;
+
+        for other_room in &rooms {
+            if new_room.intersect(other_room) {
+                intersected = true;
+                break;
+            }
+        }
+
+        if !intersected {
+            map_builder = map_builder.create_room(&new_room);
+
+            let (new_room_center_x, new_room_center_y ) = new_room.center();
+
+            if !rooms.is_empty() {
+                let (prev_x, prev_y) = rooms[rooms.len() - 1].center();
+
+                // flip a coin
+                if rng.gen::<f32>() > 0.5 {
+                    map_builder = map_builder
+                        .create_h_tunnel(prev_x, new_room_center_x, prev_y)
+                        .create_v_tunnel(prev_y, new_room_center_y, new_room_center_x);
+                } else {
+                    map_builder = map_builder
+                        .create_v_tunnel(prev_y, new_room_center_y, prev_x)
+                        .create_h_tunnel(prev_x, new_room_center_x, new_room_center_y);
+                }
+            }
+
+            rooms.push(new_room);
+        }
+    }
+
+    let mut map = map_builder.build();
+
+    map.set_rooms(rooms);
+
+    map
+}
+
+fn create_player(map: &Map) -> Hero {
+    let mut player = Hero::new("Rand Al'Thor");
+    let first_room_center = map.get_rooms()[0].center();
+    let player_x = first_room_center.0;
+    let player_y = first_room_center.1;
+    player.set_x(player_x);
+    player.set_y(player_y);
+
+    player
+}
+
+fn create_monsters(map: &Map, max_monsters_per_room: i32) -> Vec<Box<dyn Entity>> {
+    let entities = map.get_rooms().iter()
+        .map(|room| gen_entities(&room, max_monsters_per_room))
+        .flatten()
+        .collect();
+
+    entities
+}
+
 pub enum Event {
     Move(i32, i32),
     Quit
@@ -50,7 +134,7 @@ pub enum Event {
 
 pub struct GameClient {
     renderer: TerminalRenderer,
-    engine: Box<Engine>,
+    world: World,
     event_sender: std::sync::mpsc::Sender<Event>,
     event_receiver: std::sync::mpsc::Receiver<Event>
 }
@@ -61,9 +145,9 @@ impl GameClient {
 
         Self {
             renderer: TerminalRenderer::new(),
-            engine: Box::new(Engine::new()),
             event_sender: sender,
-            event_receiver: receiver
+            event_receiver: receiver,
+            world: World::new()
         }
     }
 
@@ -77,16 +161,11 @@ impl GameClient {
         self.renderer.init()
             .expect("Failed to init renderer");
 
-        // let mut engine = self.engine.borrow_mut();
-
-        // Input manager
-        // input_manager::init(self.event_sender.clone());
-
         let max_rooms = 20;
         let room_min_size = 5;
         let room_max_size = 20;
 
-        let (map_rooms, map) = self.engine.make_map(
+        let map = create_map(
             max_rooms,
             room_min_size,
             room_max_size,
@@ -94,81 +173,53 @@ impl GameClient {
             screen_height
         );
 
-        self.engine.get_mut_world().set_map(map);
-
-        let mut player = Box::new(Hero::new("Rand Al'Thor"));
-        let first_room_center = map_rooms[0].center();
-        let player_x = first_room_center.0;
-        let player_y = first_room_center.1;
-        player.set_x(player_x);
-        player.set_y(player_y);
-
-        info!("Hero created in {}, {}", player_x, player_y);
-
-        self.engine.get_mut_world().register_entity("player", player);
+        let hero = create_player(&map);
+        self.world.register_entity("player", Box::new(hero));
 
         let max_monsters_per_room = 3;
 
-        // For each room
-        // Generate monsters
-        // Register each monster to engine
-        let entities = map_rooms.iter()
-            .map(|room| gen_entities(&room, max_monsters_per_room))
-            .flatten()
-            .enumerate();
+        let monsters = create_monsters(&map, max_monsters_per_room);
 
-        for (index, entity) in entities {
-            let id = format!("monster-{}", index);
-            self.engine.get_mut_world().register_entity(&id, entity)
+        for (index, monster) in monsters.into_iter().enumerate() {
+            self.world.register_entity(&format!("monster-{}", index), monster);
         }
+
+        self.world.set_map(map);
 
         Ok(())
     }
 
     pub fn run(&mut self) -> BoxResult<()> {
-        // TODO/DECISION
-        // Should time be handled in floating point or int
-        let mut previous = Instant::now();
-        // let mut lag = 0.0f64;
-        let mut game_time = 0u64;
+        let mut game_state = GameState::PlayerTurn;
+        let mut previous_game_state = game_state;
 
-        let mut lag = 0.0;
+        let mut skip_user_input = true;
 
         'main: loop {
-            let current = Instant::now();
-            let elapsed = current.duration_since(previous);
-            previous = current;
-            lag += elapsed.as_secs_f64();
-
-            // Events
-            // handle_events();
-            // Update
-            // while game_time < current {
-            //     lag -= MS_PER_UPDATE;
-                
-            //     self.update();
-            // }
+            let user_input;
 
             self.update();
 
             self.render();
 
-            // let mut iter = self.event_receiver.try_iter();
+            // Get user input
+            if !skip_user_input {
+                user_input = get_user_input();
+            }
 
-            // Poll for events
-            // while let Some(event) = iter.next() {
-            //     match event {
-            //         Event::Move(dx, dy) => {
-            //             // self.move_entity("player", dx, dy);
-            //             // self.engine.execute_action();
-            //         },
-            //         Event::Quit => {
-            //             break 'main;
-            //         }
-            //     }
-            // }
+            // action = player.input_handler.handle_keys(user_input, game_state)
 
-            previous = current;
+            // Handle player actions
+
+            // Player move action
+
+            // Player pickup
+
+            // Player inventory use / drop
+
+            // Process the results stack
+
+            // Post player turn check
         }
 
         Ok(())
@@ -178,10 +229,6 @@ impl GameClient {
         // let mut engine = self.engine.borrow_mut();
         // let entities = self.engine.get_entities();
         // let num_entities = entities.len();
-
-        // for (index, entity) in entities.iter_mut() {
-        //     entity.update();
-        // }
 
         // for (index, entity) in engine.get_entities_mut() {
         //     if let Some(action) = entity.take_turn() {
@@ -196,11 +243,12 @@ impl GameClient {
 
     fn render(&self) {
         // let engine = self.engine.borrow();
-        let map = self.engine.get_world().get_current_map().expect("No map loaded");
+        // let map = self.engine.get_world().get_current_map().expect("No map loaded");
+        let map = self.world.get_current_map().unwrap();
 
         self.render_map(map);
 
-        let entities = self.engine.get_world().get_entities();
+        let entities = self.world.get_entities();
 
         // Render entitys
         self.render_entities(entities);
@@ -253,7 +301,7 @@ impl GameClient {
     }
 
     fn clear_entities(&self, entities: &Entities) {
-        for entity in entities.values() {
+        for (index, entity) in entities.iter() {
             self.clear_entity(entity.borrow());
         }
     }
@@ -261,6 +309,12 @@ impl GameClient {
     fn clear_entity(&self, entity: &dyn Entity) {
         self.renderer.mvaddch(entity.get_x(), entity.get_y(), ' ');
     }
+}
+
+fn get_user_input() -> Option<i32> {
+    let user_input = nc::getch();
+
+    Some(user_input)
 }
 
 struct Message {

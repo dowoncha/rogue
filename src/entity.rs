@@ -1,10 +1,15 @@
 use ncurses as nc;
 
 use std::rc::Rc;
+use std::collections::HashMap;
 
 use action::{Direction, Action, WalkAction};
-use engine::World;
+use world::World;
 use renderer::ColorPair;
+
+trait Component {}
+
+pub type Entities = HashMap<String, Box<dyn Entity>>;
 
 pub trait Entity {
     fn get_x(&self) -> i32;
@@ -15,15 +20,13 @@ pub trait Entity {
     fn get_color(&self) -> ColorPair;
     fn take_turn(&self) -> Option<Box<dyn Action>>;
     fn update(&mut self) { }
-    fn get_world(&self) -> Option<Rc<World>>;
-    fn set_world(&mut self, world: Rc<World>);
+    // fn add_component(&mut self, component_name: &str, component: Box<dyn Component>) {}
 }
 
 pub struct Hero {
     name: String,
     x: i32,
     y: i32,
-    world: Option<Rc<World>>
 }
 
 impl Hero {
@@ -32,20 +35,11 @@ impl Hero {
             name: name.to_string(),
             x: 0,
             y: 0,
-            world: None
         }
     }
 }
 
 impl Entity for Hero {
-    fn get_world(&self) -> Option<Rc<World>> {
-        self.world.as_ref().map(|world| Rc::clone(world))
-    }
-
-    fn set_world(&mut self, world: Rc<World>) {
-        self.world = Some(world);
-    }
-
     fn get_x(&self) -> i32 {
         self.x
     }
@@ -135,7 +129,6 @@ pub struct Monster {
     health: i32,
     x: i32,
     y: i32,
-    world: Option<Rc<World>>
 }
 
 impl Monster {
@@ -146,20 +139,11 @@ impl Monster {
             breed: breed,
             x: x,
             y: y,
-            world: None
         }
     }
 }
 
 impl Entity for Monster {
-    fn get_world(&self) -> Option<Rc<World>> {
-        self.world.as_ref().map(|world| Rc::clone(world))
-    }
-
-    fn set_world(&mut self, world: Rc<World>) {
-        self.world = Some(world);
-    }
-
     fn get_x(&self) -> i32 {
         self.x
     }

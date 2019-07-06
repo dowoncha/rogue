@@ -27,7 +27,7 @@ mod entity;
 mod gen_map_1;
 mod command_manager;
 mod config_manager;
-mod input_manager;
+mod game_state;
 pub mod file_logger;
 mod types;
 mod map;
@@ -36,5 +36,6 @@ mod dungeon;
 mod engine;
 mod renderer;
 mod client;
+mod world;
 
 pub use client::GameClient;

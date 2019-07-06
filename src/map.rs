@@ -29,6 +29,7 @@ impl Cell {
 // A map is a 2d grid of tiles
 pub struct Map {
     cells: Vec<Cell>,
+    rooms: Vec<Rect>,
     width: usize,
     height: usize,
 }
@@ -41,9 +42,13 @@ impl Map {
             width: width,
             height: height,
             cells: cells,
+            rooms: Vec::new()
         }
     }
 
+    /**
+     * Fill room with walls
+     */
     pub fn init_cells(width: usize, height: usize) -> Vec<Cell> {
         let mut cells = Vec::with_capacity(width * height);
         for y in 0..height {
@@ -57,25 +62,6 @@ impl Map {
         }
 
         cells
-    }
-
-    pub fn open(filename: &str) -> std::io::Result<Self> {
-        debug!("Opening map {}", filename);
-
-        let mut file = File::open(filename)?;
-        let mut buffer = String::new();
-
-        file.read_to_string(&mut buffer)?;
-
-        let (width, height) = Map::get_buffer_dimensions(&buffer);
-
-        let cells = Map::create_cells_from_buffer(&buffer, width, height);
-
-        Ok(Map {
-            cells: cells,
-            width: width,
-            height: height
-        })
     }
 
     pub fn cell_index(&self, x: i32, y: i32) -> usize {
@@ -118,31 +104,6 @@ impl Map {
         (width, height)
     }
 
-    fn create_cells_from_buffer(buffer: &str, width: usize, height: usize) -> Vec<Cell> {
-        let lines = buffer.lines();
-
-        let mut cells = Vec::with_capacity(width * height);
-
-        for line in lines {
-            let mut chars = line.chars();
-
-            for _ in 0..width {
-                let glyph = chars.next().unwrap_or(' ');
-
-                match glyph {
-                    '#' => {
-                        cells.push(Cell::new(glyph, true, true));
-                    }
-                    _ => {
-                        cells.push(Cell::new(glyph, false, false));
-                    }
-                }
-            }
-        }
-
-        cells
-    }
-
     pub fn get_cell_ref(&self, x: i32, y: i32) -> &Cell {
         &self.cells[y as usize * self.width + x as usize]
     }
@@ -151,8 +112,12 @@ impl Map {
         &mut self.cells[y as usize * self.width + x as usize]
     }
 
-    pub fn find_entity(&self, entity_id: &str) -> Option<&Entity> {
-        None
+    pub fn get_rooms(&self) -> &[Rect] {
+        &self.rooms
+    }
+
+    pub fn set_rooms(&mut self, rooms: Vec<Rect>) {
+        self.rooms = rooms;
     }
 }
 
@@ -215,6 +180,31 @@ impl MapBuilder {
     pub fn build(self) -> Map {
         self.map
     }
+}
+
+fn create_cells_from_buffer(buffer: &str, width: usize, height: usize) -> Vec<Cell> {
+    let lines = buffer.lines();
+
+    let mut cells = Vec::with_capacity(width * height);
+
+    for line in lines {
+        let mut chars = line.chars();
+
+        for _ in 0..width {
+            let glyph = chars.next().unwrap_or(' ');
+
+            match glyph {
+                '#' => {
+                    cells.push(Cell::new(glyph, true, true));
+                }
+                _ => {
+                    cells.push(Cell::new(glyph, false, false));
+                }
+            }
+        }
+    }
+
+    cells
 }
 
 #[cfg(test)]
