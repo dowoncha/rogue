@@ -1,4 +1,6 @@
 use std::cell::RefCell;
+use std::rc::Rc;
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use std::collections::HashMap;
 use std::borrow::{Borrow, BorrowMut};
@@ -11,37 +13,37 @@ use console::Color;
 use game_state::GameState;
 use map::{Map, MapBuilder};
 use types::{BoxResult, Rect};
-use action::{Action, WalkAction};
+// use action::{Action, WalkAction};
 use engine::{Engine};
 use renderer::{TerminalRenderer, ColorPair};
-use entity::{Entity, Entities, InputType, handle_key, Breed, Hero, Monster};
-use world::World;
+use entities::{Entity, Entities, InputType, handle_key, Breed, create_player};
+// use world::World;
 
-fn gen_entities(room: &Rect, max_monsters_per_room: i32) -> Vec<Box<dyn Entity>> {
+fn gen_entities(room: &Rect, max_monsters_per_room: i32) -> Vec<Entity> {
     let mut rng = thread_rng();
     let num_monsters = rng.gen_range(0, max_monsters_per_room);
 
-    let mut entities: Vec<Box<Entity>> = Vec::new();
+    let mut entities: Vec<Entity> = Vec::new();
 
-    let goblin_breed = Breed {
-        name: "goblin".to_string(),
-        glyph: 'g',
-        max_health: 10,
-        color: ColorPair::GreenBlack
-    };
+    // let goblin_breed = Breed {
+    //     name: "goblin".to_string(),
+    //     glyph: 'g',
+    //     max_health: 10,
+    //     color: ColorPair::GreenBlack
+    // };
 
     for _ in 0..num_monsters {
         let x = rng.gen_range(room.x1 + 1, room.x2 - 1);
         let y = rng.gen_range(room.y1 + 1, room.y2 - 1);
 
         // Check if any entity resides in selected cell
-        if entities.iter().filter(|e| e.get_x() == x && e.get_y() == y).count() == 0 {
-            let entity = Box::new(Monster::new(
-                goblin_breed.clone(),
-                x, y));
+        // if entities.iter().filter(|e| e.get_x() == x && e.get_y() == y).count() == 0 {
+            // let entity = Entity::new(
+            //     goblin_breed.clone(),
+            //     x, y);
 
-            entities.push(entity);
-        }
+            // entities.push(entity);
+        // }
     }
 
     entities
@@ -109,18 +111,7 @@ pub fn create_map(
     map
 }
 
-fn create_player(map: &Map) -> Hero {
-    let mut player = Hero::new("Rand Al'Thor");
-    let first_room_center = map.get_rooms()[0].center();
-    let player_x = first_room_center.0;
-    let player_y = first_room_center.1;
-    player.set_x(player_x);
-    player.set_y(player_y);
-
-    player
-}
-
-fn create_monsters(map: &Map, max_monsters_per_room: i32) -> Vec<Box<dyn Entity>> {
+fn create_monsters(map: &Map, max_monsters_per_room: i32) -> Vec<Entity> {
     let entities = map.get_rooms().iter()
         .map(|room| gen_entities(&room, max_monsters_per_room))
         .flatten()
@@ -135,15 +126,16 @@ pub enum PlayerTurnResultType {
     EndTurn
 }
 
-pub enum Event {
-    Input(i32)
+pub struct UIEvent {
+    kind: &'static str,
+    args: Vec<String>
 }
 
 pub struct GameClient {
     renderer: TerminalRenderer,
-    world: World,
-    event_sender: std::sync::mpsc::Sender<Event>,
-    event_receiver: std::sync::mpsc::Receiver<Event>
+    engine: Engine,
+    ui_event_sender: std::sync::mpsc::Sender<UIEvent>,
+    ui_event_receiver: std::sync::mpsc::Receiver<UIEvent>
 }
 
 impl GameClient {
@@ -152,9 +144,10 @@ impl GameClient {
 
         Self {
             renderer: TerminalRenderer::new(),
-            event_sender: sender,
-            event_receiver: receiver,
-            world: World::new()
+            engine: Engine::new(),
+            ui_event_sender: sender,
+            ui_event_receiver: receiver,
+            // world: World::new()
         }
     }
 
@@ -165,10 +158,14 @@ impl GameClient {
         let screen_width = 80;
         let screen_height = 50;
 
-        self.renderer.init()
-            .expect("Failed to init renderer");
+        {
+            self.engine.init();
 
-        init_input_thread(self.event_sender.clone());
+            self.renderer.init()
+                .expect("Failed to init renderer");
+        }
+
+        init_input_thread(self.ui_event_sender.clone());
 
         let max_rooms = 20;
         let room_min_size = 5;
@@ -182,18 +179,18 @@ impl GameClient {
             screen_height
         );
 
-        let hero = create_player(&map);
-        self.world.register_entity("player", Box::new(hero));
+        create_player(&self.engine);
+        // self.world.register_entity("player", Box::new(hero));
 
         let max_monsters_per_room = 3;
 
         let monsters = create_monsters(&map, max_monsters_per_room);
 
         for (index, monster) in monsters.into_iter().enumerate() {
-            self.world.register_entity(&format!("monster-{}", index), monster);
+            // self.world.register_entity(&format!("monster-{}", index), monster);
         }
 
-        self.world.set_map(map);
+        // self.world.set_map(map);
 
         Ok(())
     }
@@ -208,7 +205,7 @@ impl GameClient {
 
         let mut message_log = MessageLog::new();
 
-        let mut player_turn_results = Vec::new();
+        let mut player_turn_results: Vec<PlayerTurnResultType> = Vec::new();
 
         let mut game_state = GameState::PlayerTurn;
         let mut previous_game_state = game_state;
@@ -219,7 +216,24 @@ impl GameClient {
             // Recompute FOV
 
             // Render and display the dungeon
-            self.render();
+            // Render the world
+
+            // Render the map
+            // render all tiles in map
+            // render all entities in map
+
+            // let engine = self.engine.borrow();
+            // let map = self.engine.get_world().get_current_map().expect("No map loaded");
+            // let map = self.world.get_current_map().unwrap();
+
+            // self.render_map(map);
+
+            // let entities = self.world.get_entities();
+
+            // Render entitys
+            // self.render_entities(entities);
+
+            self.renderer.refresh();
 
             // Render the UI
             message_log.render(&mut bottom_panel_console);
@@ -233,53 +247,48 @@ impl GameClient {
             // Blit suboncoles to mian consoles and flush all rendering
 
             // Clear all entities drawn to consoles
-            self.clear_entities();
+            // self.clear_entities();
 
-            let mut action = None;
+            // let mut action = None;
 
             // Get user input
-            if !skip_user_input {
-                if let Ok(event) = self.event_receiver.try_recv() {
-                    match event {
-                        Event::Input(input) => {
-                            action = handle_key(input);
-                        }
-                    }
-                }
-            }
+            // if !skip_user_input {
+            //     if let Ok(event) = self.event_receiver.try_recv() {
+            //         match event {
+            //             UIEvent::Input(input) => {
+            //                 action = handle_key(input);
+            //             }
+            //         }
+            //     }
+            // }
 
             // Handle Player action
-            if let Some(action) = action {
-                match action {
-                    InputType::Move(dx, dy) => {
-                        player_move_or_attack(
-                            &mut self.world, 
-                            dx, 
-                            dy,
-                            &mut player_turn_results
-                        );
-                    }
-                    _ => {}
-                }
-            }
+            // if let Some(action) = action {
+            //     match action {
+            //         InputType::Move(dx, dy) => {
+            //             player_move_or_attack(
+            //                 &mut self.world, 
+            //                 dx, 
+            //                 dy,
+            //                 &mut player_turn_results
+            //             );
+            //         }
+            //         _ => {}
+            //     }
+            // }
 
-            player_turn_results.drain(..).for_each(|turn_result| {
-                match turn_result {
-                    PlayerTurnResultType::Move(dx, dy) => {
-                        let player = &mut self.world.get_mut_entity("player").unwrap();
-
-                        let dest_x = player.get_x() + dx;
-                        let dest_y = player.get_y() + dy;
-
-                        player.set_x(dest_x);
-                        player.set_y(dest_y);
-                    }
-                    PlayerTurnResultType::Message(message) => {
-                        message_log.add_message(message);
-                    }
-                    _ => {}
-                }
-            })
+            // player_turn_results.drain(..).for_each(|turn_result| {
+            //     match turn_result {
+            //         PlayerTurnResultType::Move(dx, dy) => {
+            //             let player = &self.world.get_entity("player").unwrap();
+            //             player.walk(&self.world, dx, dy);
+            //         }
+            //         PlayerTurnResultType::Message(message) => {
+            //             message_log.add_message(message);
+            //         }
+            //         _ => {}
+            //     }
+            // })
 
             //     if let Some(action) = handle_key(input) {
             //         if let Ok(walk_action) = action.downcast::<WalkAction>() {
@@ -323,21 +332,6 @@ impl GameClient {
         // }
     }
 
-    fn render(&self) {
-        // let engine = self.engine.borrow();
-        // let map = self.engine.get_world().get_current_map().expect("No map loaded");
-        let map = self.world.get_current_map().unwrap();
-
-        self.render_map(map);
-
-        let entities = self.world.get_entities();
-
-        // Render entitys
-        self.render_entities(entities);
-
-        self.renderer.refresh();
-    }
-
     fn render_map(&self, map: &Map) {
         let viewport_x = 0;
         let viewport_y = 0;
@@ -364,50 +358,50 @@ impl GameClient {
         }
     }
 
-    fn render_entities(&self, entities: &Entities) {
-        // Filter entities that have a render component
-        for (id, entity) in entities {
-            // info!("Rendering entity {}", id);
-            self.render_entity(entity.borrow());
-        }
-    }
+    // fn render_entities(&self, entities: &Entities) {
+    //     // Filter entities that have a render component
+    //     for (id, entity) in entities {
+    //         // info!("Rendering entity {}", id);
+    //         self.render_entity(entity.borrow());
+    //     }
+    // }
 
-    fn render_entity(&self, entity: &dyn Entity) {
-        self.renderer.mvaddch_color(
-            entity.get_x(), 
-            entity.get_y(), 
-            entity.get_glyph(),
-            entity.get_color());
-    }
+    // fn render_entity(&self, entity: &Entity) {
+    //     self.renderer.mvaddch_color(
+    //         entity.get_x(), 
+    //         entity.get_y(), 
+    //         entity.get_glyph(),
+    //         entity.get_color());
+    // }
 
-    fn clear_entities(&self) {
-        let entities = self.world.get_entities();
+    // fn clear_entities(&self) {
+    //     let entities = self.world.get_entities();
 
-        for (index, entity) in entities.iter() {
-            self.clear_entity(entity.borrow());
-        }
-    }
+    //     for (index, entity) in entities.iter() {
+    //         self.clear_entity(entity.borrow());
+    //     }
+    // }
 
-    fn clear_entity(&self, entity: &dyn Entity) {
-        self.renderer.mvaddch(entity.get_x(), entity.get_y(), ' ');
-    }
+    // fn clear_entity(&self, entity: &Entity) {
+    //     self.renderer.mvaddch(entity.get_x(), entity.get_y(), ' ');
+    // }
 }
 
-fn init_input_thread(event_sender: std::sync::mpsc::Sender<Event>) {
+fn init_input_thread(event_sender: std::sync::mpsc::Sender<UIEvent>) {
     std::thread::spawn(move || {
         loop {
             let user_input = nc::getch();
 
             if user_input != -1 {
                 debug!("User input {}", user_input);
-                event_sender.send(Event::Input(user_input));
+                event_sender.send(UIEvent { kind: "input", args: vec![user_input.to_string()] });
             }
         }
     });
 }
 
 fn player_move_or_attack(
-    world: &mut World,
+    // world: &mut World,
     dx: i32,
     dy: i32,
     player_turn_results: &mut Vec<PlayerTurnResultType>

@@ -18,25 +18,32 @@ extern crate log;
 extern crate rand;
 extern crate rand_distr;
 
+extern crate serde;
+extern crate serde_json;
+
 extern crate time;
 
 extern crate ncurses;
 
-mod console;
-mod action;
-mod entity;
-mod gen_map_1;
-mod command_manager;
-mod config_manager;
-mod game_state;
-pub mod file_logger;
-mod types;
-mod map;
-mod character;
-mod dungeon;
-mod engine;
-mod renderer;
-mod client;
-mod world;
+extern crate uuid;
 
-pub use client::GameClient;
+// mod console;
+// mod components;
+// // mod action;
+// mod entities;
+// mod gen_map_1;
+// mod command_manager;
+// mod config_manager;
+// mod game_state;
+// pub mod file_logger;
+// mod types;
+// mod map;
+// mod character;
+// mod dungeon;
+// mod engine;
+// mod renderer;
+// mod client;
+// // mod world;
+// mod systems;
+
+// pub use client::GameClient;

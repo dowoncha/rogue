@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::prelude::*;
-use entity::Entity;
+use entities::Entity;
 use types::{Rect, Dimension};
 
 #[derive(Debug)]

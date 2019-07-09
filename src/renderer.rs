@@ -4,24 +4,7 @@ use types::{BoxResult, Dimension, Menu, MenuItem};
 
 pub use self::colors::ColorPair;
 
-struct Console {
-    width: usize,
-    height: usize,
-    buffer: Vec<char>
-}
 
-impl Console {
-    pub fn new(width: usize, height: usize) -> Self {
-        Self {
-            width: width,
-            height: height,
-            buffer: vec![' '; width * height]
-        }
-    }
-
-    pub fn clear(&mut self, ch: char, fg: (u8, u8, u8), bg: (u8, u8, u8)) {
-    }
-}
 
 pub struct Window {
     pointer: nc::WINDOW
