@@ -123,21 +123,25 @@ mod player_tests {
     #[test]
     fn test_controls() {
         // 'w'
-        let (dx, dy) = handle_input(119);
-        assert!(dx == 0 && dy == -1);
+        let event = handle_input(119).unwrap();
+        assert_eq!(event, InputEvent::MovePlayer(0, -1));
 
         //' d'
-        let (dx, dy) = handle_input(100);
-        assert!(dx == 1 && dy == 0);
+        let event = handle_input(100).unwrap();
+        assert_eq!(event, InputEvent::MovePlayer(1, 0));
 
         // assert!(player.x == 101 && player.y == 99);
         // 's'
-        let (dx, dy) = handle_input(115);
-        assert!(dx == 0 && dy == 1);
+        let event = handle_input(115).unwrap();
+        assert_eq!(event, InputEvent::MovePlayer(0, 1));
 
         // 'a'
-        let (dx, dy) = handle_input(97);
-        assert!(dx == -1 && dy == 0);
+        let event = handle_input(97).unwrap();
+        assert_eq!(event, InputEvent::MovePlayer(-1, 0));
+
+        // 'q'
+        let event = handle_input(113).unwrap();
+        assert_eq!(event, InputEvent::Quit);
     }
     
 
@@ -181,22 +185,31 @@ mod player_tests {
     }
 }
 
-fn handle_input(input: i32) -> (i32, i32) {
+#[derive(Debug, PartialEq)]
+enum InputEvent {
+    MovePlayer(i32, i32),
+    Quit
+}
+
+fn handle_input(input: i32) -> Option<InputEvent> {
     match input {
         119 => {
             //'w'
-            (0, -1)
+            Some(InputEvent::MovePlayer(0, -1))
         }
         100 => {
-            (1, 0)
+            Some(InputEvent::MovePlayer(1, 0))
         }
         115 => {
-            (0, 1)
+            Some(InputEvent::MovePlayer(0, 1))
         }
         97 => {
-            (-1, 0)
-        },
-        _ => { (0, 0)}
+            Some(InputEvent::MovePlayer(-1, 0))
+        }
+        113 => {
+            Some(InputEvent::Quit)
+        }
+        _ => { None }
     }
 }
 
@@ -472,12 +485,35 @@ impl Game {
 
         let mut buffer = String::new();
 
+        // write game header
+        writeln!(buffer, "Rogue");
+
+        let game_version = 0.1;
+
+        // write game version
+        writeln!(buffer, "v{}", game_version);
+
+        // Write player info
         writeln!(buffer, "{}", self.player.name())?;
+
+        // write save_date
+
+        // write map
+
+        // write entities
+        for (id, monster) in self.monsters.iter() {
+            writeln!(buffer, "Entity");
+            writeln!(buffer, "id\t{}", id);
+            writeln!(buffer, "name\t{}", monster.name());
+            writeln!(buffer, "hp/max\t{}/{}", monster.health(), monster.max_health());
+
+            writeln!(buffer, "EndEntity");
+        }
 
         Ok(buffer)
     }
 
-    pub fn save(&self) -> std::io::Result<SaveResult> {
+    pub fn save(&self, filename: Option<&str>) -> std::io::Result<SaveResult> {
         use std::fmt::Write;
 
         let player_name = self.player.name();
@@ -487,6 +523,7 @@ impl Game {
         let buffer = self.serialize().unwrap();
 
         write!(savefile, "{}", buffer)?;
+
 
         Ok(SaveResult {
             filename: filename.to_string()
@@ -644,7 +681,7 @@ mod save_load_tests {
 
         game.get_mut_player().set_name("gromash");
 
-        let save_result = game.save().unwrap();
+        let save_result = game.save(None).unwrap();
 
         let savefilename = save_result.filename;
 
@@ -708,29 +745,30 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     game.spawn_monster(goblin, 7, 5);
 
-    loop {
+    'main: loop {
         game.render();
         
         let input = get_input();
 
-        let (dx, dy) = handle_input(input);
-        
-        let (x1, y1) = {
-            let player = game.get_player();
+        if let Some(input_event) = handle_input(input) {
+            match input_event {
+                InputEvent::MovePlayer(dx, dy) => {
+                    let (x1, y1) = {
+                        let player = game.get_player();
 
-            (player.x + dx, player.y + dy)
-        };
+                        (player.x + dx, player.y + dy)
+                    };
 
-        let move_result = game.move_player(x1, y1);
-
-        // if let Err(blocker_name) = move_result {
-        //     engine.get_mut_player().attack()
-        // }
+                    let _ = game.move_player(x1, y1);
+                }
+                InputEvent::Quit => break 'main
+            }
+        }
 
         game.cleanup();
     }
 
-    game.save()?;
+    game.save(None)?;
 
     drop_ncurses();
 
