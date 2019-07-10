@@ -1,3 +1,5 @@
+#![feature(drain_filter)]
+
 #[macro_use]
 extern crate log;
 extern crate ncurses;
@@ -8,6 +10,11 @@ use std::env;
 use std::panic;
 use std::fs::File;
 use std::io::prelude::*;
+use std::collections::HashMap;
+
+/**
+ * Render code
+ */
 
 fn init_ncurses() {
     // Start ncurses
@@ -39,10 +46,6 @@ fn init_ncurses() {
     nc::curs_set(nc::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
 }
 
-fn render_rect(rect: &Rect) {
-    
-}
-
 fn get_input() -> i32 {
     let input = nc::getch();
 
@@ -52,6 +55,12 @@ fn get_input() -> i32 {
 fn drop_ncurses() {
     nc::endwin();
 }
+
+trait Render {
+    fn render(&self);
+}
+
+/** Entity code */
 
 struct Player {
     name: String,
@@ -89,13 +98,28 @@ impl Player {
         self.y = y;
     }
 
+    fn set_position(&mut self, x: i32, y: i32 ) {
+        self.x = x;
+        self.y = y;
+    }
+
+    fn attack(&self, monster: &mut Monster) {
+        let damage = 3;
+        let new_health = monster.health() - damage;
+        monster.set_health(new_health);
+    }
+}
+
+impl Render for Player {
     fn render(&self) {
         nc::mvaddch(self.y, self.x, '@' as u64);
     }
 }
 
-#[cfg(tests)]
+#[cfg(test)]
 mod player_tests {
+    use super::*;
+
     #[test]
     fn test_controls() {
         // 'w'
@@ -115,6 +139,7 @@ mod player_tests {
         let (dx, dy) = handle_input(97);
         assert!(dx == -1 && dy == 0);
     }
+    
 
     #[test]
     fn test_change_players_name() {
@@ -125,6 +150,34 @@ mod player_tests {
         player.set_name("tinker");
         
         assert_eq!(player.name(), "tinker");
+    }
+
+    #[test]
+    fn test_player_attack() {
+        let player = Player::new("attacker");
+
+        let mut monster = Monster::new("defender");
+
+        assert_eq!(monster.max_health(), 10);
+        assert_eq!(monster.health(), 10);
+
+        player.attack(&mut monster);
+
+        assert_eq!(monster.max_health(), 10);
+        assert_eq!(monster.health(), 7);
+
+        player.attack(&mut monster);
+        
+        assert_eq!(monster.health(), 4);
+
+        player.attack(&mut monster);
+
+        assert_eq!(monster.health(), 1);
+
+        player.attack(&mut monster);
+
+        monster.is_dead();
+
     }
 }
 
@@ -147,18 +200,25 @@ fn handle_input(input: i32) -> (i32, i32) {
     }
 }
 
+#[derive(Debug)]
 struct Monster {
     name: String,
     x: i32,
-    y: i32
+    y: i32,
+    max_health: i32,
+    health: i32,
 }
 
 impl Monster {
     pub fn new(name: &str) -> Self {
+        let max_health = 10;
+
         Self {
             name: name.to_string(),
             x: -1,
-            y: -1
+            y: -1,
+            max_health: max_health,
+            health: max_health,
         }
     }
     
@@ -178,11 +238,34 @@ impl Monster {
         self.y = y;
     }
 
-    pub fn render(&self) {
-        nc::mvaddch(self.y, self.x, 'G' as u64);
+    pub fn set_health(&mut self, health: i32) {
+        self.health = health;
+    }
+
+    pub fn health(&self) -> i32 {
+        self.health
+    }
+
+    pub fn max_health(&self) -> i32 {
+        self.max_health
+    }
+
+    pub fn is_dead(&self) -> bool {
+        self.health <= 0
     }
 }
 
+impl PartialEq for Monster {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }    
+}
+
+impl Render for Monster {
+    fn render(&self) {
+        nc::mvaddch(self.y, self.x, 'G' as u64);
+    }
+}
 
 #[test]
 fn test_create_monster() {
@@ -192,11 +275,28 @@ fn test_create_monster() {
     assert_eq!(monster.position(), (-1, -1));
 }
 
+#[test]
+fn test_monster_equality() {
+    let monster1 = Monster::new("jacob");
+
+    let monster2 = Monster::new("jacob");
+
+    assert_eq!(monster1, monster2);
+}
+
 struct Rect {
     x: i32,
     y: i32,
     width: i32,
     height: i32
+}
+
+impl Render for Rect {
+    fn render(&self) {
+        let buffer = self.get_buffer();
+
+        nc::mvaddstr(self.y, self.x, &buffer);
+    }
 }
 
 impl Map for Rect {
@@ -235,12 +335,6 @@ impl Map for Rect {
         buffer
     }
 
-    fn render(&self) {
-        let buffer = self.get_buffer();
-
-        nc::mvaddstr(self.y, self.x, &buffer);
-    }
-
     fn save(&self, filename: &str ) -> std::io::Result<SaveResult> {
         use std::fmt::Write;
 
@@ -254,18 +348,15 @@ impl Map for Rect {
     }
 }
 
-trait Map {
+trait Map: Render {
     fn width(&self) -> i32;
 
     fn height(&self) -> i32;
-
-    fn render(&self);
 
     fn is_walkable(&self, x: i32, y: i32) -> bool;
 
     fn save(&self, filename: &str) -> std::io::Result<SaveResult> {
         // let mut savefile = File::create(filename).unwrap();
-
         std::fs::write(filename, "MAP\nENDMAP\n");
 
         Ok(SaveResult { filename: filename.to_string() })
@@ -301,10 +392,15 @@ struct SaveResult {
     filename: String
 }
 
+#[derive(Debug, PartialEq)]
+enum MoveError {
+    Blocked(String)
+}
+
 struct Game {
     map: Box<dyn Map>,
     player: Player,
-    monster: Monster
+    monsters: HashMap<String, Monster>
 }
 
 impl Game {
@@ -314,7 +410,7 @@ impl Game {
         Self {
             map: Box::new(Rect { x: 0, y: 0, width: 10, height: 10 }),
             player: Player::new(""),
-            monster: Monster::new("jacob")
+            monsters: HashMap::new() 
         }
     }
 
@@ -325,16 +421,50 @@ impl Game {
     pub fn get_player(&self) -> &Player {
         &self.player
     }
+
+    pub fn move_player(&mut self, x: i32, y: i32) -> Result<(), MoveError> {
+        if !self.map.is_walkable(x, y) {
+            return Err(MoveError::Blocked("tile".to_string()));
+        } 
+
+        let mut blocker = None;
+
+        for monster in self.get_monsters() {
+            if monster.position() == (x, y) {
+                blocker = Some(monster.name().to_string());
+            }
+        }
+
+        // Player should attack blocking monster
+        if let Some(monster_name) = blocker {
+            let mut monster = self.monsters.get_mut(&monster_name).unwrap();
+
+            self.player.attack(&mut monster);
+
+            return Err(MoveError::Blocked(monster_name.to_string()));
+        }
+
+        self.player.set_position(x, y);
+
+        Ok(())
+    }
     
     pub fn spawn_monster(&mut self, mut monster: Monster, x: i32, y: i32) {
+        // TODO:
+        // Cannot spawn if entity exists on space
+
         monster.set_x(x);
         monster.set_y(y);
 
-        self.monster = monster
+        self.monsters.insert(monster.name().to_string(), monster);
     }
 
-    pub fn get_monster(&self, monster_name: &str) -> &Monster {
-        &self.monster
+    pub fn get_monster(&self, monster_name: &str) -> Option<&Monster> {
+        self.monsters.values().find(|monster| monster.name() == monster_name)
+    }
+
+    pub fn get_monsters<'a>(&'a self) -> impl Iterator<Item = &'a Monster> {
+        self.monsters.values()
     }
     
     pub fn serialize(&self) -> Result<String, Box<std::error::Error>> {
@@ -342,34 +472,29 @@ impl Game {
 
         let mut buffer = String::new();
 
-        writeln!(buffer, "gromash")?;
+        writeln!(buffer, "{}", self.player.name())?;
 
         Ok(buffer)
     }
 
     pub fn save(&self) -> std::io::Result<SaveResult> {
-        use std::fmt;
+        use std::fmt::Write;
 
-
-        let player_name = "test";
+        let player_name = self.player.name();
         let filename = format!("{}-datetime.save", player_name);
         let mut savefile = File::create(&filename)?;
 
         let buffer = self.serialize().unwrap();
 
-        write!(savefile, "{}", buffer);
+        write!(savefile, "{}", buffer)?;
 
         Ok(SaveResult {
             filename: filename.to_string()
         })
     }
 
-    pub fn render(&self) {
-        self.map.render();
-
-        self.player.render();
-
-        self.monster.render();
+    pub fn cleanup(&mut self) {
+        self.monsters.retain(|k, monster| !monster.is_dead());
     }
 
     pub fn get_map(&self) -> &dyn Map {
@@ -383,6 +508,18 @@ impl Game {
     pub fn spawn_player(&mut self) {
         self.player.set_x(5);
         self.player.set_y(5);
+    }
+}
+
+impl Render for Game {
+    fn render(&self) {
+        self.map.render();
+
+        self.player.render();
+
+        for monster in self.monsters.values() {
+            monster.render();
+        }
     }
 }
 
@@ -426,15 +563,53 @@ mod game_tests {
 
     #[test]
     fn test_spawn_monster() {
-        let monster = Monster::new("jacob");
+        let monster_name = "jacob";
+        let monster = Monster::new(monster_name);
 
         let mut game = Game::new();
 
         game.spawn_monster(monster, 5, 5);
 
-        let monster = game.get_monster("jacob");
+        let monster = game.get_monster(monster_name);
 
-        assert_eq!(monster.position(), (5, 5));
+        assert!(monster.is_some());
+
+        assert_eq!(monster.unwrap().position(), (5, 5));
+    }
+
+    #[test]
+    fn test_player_move() {
+        let mut game = Game::new();
+
+        let map = Rect { x: 0, y: 0, width: 50, height: 50 };
+        game.set_map(map);
+
+        let walk_result = game.move_player(5, 5);
+
+        assert!(walk_result.is_ok());
+    }
+
+    #[test]
+    fn test_player_move_into_monster_tile() {
+        let mut game = Game::new();
+        let monster_name = "jacob";
+
+        let monster = Monster::new(monster_name);
+
+        game.spawn_monster(monster, 6, 6);
+
+        let walk_result = game.move_player(6, 6);
+
+        assert_eq!(walk_result,  Err(MoveError::Blocked(monster_name.to_string())));
+    }
+
+    #[test]
+    fn test_reaper() {
+        let mut game = Game::new();
+
+        game.cleanup();
+
+        assert!(game.get_monsters().all(|monster| !monster.is_dead()));
     }
 
     // player movement into monster occupied tile */
@@ -465,7 +640,9 @@ mod save_load_tests {
 
     #[test]
     fn test_save_game() {
-        let game = Game::new();
+        let mut game = Game::new();
+
+        game.get_mut_player().set_name("gromash");
 
         let save_result = game.save().unwrap();
 
@@ -506,18 +683,7 @@ mod save_load_tests {
     }
 }
 
-// #[test]
-// fn test_load_map_from_file() {
-//     let test_mapfile = "test.map"
-
-//     let map = load_map();
-
-//     assert!(map.is_ok());
-
-//     let map = map.unwrap();
-
-//     assert!(validate_map(map));
-// }
+// fn test_load_map_from_file()
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // println!("\u{001b}[31mHelloWorld");
@@ -540,8 +706,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     let goblin = Monster::new("goblin");
 
-    game.spawn_monster(goblin, 5, 5);
-
+    game.spawn_monster(goblin, 7, 5);
 
     loop {
         game.render();
@@ -556,15 +721,16 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
             (player.x + dx, player.y + dy)
         };
 
-        let map = game.get_map();
+        let move_result = game.move_player(x1, y1);
 
-        if map.is_walkable(x1, y1) {
-            let player = game.get_mut_player();
-            player.walk(dx, dy)
-        }
+        // if let Err(blocker_name) = move_result {
+        //     engine.get_mut_player().attack()
+        // }
+
+        game.cleanup();
     }
 
-    game.save();
+    game.save()?;
 
     drop_ncurses();
 
