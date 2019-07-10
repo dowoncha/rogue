@@ -10,7 +10,7 @@ use std::env;
 use std::panic;
 use std::fs::File;
 use std::io::prelude::*;
-use std::collections::HashMap;
+use std::collections::{HashMap, LinkedList, VecDeque};
 
 /**
  * Render code
@@ -56,16 +56,30 @@ fn drop_ncurses() {
     nc::endwin();
 }
 
+trait Entity {
+}
+
 trait Render {
     fn render(&self);
 }
 
 /** Entity code */
+trait Health {
+    fn max_health(&self) -> i32;
+    fn health(&self) -> i32;
+    fn set_health(&mut self, health: i32);
+    fn is_dead(&self) -> bool {
+        self.health() <= 0
+    }
+}
 
 struct Player {
     name: String,
     pub x: i32,
-    pub y: i32
+    pub y: i32,
+    health: i32,
+    max_health: i32,
+    strength: i32
 }
 
 impl Player {
@@ -73,7 +87,10 @@ impl Player {
         Self {
             name: name.to_string(),
             x: -1,
-            y: -1
+            y: -1,
+            health: 15,
+            max_health: 15,
+            strength: 10
         }
     }
 
@@ -103,8 +120,15 @@ impl Player {
         self.y = y;
     }
 
+    fn calc_damage(&self, monster: &Monster) -> i32 {
+        // DND sysetem
+
+        // Roll weapon dice
+        3
+    }
+
     fn attack(&self, monster: &mut Monster) {
-        let damage = 3;
+        let damage = self.calc_damage(monster);
         let new_health = monster.health() - damage;
         monster.set_health(new_health);
     }
@@ -180,7 +204,7 @@ mod player_tests {
 
         player.attack(&mut monster);
 
-        monster.is_dead();
+        assert!(monster.is_dead());
 
     }
 }
@@ -250,21 +274,19 @@ impl Monster {
     pub fn set_y(&mut self, y: i32) {
         self.y = y;
     }
+}
 
-    pub fn set_health(&mut self, health: i32) {
+impl Health for Monster {
+    fn set_health(&mut self, health: i32) {
         self.health = health;
     }
 
-    pub fn health(&self) -> i32 {
+    fn health(&self) -> i32 {
         self.health
     }
 
-    pub fn max_health(&self) -> i32 {
+    fn max_health(&self) -> i32 {
         self.max_health
-    }
-
-    pub fn is_dead(&self) -> bool {
-        self.health <= 0
     }
 }
 
@@ -486,12 +508,12 @@ impl Game {
         let mut buffer = String::new();
 
         // write game header
-        writeln!(buffer, "Rogue");
+        writeln!(buffer, "Rogue")?;
 
         let game_version = 0.1;
 
         // write game version
-        writeln!(buffer, "v{}", game_version);
+        writeln!(buffer, "v{}", game_version)?;
 
         // Write player info
         writeln!(buffer, "{}", self.player.name())?;
@@ -499,15 +521,14 @@ impl Game {
         // write save_date
 
         // write map
+        writeln!(buffer, "MAP\n{}\nENDMAP", &self.get_map().get_buffer())?;
 
         // write entities
         for (id, monster) in self.monsters.iter() {
-            writeln!(buffer, "Entity");
-            writeln!(buffer, "id\t{}", id);
-            writeln!(buffer, "name\t{}", monster.name());
-            writeln!(buffer, "hp/max\t{}/{}", monster.health(), monster.max_health());
-
-            writeln!(buffer, "EndEntity");
+            writeln!(buffer, "ENTITY {}", id)?;
+            writeln!(buffer, "name\t{}", monster.name())?;
+            writeln!(buffer, "hp/max\t{}/{}", monster.health(), monster.max_health())?;
+            writeln!(buffer, "ENDENTITY")?;
         }
 
         Ok(buffer)
@@ -558,6 +579,15 @@ impl Render for Game {
             monster.render();
         }
     }
+}
+
+fn validate_save(buffer: &str) -> bool {
+    let mut lines = buffer.lines();
+    if lines.next().unwrap() != "Rogue" {
+        return false;
+    }
+
+    true
 }
 
 #[cfg(test)]
@@ -669,10 +699,8 @@ mod save_load_tests {
 
         let game_save_buffer = game.serialize().unwrap();
 
-        let mut game_save_lines = game_save_buffer.lines();
+        assert!(validate_save(&game_save_buffer));
 
-        // First line is player name
-        assert_eq!(game_save_lines.next().unwrap(), "gromash");
     }
 
     #[test]
@@ -720,6 +748,63 @@ mod save_load_tests {
     }
 }
 
+trait Timed {
+    fn set_action_points(&mut self, points: i32);
+    fn action_points(&self) -> i32;
+    fn speed(&self) -> i32;
+    fn take_turn(&mut self) -> i32 {
+        0
+    }
+}
+
+pub struct TimeTravelers<'t>(VecDeque<&'t dyn Timed>);
+
+impl<'t> TimeTravelers<'t> {
+    fn new() -> Self {
+        Self(VecDeque::new())
+    }
+
+    fn register(&mut self, entity: &'t mut dyn Timed) {
+        entity.set_action_points(0);
+        self.0.push_back(entity);
+    }
+
+    fn tick(&mut self) {
+        if let Some(entity) = self.0.front_mut() {
+            // self.0.rotate_right(1);
+            let new_action_points = entity.action_points() + entity.speed();
+
+            // entity.set_action_points(new_action_points);
+        }
+    }
+}
+
+pub struct TestTimed;
+
+impl Timed for TestTimed {
+    fn set_action_points(&mut self, points: i32) {}
+    fn action_points(&self) -> i32 {
+        1
+    }
+
+    fn speed(&self) -> i32 {
+        1
+    }
+
+    
+}
+
+#[test]
+fn test_register_timed_entity() {
+    let mut test_timed = TestTimed;
+
+    let mut time_travelers = TimeTravelers::new();
+
+    time_travelers.register(&mut test_timed);
+
+    time_travelers.tick();
+}
+
 // fn test_load_map_from_file()
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
@@ -745,6 +830,8 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     game.spawn_monster(goblin, 7, 5);
 
+    let mut game_time = 0;
+
     'main: loop {
         game.render();
         
@@ -766,6 +853,8 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         }
 
         game.cleanup();
+
+        game_time += 1;
     }
 
     game.save(None)?;
