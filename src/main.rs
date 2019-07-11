@@ -56,8 +56,6 @@ fn drop_ncurses() {
     nc::endwin();
 }
 
-trait Entity {
-}
 
 trait Render {
     fn render(&self);
@@ -136,7 +134,7 @@ impl Player {
 
 impl Render for Player {
     fn render(&self) {
-        nc::mvaddch(self.y, self.x, '@' as u64);
+        nc::mvaddch(self.y, self.x, '@' as u32);
     }
 }
 
@@ -298,7 +296,7 @@ impl PartialEq for Monster {
 
 impl Render for Monster {
     fn render(&self) {
-        nc::mvaddch(self.y, self.x, 'G' as u64);
+        nc::mvaddch(self.y, self.x, 'G' as u32);
     }
 }
 
