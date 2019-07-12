@@ -25,28 +25,41 @@ extern crate ncurses;
 
 extern crate uuid;
 
-use std::any::{Any, TypeId};
 use std::collections::HashMap;
 
+#[macro_use]
 pub mod components;
+pub use components::{Component, ComponentType, EventQueue, CommandQueue};
 
+#[macro_export]
+macro_rules! get_component {
+    ($em:expr, $entity:expr, $component:ty) => {
+        {
+            let generic_component = $em.get_component($entity, <$component>::get_component_type()).unwrap();
+            let concrete = generic_component.as_any().downcast_ref::<$component>().unwrap();
 
-pub type ComponentType = TypeId;
-pub type ObjectType = TypeId;
+            concrete
+        }
+    };
+    ($i:ident, $em: expr, $entity: expr, $component:ty) => {
+        {
+            let gen = $em.get_component_mut($entity, <$component>::get_component_type()).unwrap();
+            let concrete = gen.as_any_mut().downcast_mut::<$component>().unwrap();
 
+            concrete
+        }
+    }
+}
 pub type Entity = i32;
 
-pub trait Component {
-    fn get_component_type() -> ComponentType where Self: Sized;
-    fn as_any(&self) -> &dyn Any;
-    fn as_any_mut(&mut self) -> &mut dyn Any;
+pub trait System {
+    fn process(&mut self, entity_manager: &mut EntityManager);
 }
 
 pub struct EntityManager {
     entities: Vec<Entity>,
-    component_data_tables: HashMap<TypeId, HashMap<Entity, Box<dyn Component>>>,
+    component_data_tables: HashMap<ComponentType, HashMap<Entity, Box<dyn Component>>>,
 }
-
 impl EntityManager {
     pub fn new() -> Self {
         Self {
@@ -106,7 +119,7 @@ impl EntityManager {
         None
     }
 
-    pub fn get_entities_with_components(&self, component_type: TypeId) -> Vec<Entity> {
+    pub fn get_entities_with_components(&self, component_type: ComponentType) -> Vec<Entity> {
         use std::iter::FromIterator;
 
         match self.component_data_tables.get(&component_type) {
@@ -120,17 +133,45 @@ impl EntityManager {
         // Vec::new().into_iter()
     }
 
-    // pub fn get_all_components_of_type(
-    //     &self,
-    //     component_type: ComponentType,
-    // ) -> impl Iterator<Item = &impl Component> {
-        
+    pub fn get_all_components_of_type(
+        &self,
+        component_type: ComponentType,
+    ) -> Vec<&Box<dyn Component>> {
+        use std::iter::FromIterator;
 
-    //     match self.component_data_tables.get(&component_type) {
-    //         Some(table) => table.values().into_iter(),
-    //         None => Vec::new().into_iter(),
-        
-    // }
+        match self.component_data_tables.get(&component_type) {
+            Some(table) => Vec::from_iter(table.values().into_iter()),
+            None => vec![],
+        }
+    }
+
+    pub fn get_event_queue(&self) -> &EventQueue {
+        let entity = *self.get_entities_with_components(EventQueue::get_component_type()).get(0).expect("No event queue found");
+        let events = get_component!(self, entity, EventQueue);
+
+        events
+    }
+
+    pub fn get_event_queue_mut(&mut self) -> &mut EventQueue {
+        let entity = *self.get_entities_with_components(EventQueue::get_component_type()).get(0).expect("No event queue found");
+        let events = get_component!(mut, self, entity, EventQueue);
+
+        events
+    }
+
+    pub fn get_command_queue_mut(&mut self) -> &mut CommandQueue {
+        let entity = *self.get_entities_with_components(CommandQueue::get_component_type()).get(0).expect("No command queue found");
+        let commands = get_component!(mut, self, entity, CommandQueue);
+
+        commands
+    }
+
+    pub fn get_command_queue(&self) -> &CommandQueue {
+        let entity = *self.get_entities_with_components(CommandQueue::get_component_type()).get(0).expect("No command queue found");
+        let commands = get_component!(self, entity, CommandQueue);
+
+        commands
+    }
 }
 
 #[cfg(test)]
@@ -189,26 +230,18 @@ mod entity_manager_tests {
 }
 
 mod input_system;
+mod render_system;
+mod chronos_system;
+mod move_system;
+pub mod command_system;
+pub mod event_system;
+mod collide_system;
 
-pub use input_system::{System, InputSystem};
+pub use input_system::{InputSystem};
+pub use render_system::{RenderSystem, drop_ncurses};
+pub use chronos_system::{Chronos};
+pub use move_system::{MovementSystem};
+pub use collide_system::{CollisionSystem};
+// pub use command_system::{CommandSystem};
 
-// mod console;
-// mod components;
-// // mod action;
-// mod entities;
-// mod gen_map_1;
-// mod command_manager;
-// mod config_manager;
-// mod game_state;
 pub mod file_logger;
-// mod types;
-// mod map;
-// mod character;
-// mod dungeon;
-// mod engine;
-// mod renderer;
-// mod client;
-// // mod world;
-// mod systems;
-
-// pub use client::GameClient;

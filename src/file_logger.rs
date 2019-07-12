@@ -54,10 +54,10 @@ pub fn init() -> Result<(), Box<std::error::Error>> {
 
     // Panic hook
     panic::set_hook(Box::new(|panic_info| {
-        if let Some(s) = panic_info.payload().downcast_ref::<&str>() {
-            error!("panic occurred: {:?}", s);
-        } else {
-            error!("panic occurred");
+        if let Some(s) = panic_info.payload().downcast_ref::<String>() {
+            error!("panic occurred: {}", s);
+        } else if let Some(s) = panic_info.payload().downcast_ref::<&str>() {
+            error!("panic occurred: {}", s);
         }
 
         if let Some(location) = panic_info.location() {

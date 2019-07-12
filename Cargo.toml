@@ -16,8 +16,11 @@ specs = "0.9.1"
 time = "0.1"
 error-chain = "*"
 lazy_static = "*"
-serde = "*"
 serde_json = "*"
+
+[dependencies.serde]
+version = "*"
+features = ["derive"]
 
 [dependencies.uuid]
 version = "0.7"
