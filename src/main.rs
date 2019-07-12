@@ -8,17 +8,23 @@ extern crate lazy_static;
 
 
 extern crate rogue;
-use rogue::{file_logger, Component, System, InputSystem, EntityManager, ComponentType};
+use rogue::{file_logger, Component, System, InputSystem, Entity, EntityManager, ComponentType};
 use rogue::components::{Position, Input};
 
 use ncurses as nc;
 
-use std::any::{Any, TypeId};
+use std::any::{Any};
 use std::collections::{HashMap, LinkedList, VecDeque};
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 use std::panic;
+
+#[derive(PartialEq, PartialOrd, Eq, Ord, Copy, Clone)]
+pub enum RenderLayer {
+    Player = 1000,
+    Map = 10
+}
 
 /**
  * Render code
@@ -60,6 +66,7 @@ fn drop_ncurses() {
 
 pub struct Render {
     pub glyph: char,
+    pub layer: RenderLayer
     // fg
     // bg
 }
@@ -98,25 +105,25 @@ impl System for RenderSystem {
     }
 
     fn process(&mut self, entity_manager: &mut EntityManager) {
-        let render_entities = entity_manager.get_entities_with_components(Render::get_component_type());
+        let mut entities = entity_manager.get_entities_with_components(Render::get_component_type());
 
-        for render_entity in render_entities {
-            let component = entity_manager.get_component(render_entity, Render::get_component_type()).unwrap();
-            let render = component.as_any().downcast_ref::<Render>().unwrap();
-            
-            let component = entity_manager.get_component(render_entity, Position::get_component_type()).unwrap();
-            let position = component.as_any().downcast_ref::<Position>().unwrap();
+        let render_components = entities.iter()
+            .map(|entity| entity_manager.get_component(*entity, Render::get_component_type()).unwrap())
+            .map(|component| component.as_any().downcast_ref::<Render>().unwrap());
 
+        let position_components  = entities.iter()
+            .map(|entity| entity_manager.get_component(*entity, Position::get_component_type()).unwrap())
+            .map(|component| component.as_any().downcast_ref::<Position>().unwrap());
+
+        let mut sorted_entities: Vec<(&Entity, (&Render, &Position))> = entities.iter()
+            .zip(render_components.zip(position_components))
+            .collect::<Vec<_>>();
+
+            sorted_entities.sort_by(|(_, (a, _)), (_, (b, _))| a.layer.cmp(&b.layer));
+
+        for (_, (render, position)) in sorted_entities {
             nc::mvaddch(position.y, position.x, render.glyph as u64);
         }
-
-        // self.map.render();
-
-//         self.player.render();
-
-//         for monster in self.monsters.values() {
-//             monster.render();
-//         }
     }
 }
 
@@ -380,9 +387,9 @@ impl Map for Rect {
                     buffer.push('.');
                 }
             }
-
-            buffer.push('\n');
         }
+
+        assert_eq!(buffer.len(), (self.width() * self.height()) as usize);
 
         buffer
     }
@@ -936,8 +943,25 @@ fn create_player(em: &mut EntityManager) {
     let player = em.create_entity();
 
     em.add_component(player, Input);
-    em.add_component(player, Render { glyph: '@' });
+    em.add_component(player, Render { glyph: '@', layer: RenderLayer::Player });
     em.add_component(player, Position{ x: 0, y: 0});
+}
+
+fn create_map(map: &dyn Map, entity_manager: &mut EntityManager ) {
+    let buffer = map.get_buffer();
+    let mut tiles = buffer.chars();
+
+    for y in 0..map.height() {
+        for x in 0..map.width() {
+            let tile = entity_manager.create_entity();
+            let index = (y * map.width() + x) as usize;
+
+            let glyph = tiles.next().expect("No tile at index");
+
+            entity_manager.add_component(tile, Render { glyph: glyph, layer: RenderLayer::Map });
+            entity_manager.add_component(tile, Position{ x: x, y: y });
+        }
+    }
 }
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
@@ -961,7 +985,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     create_player(&mut entity_manager);
 
-    let mut chronos = Chronos::new();
+    // let mut chronos = Chronos::new();
 
     let rect = Rect {
         x: 0,
@@ -970,16 +994,18 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         height: 20,
     };
 
-    game.set_map(rect);
+    create_map(&rect, &mut entity_manager);
 
-    game.get_mut_player().set_name("gromash");
-    game.spawn_player();
+    // game.set_map(rect);
 
-    let goblin = Monster::new("goblin");
+    // game.get_mut_player().set_name("gromash");
+    // game.spawn_player();
 
-    game.spawn_monster(goblin, 7, 5);
+    // let goblin = Monster::new("goblin");
 
-    let game_time = GameTime::new();
+    // game.spawn_monster(goblin, 7, 5);
+
+    // let game_time = GameTime::new();
 
     // game.register_entity("gametime", game_time);
 
