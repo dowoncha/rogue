@@ -26,83 +26,18 @@ extern crate ncurses;
 extern crate uuid;
 
 use std::any::{Any, TypeId};
-use std::borrow::Borrow;
 use std::collections::HashMap;
-use std::convert::TryInto;
+
+pub mod components;
+
 
 pub type ComponentType = TypeId;
 pub type ObjectType = TypeId;
 
 pub type Entity = i32;
 
-// #[derive(PartialEq, Eq, Hash, Copy, Clone)]
-// pub enum ComponentType {
-//     Test,
-//     Input,
-//     Position,
-//     Velocity,
-//     Render
-// }
-
-struct Position {
-    x: i32,
-    y: i32
-}
-
-impl Component for Position {
-    fn get_component_type() -> ComponentType {
-        TypeId::of::<Self>()
-    }
-
-    // fn get_object_type(&self) -> ObjectType {
-    //     Self::get_component_type()
-    // }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self
-    }
-}
-
-// struct Velocity {
-//     dx: i32,
-//     dy: i32
-// }
-
-// impl Component for Velocity {
-//     fn get_component_type(&self) -> ComponentType {
-//         ComponentType::Velocity
-//     }
-// }
-
-struct TestComponent;
-
-impl Component for TestComponent {
-    fn get_component_type() -> TypeId {
-        TypeId::of::<Self>()
-    }
-
-    // fn get_object_type(&self) -> TypeId {
-    //     Self::get_component_type()
-    // }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self
-    }
-}
-
 pub trait Component {
     fn get_component_type() -> ComponentType where Self: Sized;
-    // fn get_object_type(&self) -> ObjectType {
-    //     <Self as Component>::get
-    // }
     fn as_any(&self) -> &dyn Any;
     fn as_any_mut(&mut self) -> &mut dyn Any;
 }
@@ -200,6 +135,7 @@ impl EntityManager {
 
 #[cfg(test)]
 mod entity_manager_tests {
+    use components::{TestComponent};
     use super::*;
 
     #[test]
@@ -264,7 +200,7 @@ pub use input_system::{System, InputSystem};
 // mod command_manager;
 // mod config_manager;
 // mod game_state;
-// pub mod file_logger;
+pub mod file_logger;
 // mod types;
 // mod map;
 // mod character;

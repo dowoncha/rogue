@@ -8,7 +8,8 @@ extern crate lazy_static;
 
 
 extern crate rogue;
-use rogue::{Component, System, InputSystem, EntityManager, ComponentType};
+use rogue::{file_logger, Component, System, InputSystem, EntityManager, ComponentType};
+use rogue::components::{Position, Input};
 
 use ncurses as nc;
 
@@ -53,18 +54,12 @@ fn init_ncurses() {
     nc::curs_set(nc::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
 }
 
-fn get_input() -> i32 {
-    let input = nc::getch();
-
-    input
-}
-
 fn drop_ncurses() {
     nc::endwin();
 }
 
-struct Render {
-    glyph: char,
+pub struct Render {
+    pub glyph: char,
     // fg
     // bg
 }
@@ -91,11 +86,15 @@ impl RenderSystem {
     }
 }
 
+impl Drop for RenderSystem {
+    fn drop(&mut self) {
+        drop_ncurses();
+    }
+}
+
 impl System for RenderSystem {
-    
-
     fn mount(&mut self) {
-
+        init_ncurses();
     }
 
     fn process(&mut self, entity_manager: &mut EntityManager) {
@@ -103,8 +102,21 @@ impl System for RenderSystem {
 
         for render_entity in render_entities {
             let component = entity_manager.get_component(render_entity, Render::get_component_type()).unwrap();
-            let render_component = component.as_any().downcast_ref::<Render>();
+            let render = component.as_any().downcast_ref::<Render>().unwrap();
+            
+            let component = entity_manager.get_component(render_entity, Position::get_component_type()).unwrap();
+            let position = component.as_any().downcast_ref::<Position>().unwrap();
+
+            nc::mvaddch(position.y, position.x, render.glyph as u64);
         }
+
+        // self.map.render();
+
+//         self.player.render();
+
+//         for monster in self.monsters.values() {
+//             monster.render();
+//         }
     }
 }
 
@@ -254,12 +266,12 @@ impl Monster {
         &self.name
     }
 
-    pub fn position(&self) -> (i32, i32) {
-        (self.x, self.y)
-    }
-
     pub fn set_x(&mut self, x: i32) {
         self.x = x;
+    }
+
+    pub fn position(&self) -> (i32, i32) {
+        (self.x, self.y)
     }
 
     pub fn set_y(&mut self, y: i32) {
@@ -612,13 +624,7 @@ impl Game {
 
 // impl Render for Game {
 //     fn render(&self) {
-//         self.map.render();
-
-//         self.player.render();
-
-//         for monster in self.monsters.values() {
-//             monster.render();
-//         }
+//         
 //     }
 // }
 
@@ -926,24 +932,34 @@ fn test_game_time_tick() {
     assert_eq!(new_time, new_time2);
 }
 
+fn create_player(em: &mut EntityManager) {
+    let player = em.create_entity();
+
+    em.add_component(player, Input);
+    em.add_component(player, Render { glyph: '@' });
+    em.add_component(player, Position{ x: 0, y: 0});
+}
+
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // println!("\u{001b}[31mHelloWorld");
     let args: Vec<_> = env::args().collect();
 
-    // file_logger::init()
-    //     .expect("Failed to init file logger");
+    file_logger::init()
+        .expect("Failed to init file logger");
 
     // Initialize ncurses
-    init_ncurses();
+    // init_ncurses();
 
     let mut game = Game::new();
 
     let mut entity_manager = EntityManager::new();
-    let mut input_system = InputSystem::new();
     let mut render_system = RenderSystem::new();
+    let mut input_system = InputSystem::new();
 
-    input_system.mount();
     render_system.mount();
+    input_system.mount();
+
+    create_player(&mut entity_manager);
 
     let mut chronos = Chronos::new();
 
@@ -968,8 +984,6 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // game.register_entity("gametime", game_time);
 
     'main: loop {
-        // game.render();
-
         input_system.process(&mut entity_manager);
 
         render_system.process(&mut entity_manager);
@@ -998,8 +1012,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         game.cleanup();
     }
 
-    game.save(None)?;
-
+    // game.save(None)?;
     drop_ncurses();
 
     Ok(())

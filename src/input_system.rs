@@ -1,27 +1,7 @@
 use ncurses as nc;
 
-use std::any::{TypeId, Any};
-use super::{Position, Component, EntityManager, ComponentType};
-
-pub struct Input;
-
-impl Component for Input {
-    fn get_component_type() -> ComponentType {
-        TypeId::of::<Self>()
-    }
-
-    // fn get_object_type(&self) -> ComponentType {
-    //     TypeId::of::<Self>()
-    // }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self
-    }
-}
+use super::{Component, EntityManager};
+use components::{Position, Input};
 
 pub trait System {
     fn mount(&mut self);
@@ -71,8 +51,10 @@ impl System for InputSystem {
 
                         // Check if it is occupied
                         for input_entity in input_entities {
-                            let component = entity_manager.get_component_mut(input_entity, Position::get_component_type()).unwrap();
-                            let position: &mut Position = component.as_any_mut().downcast_mut::<Position>().unwrap();
+                            let component = entity_manager.get_component_mut(input_entity, Position::get_component_type())
+                                .expect("Entity does not have a position component");
+                            let position: &mut Position = component.as_any_mut().downcast_mut::<Position>()
+                                .expect("Could not downgrade component into position");
 
                             position.x += dx;
                             position.y += dy;
