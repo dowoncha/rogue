@@ -3,14 +3,21 @@
 #[macro_use]
 extern crate log;
 extern crate ncurses;
+#[macro_use]
+extern crate lazy_static;
+
+
+extern crate rogue;
+use rogue::{Component, System, InputSystem, EntityManager, ComponentType};
 
 use ncurses as nc;
 
+use std::any::{Any, TypeId};
+use std::collections::{HashMap, LinkedList, VecDeque};
 use std::env;
-use std::panic;
 use std::fs::File;
 use std::io::prelude::*;
-use std::collections::{HashMap, LinkedList, VecDeque};
+use std::panic;
 
 /**
  * Render code
@@ -56,9 +63,49 @@ fn drop_ncurses() {
     nc::endwin();
 }
 
+struct Render {
+    glyph: char,
+    // fg
+    // bg
+}
 
-trait Render {
-    fn render(&self);
+impl Component for Render {
+    fn get_component_type() -> ComponentType {
+        ComponentType::of::<Self>()
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self
+    }
+}
+
+struct RenderSystem;
+
+impl RenderSystem {
+    fn new() -> Self {
+        Self {}
+    }
+}
+
+impl System for RenderSystem {
+    
+
+    fn mount(&mut self) {
+
+    }
+
+    fn process(&mut self, entity_manager: &mut EntityManager) {
+        let render_entities = entity_manager.get_entities_with_components(Render::get_component_type());
+
+        for render_entity in render_entities {
+            let component = entity_manager.get_component(render_entity, Render::get_component_type()).unwrap();
+            let render_component = component.as_any().downcast_ref::<Render>();
+        }
+    }
 }
 
 /** Entity code */
@@ -77,7 +124,7 @@ struct Player {
     pub y: i32,
     health: i32,
     max_health: i32,
-    strength: i32
+    strength: i32,
 }
 
 impl Player {
@@ -88,7 +135,7 @@ impl Player {
             y: -1,
             health: 15,
             max_health: 15,
-            strength: 10
+            strength: 10,
         }
     }
 
@@ -102,7 +149,7 @@ impl Player {
 
     fn walk(&mut self, dx: i32, dy: i32) {
         self.x += dx;
-        self.y += dy; 
+        self.y += dy;
     }
 
     fn set_x(&mut self, x: i32) {
@@ -113,7 +160,7 @@ impl Player {
         self.y = y;
     }
 
-    fn set_position(&mut self, x: i32, y: i32 ) {
+    fn set_position(&mut self, x: i32, y: i32) {
         self.x = x;
         self.y = y;
     }
@@ -132,40 +179,15 @@ impl Player {
     }
 }
 
-impl Render for Player {
-    fn render(&self) {
-        nc::mvaddch(self.y, self.x, '@' as u32);
-    }
-}
+// impl Render for Player {
+//     fn render(&self) {
+//         nc::mvaddch(self.y, self.x, '@' as u64);
+//     }
+// }
 
 #[cfg(test)]
 mod player_tests {
     use super::*;
-
-    #[test]
-    fn test_controls() {
-        // 'w'
-        let event = handle_input(119).unwrap();
-        assert_eq!(event, InputEvent::MovePlayer(0, -1));
-
-        //' d'
-        let event = handle_input(100).unwrap();
-        assert_eq!(event, InputEvent::MovePlayer(1, 0));
-
-        // assert!(player.x == 101 && player.y == 99);
-        // 's'
-        let event = handle_input(115).unwrap();
-        assert_eq!(event, InputEvent::MovePlayer(0, 1));
-
-        // 'a'
-        let event = handle_input(97).unwrap();
-        assert_eq!(event, InputEvent::MovePlayer(-1, 0));
-
-        // 'q'
-        let event = handle_input(113).unwrap();
-        assert_eq!(event, InputEvent::Quit);
-    }
-    
 
     #[test]
     fn test_change_players_name() {
@@ -174,7 +196,7 @@ mod player_tests {
         assert_eq!(player.name(), "gromash");
 
         player.set_name("tinker");
-        
+
         assert_eq!(player.name(), "tinker");
     }
 
@@ -193,7 +215,7 @@ mod player_tests {
         assert_eq!(monster.health(), 7);
 
         player.attack(&mut monster);
-        
+
         assert_eq!(monster.health(), 4);
 
         player.attack(&mut monster);
@@ -203,35 +225,6 @@ mod player_tests {
         player.attack(&mut monster);
 
         assert!(monster.is_dead());
-
-    }
-}
-
-#[derive(Debug, PartialEq)]
-enum InputEvent {
-    MovePlayer(i32, i32),
-    Quit
-}
-
-fn handle_input(input: i32) -> Option<InputEvent> {
-    match input {
-        119 => {
-            //'w'
-            Some(InputEvent::MovePlayer(0, -1))
-        }
-        100 => {
-            Some(InputEvent::MovePlayer(1, 0))
-        }
-        115 => {
-            Some(InputEvent::MovePlayer(0, 1))
-        }
-        97 => {
-            Some(InputEvent::MovePlayer(-1, 0))
-        }
-        113 => {
-            Some(InputEvent::Quit)
-        }
-        _ => { None }
     }
 }
 
@@ -256,7 +249,7 @@ impl Monster {
             health: max_health,
         }
     }
-    
+
     pub fn name(&self) -> &str {
         &self.name
     }
@@ -291,12 +284,26 @@ impl Health for Monster {
 impl PartialEq for Monster {
     fn eq(&self, other: &Self) -> bool {
         self.name == other.name
-    }    
+    }
 }
 
-impl Render for Monster {
-    fn render(&self) {
-        nc::mvaddch(self.y, self.x, 'G' as u32);
+// impl Render for Monster {
+//     fn render(&self) {
+//         nc::mvaddch(self.y, self.x, 'G' as u64);
+//     }
+// }
+
+impl Timed for Monster {
+    fn rate(&self) -> i32 {
+        let speed = 10;
+        speed
+    }
+
+    fn cost(&mut self) -> i32 {
+        // Do something
+
+        // how much did the action cost?
+        0
     }
 }
 
@@ -321,16 +328,16 @@ struct Rect {
     x: i32,
     y: i32,
     width: i32,
-    height: i32
+    height: i32,
 }
 
-impl Render for Rect {
-    fn render(&self) {
-        let buffer = self.get_buffer();
+// impl Render for Rect {
+//     fn render(&self) {
+//         let buffer = self.get_buffer();
 
-        nc::mvaddstr(self.y, self.x, &buffer);
-    }
-}
+//         nc::mvaddstr(self.y, self.x, &buffer);
+//     }
+// }
 
 impl Map for Rect {
     fn width(&self) -> i32 {
@@ -353,7 +360,7 @@ impl Map for Rect {
                 if y == self.y || y == self.y + self.height - 1 {
                     // nc::mvaddch(y, x, '-' as u64);
                     buffer.push('-');
-                } else if (x == self.x || x == self.x + self.width - 1) {
+                } else if x == self.x || x == self.x + self.width - 1 {
                     // nc::mvaddch(y, x, '|' as u64);
                     buffer.push('|');
                 } else {
@@ -368,7 +375,7 @@ impl Map for Rect {
         buffer
     }
 
-    fn save(&self, filename: &str ) -> std::io::Result<SaveResult> {
+    fn save(&self, filename: &str) -> std::io::Result<SaveResult> {
         use std::fmt::Write;
 
         let mut file = File::create(filename)?;
@@ -376,12 +383,12 @@ impl Map for Rect {
         write!(file, "{}", self.get_buffer());
 
         Ok(SaveResult {
-            filename: filename.to_string()
+            filename: filename.to_string(),
         })
     }
 }
 
-trait Map: Render {
+trait Map {
     fn width(&self) -> i32;
 
     fn height(&self) -> i32;
@@ -392,7 +399,9 @@ trait Map: Render {
         // let mut savefile = File::create(filename).unwrap();
         std::fs::write(filename, "MAP\nENDMAP\n");
 
-        Ok(SaveResult { filename: filename.to_string() })
+        Ok(SaveResult {
+            filename: filename.to_string(),
+        })
     }
 
     fn get_buffer(&self) -> String;
@@ -404,7 +413,12 @@ mod map_tests {
 
     #[test]
     fn test_rect_room_collision() {
-        let room = Rect { x: 0, y: 0, width: 20, height: 20 };
+        let room = Rect {
+            x: 0,
+            y: 0,
+            width: 20,
+            height: 20,
+        };
 
         for i in 0..20 {
             assert!(!room.is_walkable(i, 0));
@@ -422,18 +436,19 @@ mod map_tests {
 }
 
 struct SaveResult {
-    filename: String
+    filename: String,
 }
 
 #[derive(Debug, PartialEq)]
 enum MoveError {
-    Blocked(String)
+    Blocked(String),
 }
 
 struct Game {
     map: Box<dyn Map>,
     player: Player,
-    monsters: HashMap<String, Monster>
+    monsters: HashMap<String, Monster>,
+    // entities: HashMap<String, Box<dyn Entity>>,
 }
 
 impl Game {
@@ -441,9 +456,15 @@ impl Game {
         // TODO: randomly generate
 
         Self {
-            map: Box::new(Rect { x: 0, y: 0, width: 10, height: 10 }),
+            map: Box::new(Rect {
+                x: 0,
+                y: 0,
+                width: 10,
+                height: 10,
+            }),
             player: Player::new(""),
-            monsters: HashMap::new() 
+            monsters: HashMap::new(),
+            // entities: HashMap::new(),
         }
     }
 
@@ -458,7 +479,7 @@ impl Game {
     pub fn move_player(&mut self, x: i32, y: i32) -> Result<(), MoveError> {
         if !self.map.is_walkable(x, y) {
             return Err(MoveError::Blocked("tile".to_string()));
-        } 
+        }
 
         let mut blocker = None;
 
@@ -481,7 +502,19 @@ impl Game {
 
         Ok(())
     }
-    
+
+    // pub fn register_entity(&mut self, id: &str, entity: impl Entity + 'static) {
+    //     self.entities.insert(id.to_string(), Box::new(entity));
+    // }
+
+    // pub fn get_entities(&self) -> impl Iterator<Item = &Box<dyn Entity>> {
+    //     self.entities.values()
+    // }
+
+    // pub fn get_entities_mut(&mut self) -> impl Iterator<Item = &mut Box<dyn Entity>> {
+    //     self.entities.values_mut()
+    // }
+
     pub fn spawn_monster(&mut self, mut monster: Monster, x: i32, y: i32) {
         // TODO:
         // Cannot spawn if entity exists on space
@@ -493,13 +526,19 @@ impl Game {
     }
 
     pub fn get_monster(&self, monster_name: &str) -> Option<&Monster> {
-        self.monsters.values().find(|monster| monster.name() == monster_name)
+        self.monsters
+            .values()
+            .find(|monster| monster.name() == monster_name)
+    }
+
+    pub fn get_monsters_mut<'a>(&'a mut self) -> impl Iterator<Item = &'a mut Monster> {
+        self.monsters.values_mut()
     }
 
     pub fn get_monsters<'a>(&'a self) -> impl Iterator<Item = &'a Monster> {
         self.monsters.values()
     }
-    
+
     pub fn serialize(&self) -> Result<String, Box<std::error::Error>> {
         use std::fmt::Write;
 
@@ -525,7 +564,12 @@ impl Game {
         for (id, monster) in self.monsters.iter() {
             writeln!(buffer, "ENTITY {}", id)?;
             writeln!(buffer, "name\t{}", monster.name())?;
-            writeln!(buffer, "hp/max\t{}/{}", monster.health(), monster.max_health())?;
+            writeln!(
+                buffer,
+                "hp/max\t{}/{}",
+                monster.health(),
+                monster.max_health()
+            )?;
             writeln!(buffer, "ENDENTITY")?;
         }
 
@@ -543,9 +587,8 @@ impl Game {
 
         write!(savefile, "{}", buffer)?;
 
-
         Ok(SaveResult {
-            filename: filename.to_string()
+            filename: filename.to_string(),
         })
     }
 
@@ -567,16 +610,55 @@ impl Game {
     }
 }
 
-impl Render for Game {
-    fn render(&self) {
-        self.map.render();
+// impl Render for Game {
+//     fn render(&self) {
+//         self.map.render();
 
-        self.player.render();
+//         self.player.render();
 
-        for monster in self.monsters.values() {
-            monster.render();
+//         for monster in self.monsters.values() {
+//             monster.render();
+//         }
+//     }
+// }
+
+/**
+ * Chronos is the time keeper
+ * He has a reference to all entities
+ * And allocates time to entities for actions
+ */
+struct Chronos {
+    time_travelers: VecDeque<(i32, String)>,
+}
+
+impl Chronos {
+    pub fn new() -> Self {
+        Self {
+            time_travelers: VecDeque::new(),
         }
     }
+
+    pub fn travelers_len(&self) -> usize {
+        self.time_travelers.len()
+    }
+
+    pub fn register(&mut self, entity_id: &str) {
+        let current_time = -100;
+        self.time_travelers
+            .push_back((current_time, entity_id.to_string()));
+    }
+
+    pub fn release(&mut self, entity_id: &str) {
+        if let Some(index) = self
+            .time_travelers
+            .iter()
+            .position(|(energy, traveler)| traveler == entity_id)
+        {
+            self.time_travelers.remove(index);
+        }
+    }
+
+    pub fn tick<'m>(&mut self, entities: impl Iterator<Item = &'m mut Box<dyn Timed>>) {}
 }
 
 fn validate_save(buffer: &str) -> bool {
@@ -591,6 +673,8 @@ fn validate_save(buffer: &str) -> bool {
 #[cfg(test)]
 mod game_tests {
     use super::*;
+
+    struct TestEntity;
 
     #[test]
     fn test_set_player_name() {
@@ -608,10 +692,10 @@ mod game_tests {
     #[test]
     fn test_spawn_player() {
         let room = Rect {
-            x: 0, 
+            x: 0,
             y: 0,
             width: 10,
-            height: 10
+            height: 10,
         };
 
         let mut game = Game::new();
@@ -623,7 +707,9 @@ mod game_tests {
         let player = game.get_player();
         let room = game.get_map();
 
-        assert!(player.x > 0 && player.x < room.width() && player.y > 0 && player.y < room.height());
+        assert!(
+            player.x > 0 && player.x < room.width() && player.y > 0 && player.y < room.height()
+        );
     }
 
     #[test]
@@ -646,7 +732,12 @@ mod game_tests {
     fn test_player_move() {
         let mut game = Game::new();
 
-        let map = Rect { x: 0, y: 0, width: 50, height: 50 };
+        let map = Rect {
+            x: 0,
+            y: 0,
+            width: 50,
+            height: 50,
+        };
         game.set_map(map);
 
         let walk_result = game.move_player(5, 5);
@@ -665,7 +756,10 @@ mod game_tests {
 
         let walk_result = game.move_player(6, 6);
 
-        assert_eq!(walk_result,  Err(MoveError::Blocked(monster_name.to_string())));
+        assert_eq!(
+            walk_result,
+            Err(MoveError::Blocked(monster_name.to_string()))
+        );
     }
 
     #[test]
@@ -677,13 +771,20 @@ mod game_tests {
         assert!(game.get_monsters().all(|monster| !monster.is_dead()));
     }
 
+    #[test]
+    fn test_time() {
+        let mut chronos = Chronos::new();
+
+        let entity_id = "";
+
+        chronos.register(entity_id);
+
+        chronos.release(entity_id);
+    }
+
     // player movement into monster occupied tile */
     // Moving into monster's tile attacks it */
 }
-
-/* Game has a running state */
-
-/* Game has a player */
 
 #[cfg(test)]
 mod save_load_tests {
@@ -698,7 +799,6 @@ mod save_load_tests {
         let game_save_buffer = game.serialize().unwrap();
 
         assert!(validate_save(&game_save_buffer));
-
     }
 
     #[test]
@@ -727,7 +827,12 @@ mod save_load_tests {
     fn test_save_rect_map_to_file() {
         let filename = "test-save-rect-map-to-file.map";
 
-        let map = Rect { x: 0, y: 0, width: 3, height: 3 };
+        let map = Rect {
+            x: 0,
+            y: 0,
+            width: 3,
+            height: 3,
+        };
 
         let save_result = map.save(filename);
 
@@ -747,63 +852,79 @@ mod save_load_tests {
 }
 
 trait Timed {
-    fn set_action_points(&mut self, points: i32);
-    fn action_points(&self) -> i32;
-    fn speed(&self) -> i32;
-    fn take_turn(&mut self) -> i32 {
+    fn rate(&self) -> i32 {
+        0
+    }
+    fn cost(&mut self) -> i32 {
         0
     }
 }
 
-pub struct TimeTravelers<'t>(VecDeque<&'t dyn Timed>);
+#[derive(Debug, Copy, Clone, PartialEq)]
+struct GameTime {
+    pub sec: i32,
+    pub min: i32,
+    pub hour: i32,
+    pub day: i32,
+    pub year: i32,
+}
 
-impl<'t> TimeTravelers<'t> {
-    fn new() -> Self {
-        Self(VecDeque::new())
-    }
-
-    fn register(&mut self, entity: &'t mut dyn Timed) {
-        entity.set_action_points(0);
-        self.0.push_back(entity);
-    }
-
-    fn tick(&mut self) {
-        if let Some(entity) = self.0.front_mut() {
-            // self.0.rotate_right(1);
-            let new_action_points = entity.action_points() + entity.speed();
-
-            // entity.set_action_points(new_action_points);
+impl GameTime {
+    pub fn new() -> Self {
+        Self {
+            sec: 0,
+            min: 0,
+            hour: 0,
+            day: 0,
+            year: 0,
         }
+    }
+
+    pub fn tick(&self) -> Self {
+        let mut new_time = self.clone();
+
+        new_time.sec += 1;
+        if new_time.sec == 60 {
+            new_time.min += 1;
+        } else if new_time.min == 60 {
+            new_time.hour += 1;
+        } else if self.hour == 24 {
+            new_time.day += 1;
+        } else if self.day == 365 {
+            new_time.year += 1;
+        }
+
+        new_time.sec %= 60;
+        new_time.min %= 60;
+        new_time.hour %= 24;
+        new_time.day %= 365;
+
+        new_time
     }
 }
 
-pub struct TestTimed;
-
-impl Timed for TestTimed {
-    fn set_action_points(&mut self, points: i32) {}
-    fn action_points(&self) -> i32 {
-        1
+impl Timed for GameTime {
+    fn rate(&self) -> i32 {
+        100
     }
 
-    fn speed(&self) -> i32 {
-        1
-    }
+    fn cost(&mut self) -> i32 {
+        *self = self.tick();
 
-    
+        1000
+    }
 }
 
 #[test]
-fn test_register_timed_entity() {
-    let mut test_timed = TestTimed;
+fn test_game_time_tick() {
+    let game_time = GameTime::new();
 
-    let mut time_travelers = TimeTravelers::new();
+    let new_time = game_time.tick();
+    let new_time2 = game_time.tick();
 
-    time_travelers.register(&mut test_timed);
-
-    time_travelers.tick();
+    assert_ne!(game_time, new_time);
+    assert_eq!(new_time, new_time2);
 }
-
-// fn test_load_map_from_file()
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // println!("\u{001b}[31mHelloWorld");
@@ -817,7 +938,21 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     let mut game = Game::new();
 
-    let rect = Rect { x: 0, y: 0, width: 20, height: 20 };
+    let mut entity_manager = EntityManager::new();
+    let mut input_system = InputSystem::new();
+    let mut render_system = RenderSystem::new();
+
+    input_system.mount();
+    render_system.mount();
+
+    let mut chronos = Chronos::new();
+
+    let rect = Rect {
+        x: 0,
+        y: 0,
+        width: 20,
+        height: 20,
+    };
 
     game.set_map(rect);
 
@@ -828,31 +963,39 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     game.spawn_monster(goblin, 7, 5);
 
-    let mut game_time = 0;
+    let game_time = GameTime::new();
+
+    // game.register_entity("gametime", game_time);
 
     'main: loop {
-        game.render();
-        
-        let input = get_input();
+        // game.render();
 
-        if let Some(input_event) = handle_input(input) {
-            match input_event {
-                InputEvent::MovePlayer(dx, dy) => {
-                    let (x1, y1) = {
-                        let player = game.get_player();
+        input_system.process(&mut entity_manager);
 
-                        (player.x + dx, player.y + dy)
-                    };
+        render_system.process(&mut entity_manager);
 
-                    let _ = game.move_player(x1, y1);
-                }
-                InputEvent::Quit => break 'main
-            }
-        }
+        // Update
+        // Whos turn is it?
+
+        // this needs to be moved into player's turn
+        // let input = get_input();
+
+        // if let Some(input_event) = handle_input(input) {
+        //     match input_event {
+        //         InputEvent::MovePlayer(dx, dy) => {
+        //             let (x1, y1) = {
+        //                 let player = game.get_player();
+
+        //                 (player.x + dx, player.y + dy)
+        //             };
+
+        //             let _ = game.move_player(x1, y1);
+        //         }
+        //         InputEvent::Quit => break 'main
+        //     }
+        // }
 
         game.cleanup();
-
-        game_time += 1;
     }
 
     game.save(None)?;

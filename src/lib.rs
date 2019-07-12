@@ -1,8 +1,6 @@
 #![crate_name = "rogue"]
 #![crate_type = "lib"]
-
 #![feature(duration_float)]
-
 #![recursion_limit = "1024"]
 
 extern crate backtrace;
@@ -27,119 +25,236 @@ extern crate ncurses;
 
 extern crate uuid;
 
+use std::any::{Any, TypeId};
+use std::borrow::Borrow;
 use std::collections::HashMap;
+use std::convert::TryInto;
 
-pub type Entity = i32; 
+pub type ComponentType = TypeId;
+pub type ObjectType = TypeId;
 
-#[derive(PartialEq, Eq, Hash)]
-pub enum ComponentType {
-  Test = 0
+pub type Entity = i32;
+
+// #[derive(PartialEq, Eq, Hash, Copy, Clone)]
+// pub enum ComponentType {
+//     Test,
+//     Input,
+//     Position,
+//     Velocity,
+//     Render
+// }
+
+struct Position {
+    x: i32,
+    y: i32
 }
+
+impl Component for Position {
+    fn get_component_type() -> ComponentType {
+        TypeId::of::<Self>()
+    }
+
+    // fn get_object_type(&self) -> ObjectType {
+    //     Self::get_component_type()
+    // }
+
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self
+    }
+}
+
+// struct Velocity {
+//     dx: i32,
+//     dy: i32
+// }
+
+// impl Component for Velocity {
+//     fn get_component_type(&self) -> ComponentType {
+//         ComponentType::Velocity
+//     }
+// }
 
 struct TestComponent;
 
 impl Component for TestComponent {
-  fn get_component_type(&self) -> ComponentType {
-    ComponentType::Test
-  }
+    fn get_component_type() -> TypeId {
+        TypeId::of::<Self>()
+    }
+
+    // fn get_object_type(&self) -> TypeId {
+    //     Self::get_component_type()
+    // }
+
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self
+    }
 }
 
 pub trait Component {
-  fn get_component_type(&self) -> ComponentType;
-}
-
-pub trait System {
-  fn process_one_game_tick(previous_frame_time: i128);
+    fn get_component_type() -> ComponentType where Self: Sized;
+    // fn get_object_type(&self) -> ObjectType {
+    //     <Self as Component>::get
+    // }
+    fn as_any(&self) -> &dyn Any;
+    fn as_any_mut(&mut self) -> &mut dyn Any;
 }
 
 pub struct EntityManager {
-  entities: Vec<Entity>,
-  component_data_tables: HashMap<ComponentType, HashMap<Entity, Box<dyn Component>>>
+    entities: Vec<Entity>,
+    component_data_tables: HashMap<TypeId, HashMap<Entity, Box<dyn Component>>>,
 }
 
 impl EntityManager {
-  pub fn new() -> Self {
-    Self {
-      entities: Vec::new(),
-      component_data_tables: HashMap::new()
-    }
-  }
-
-  pub fn create_entity(&mut self) -> Entity {
-    let index = self.entities.len() as Entity;
-    self.entities.push(index);
-    index
-  }
-
-  pub fn add_component(&mut self, entity: Entity, component: impl Component + 'static) {
-    // Check if table exists, create if it doesn't
-    if !self.component_data_tables.contains_key(&component.get_component_type()) {
-      self.component_data_tables.insert(component.get_component_type(), HashMap::new());
+    pub fn new() -> Self {
+        Self {
+            entities: Vec::new(),
+            component_data_tables: HashMap::new(),
+        }
     }
 
-    // Get the component's table
-    let mut table = self.component_data_tables.get_mut(&component.get_component_type()).unwrap();
-
-    table.insert(entity, Box::new(component));
-  }
-
-  pub fn get_component(&self, entity: Entity, component_type: ComponentType) -> Option<&Box<dyn Component>> {
-    // Get the table
-    if let Some(table) = self.component_data_tables.get(&component_type) {
-      return table.get(&entity);
+    pub fn create_entity(&mut self) -> Entity {
+        let index = self.entities.len() as Entity;
+        self.entities.push(index);
+        index
     }
 
-    None
-  }
+    pub fn add_component<T>(&mut self, entity: Entity, component: T ) 
+        where T: 'static + Component 
+    {
+        let component_type = <T as Component>::get_component_type();
 
-  pub fn get_all_components_of_type(&self, component_type: ComponentType) -> impl Iterator<Item = &impl Component> {
-    let table = self.component_data_tables.get(&component_type);
+        // Check if table exists, create if it doesn't
+        if !self
+            .component_data_tables
+            // .contains_key(&component.get_object_type())
+            .contains_key(&component_type)
+        {
+            self.component_data_tables
+                .insert(component_type, HashMap::new());
+        }
 
-    match table {
-      Some(table) => {
-        table.values()
-      }
-      None => {
-        vec![].into_iter()
-      }
+        // Get the component's table
+        let table = self
+            .component_data_tables
+            .get_mut(&component_type)
+            .unwrap();
+
+        table.insert(entity, Box::new(component));
     }
-  }
+
+    pub fn get_component(
+        &self,
+        entity: Entity,
+        component_type: ComponentType
+    ) -> Option<&Box<dyn Component>> {
+        // Get the table
+        if let Some(table) = self.component_data_tables.get(&component_type) {
+            return table.get(&entity);
+        }
+
+        None
+    }
+
+    pub fn get_component_mut(&mut self, entity: Entity, component_type: ComponentType) -> Option<&mut Box<dyn Component>> {
+        if let Some(table) = self.component_data_tables.get_mut(&component_type) {
+            return table.get_mut(&entity);
+        }
+
+        None
+    }
+
+    pub fn get_entities_with_components(&self, component_type: TypeId) -> Vec<Entity> {
+        use std::iter::FromIterator;
+
+        match self.component_data_tables.get(&component_type) {
+            Some(table) => Vec::from_iter(table.keys().map(|entity| *entity)),
+            None => vec![]
+        }
+
+        // self.component_data_tables.get(&component_type).ok_or()
+
+        // let iter = table.values().map(Box::as_ref);
+        // Vec::new().into_iter()
+    }
+
+    // pub fn get_all_components_of_type(
+    //     &self,
+    //     component_type: ComponentType,
+    // ) -> impl Iterator<Item = &impl Component> {
+        
+
+    //     match self.component_data_tables.get(&component_type) {
+    //         Some(table) => table.values().into_iter(),
+    //         None => Vec::new().into_iter(),
+        
+    // }
 }
 
 #[cfg(test)]
 mod entity_manager_tests {
-  use super::*;
+    use super::*;
 
-  #[test]
-  fn test_create_entity() {
-    let mut entity_manager = EntityManager::new();
+    #[test]
+    fn test_create_entity() {
+        let mut entity_manager = EntityManager::new();
 
-    let entity = entity_manager.create_entity();
+        let entity = entity_manager.create_entity();
 
-    assert_eq!(entity, 0);
-    
-    let entity2 = entity_manager.create_entity();
-    assert_eq!(entity2, 1);
-  }
+        assert_eq!(entity, 0);
 
-  #[test]
-  fn test_add_component() {
-    let mut entity_manager = EntityManager::new();
-    let entity = entity_manager.create_entity();
+        let entity2 = entity_manager.create_entity();
+        assert_eq!(entity2, 1);
+    }
 
-    let test_component = TestComponent;
+    #[test]
+    fn test_add_component() {
+        let mut entity_manager = EntityManager::new();
+        let entity = entity_manager.create_entity();
 
-    let component: Option<&Box<dyn Component>> = entity_manager.get_component(entity, test_component.get_component_type());
-    assert!(component.is_none());
+        let test_component = TestComponent;
 
-    entity_manager.add_component(entity, TestComponent);
+        let component: Option<&Box<dyn Component>> =
+            entity_manager.get_component(entity, TestComponent::get_component_type());
+        assert!(component.is_none());
 
-    let component: Option<&Box<dyn Component>> = entity_manager.get_component(entity, test_component.get_component_type());
+        entity_manager.add_component(entity, test_component);
 
-    assert!(component.is_some());
-  }
+        let component: Option<&Box<dyn Component>> =
+            entity_manager.get_component(entity, TestComponent::get_component_type());
+
+        assert!(component.is_some());
+    }
+
+    #[test]
+    fn test_get_entities_with_components() {
+        let mut em = EntityManager::new();
+
+        let entity = em.create_entity();
+        let component = TestComponent;
+
+        let entities = em.get_entities_with_components(TestComponent::get_component_type());
+
+        assert_eq!(entities.len(), 0);
+
+        em.add_component(entity, component);
+
+        let entities = em.get_entities_with_components(TestComponent::get_component_type());
+
+        assert_eq!(entities.len(), 1);
+    }
 }
 
+mod input_system;
+
+pub use input_system::{System, InputSystem};
 
 // mod console;
 // mod components;
