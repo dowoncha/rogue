@@ -482,7 +482,14 @@ fn create_monster(em: &mut EntityManager, x: i32, y: i32) {
     em.add_component(monster, Position { x: x, y: y });
 }
 
-fn create_map(map: &dyn Map, entity_manager: &mut EntityManager ) {
+fn create_map(entity_manager: &mut EntityManager ) {
+    let map = Rect {
+        x: 0,
+        y: 0,
+        width: 20,
+        height: 20,
+    };
+
     let buffer = map.get_buffer();
     let mut tiles = buffer.chars();
 
@@ -528,15 +535,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     event_system.mount(&mut entity_manager);
     command_system.mount(&mut entity_manager);
 
-    let rect = Rect {
-        x: 0,
-        y: 0,
-        width: 20,
-        height: 20,
-    };
-
-    create_map(&rect, &mut entity_manager);
-
+    create_map(&mut entity_manager);
     create_player(&mut entity_manager);
     create_monster(&mut entity_manager, 5, 7);
 

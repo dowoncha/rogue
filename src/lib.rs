@@ -1,6 +1,7 @@
 #![crate_name = "rogue"]
 #![crate_type = "lib"]
 #![feature(duration_float)]
+#![feature(option_flattening)]
 #![recursion_limit = "1024"]
 
 extern crate backtrace;
@@ -119,6 +120,20 @@ impl EntityManager {
         None
     }
 
+    pub fn get_entity_all_components(&self, entity: Entity) -> Vec<&Box<dyn Component>> {
+        self.component_data_tables
+            .iter()
+            .filter_map(|(_, component_table)| component_table.get(&entity))
+            .collect()
+    }
+
+    pub fn remove_component(&mut self, entity: Entity, component_type: ComponentType) -> Option<Box<dyn Component>> {
+        self.component_data_tables
+            .get_mut(&component_type)
+            .map(|component_table| component_table.remove(&entity))
+            .flatten()
+    }
+
     pub fn get_entities_with_components(&self, component_type: ComponentType) -> Vec<Entity> {
         use std::iter::FromIterator;
 
@@ -131,6 +146,14 @@ impl EntityManager {
 
         // let iter = table.values().map(Box::as_ref);
         // Vec::new().into_iter()
+    }
+
+    pub fn has_component(&self, entity: Entity, component_type: ComponentType) -> bool {
+        if let Some(table) = self.component_data_tables.get(&component_type) {
+            return table.contains_key(&entity);
+        }
+
+        return false;
     }
 
     pub fn get_all_components_of_type(
