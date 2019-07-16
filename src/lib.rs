@@ -44,15 +44,14 @@ macro_rules! get_component {
             $em.get_component($entity, <$component>::get_component_type())
                 .map(|component| component.as_any().downcast_ref::<$component>())
                 .flatten()
-                .expect("No component found for entity")
+                // .expect("No component found for entity")
         }
     };
     ($i:ident, $em: expr, $entity: expr, $component:ty) => {
         {
-            let gen = $em.get_component_mut($entity, <$component>::get_component_type()).unwrap();
-            let concrete = gen.as_any_mut().downcast_mut::<$component>().unwrap();
-
-            concrete
+            $em.get_component_mut($entity, <$component>::get_component_type())
+                .map(|component| component.as_any_mut().downcast_mut::<$component>())
+                .flatten()
         }
     }
 }
@@ -175,34 +174,6 @@ impl EntityManager {
         }
     }
 
-    pub fn get_event_queue(&self) -> &EventQueue {
-        let entity = *self.get_entities_with_components(EventQueue::get_component_type()).get(0).expect("No event queue found");
-        let events = get_component!(self, entity, EventQueue);
-
-        events
-    }
-
-    pub fn get_event_queue_mut(&mut self) -> &mut EventQueue {
-        let entity = *self.get_entities_with_components(EventQueue::get_component_type()).get(0).expect("No event queue found");
-        let events = get_component!(mut, self, entity, EventQueue);
-
-        events
-    }
-
-    pub fn get_command_queue_mut(&mut self) -> &mut CommandQueue {
-        let entity = *self.get_entities_with_components(CommandQueue::get_component_type()).get(0).expect("No command queue found");
-        let commands = get_component!(mut, self, entity, CommandQueue);
-
-        commands
-    }
-
-    pub fn get_command_queue(&self) -> &CommandQueue {
-        let entity = *self.get_entities_with_components(CommandQueue::get_component_type()).get(0).expect("No command queue found");
-        let commands = get_component!(self, entity, CommandQueue);
-
-        commands
-    }
-
     pub fn kill_entity(&mut self, entity: Entity) {
         for (_, table) in self.component_data_tables.iter_mut() {
             let _ = table.remove(&entity);
@@ -282,7 +253,7 @@ impl System for WalkSystem {
 
         // Get their position components
         for entity in input_entities {
-            let input_component = get_component!(em, entity, components::Input);
+            let input_component = get_component!(em, entity, components::Input).unwrap();
 
             let (dx, dy) = match input_component.input {
                 119 => (0, -1),             // w
@@ -292,25 +263,10 @@ impl System for WalkSystem {
                 _ => (0, 0),
             };
 
-            let walk = get_component!(mut, em, entity, components::Walk);
-            walk.dx = dx;
-            walk.dy = dy;
-        }
-    }
-}
-
-pub struct PhysicsSystem;
-
-impl System for PhysicsSystem {
-    fn process(&mut self, em: &mut EntityManager) {
-        // Get walk actions
-        let walk_entities = em.get_entities_with_components(components::Walk::get_component_type());
-
-        for entity in walk_entities {
-            let walk = {
-                let walk = get_component!(em, entity, components::Walk);
-                (walk.dx, walk.dy)
-            };
+            if let Some(walk) = get_component!(mut, em, entity, components::Walk) {
+                walk.dx = dx;
+                walk.dy = dy;
+            }
         }
     }
 }
@@ -323,23 +279,35 @@ impl System for MoveSystem {
 
         for entity in walk_entities {
             let walk = {
-                get_component!(em, entity, components::Walk).clone()
+                get_component!(em, entity, components::Walk).unwrap().clone()
             };
-            let position = get_component!(mut, em, entity, components::Position);
 
-            // info!("Entity position ({}, {}) - walk ({}, {})", position.x, position.y, walk.dx, walk.dy);
+            if let Some(position) = get_component!(mut, em, entity, components::Position) {
+                // info!("Entity position ({}, {}) - walk ({}, {})", position.x, position.y, walk.dx, walk.dy);
 
-            if !(walk.dx == 0 && walk.dy == 0) {
-                let x = position.x + walk.dx;
-                let y = position.y + walk.dy;
+                if !(walk.dx == 0 && walk.dy == 0) {
+                    let x = position.x + walk.dx;
+                    let y = position.y + walk.dy;
 
-                // info!("Moving entity {} ({}, {})", entity, x, y);
+                    // info!("Moving entity {} ({}, {})", entity, x, y);
 
-                position.x = x;
-                position.y = y;
+                    position.x = x;
+                    position.y = y;
+                }
             }
         }
     }
+}
+
+#[test]
+fn test_move_system_process() {
+    let ms = MoveSystem;
+
+    let mut em = EntityManager::new();
+
+    let entity = em.create_entity();
+    em.add_component(entity, components::Position { x: 50, y: 50 });
+    em.add_component(entity, components::Walk { dx: 0, dy: 0 });
 }
 
 pub struct DamageSystem;
@@ -350,14 +318,14 @@ impl System for DamageSystem {
 
         // Apply damage if they have a health component
         for entity in damage_entities.into_iter() {
-            let damage = get_component!(em, entity, components::Damage).clone();
-            let name = get_component!(em, entity, components::Name).clone();
+            let damage = get_component!(em, entity, components::Damage).unwrap().clone();
+            // let name = get_component!(em, entity, components::Name).unwrap_or(&components::Name { name: "noname".to_string()});
+
             // let health_component = get_component!(mut, em, entity, components::Health);
-            if let Some(health_component) = em.get_component_mut(entity, components::Health::get_component_type()) {
-                let health = health_component.as_any_mut().downcast_mut::<components::Health>().unwrap();
+            if let Some(health) = get_component!(mut, em, entity, components::Health) {
                 health.health -= damage.amount;
 
-                info!("{} {}/{} hp", &name.name, health.health, health.max_health);
+                // info!("{} {}/{} hp", &name.name, health.health, health.max_health);
 
                 em.remove_component(entity, components::Damage::get_component_type());
             }
@@ -372,11 +340,13 @@ impl System for Reaper {
         let health_entities = em.get_entities_with_components(components::Health::get_component_type());
 
         for entity in health_entities.into_iter() {
-            let name = get_component!(em, entity, components::Name);
-            let health = get_component!(em, entity, components::Health);
+            let health = get_component!(em, entity, components::Health).unwrap();
 
             if health.health <= 0 {
-                info!("{} has died", &name.name);
+                if let Some(name) = get_component!(em, entity, components::Name) {
+                    info!("{} has died", &name.name);
+                }
+
                 em.kill_entity(entity);
             }
         }

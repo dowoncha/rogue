@@ -63,10 +63,10 @@ impl System for RenderSystem {
         let entities = entity_manager.get_entities_with_components(Render::get_component_type());
 
         let render_components = entities.iter()
-            .map(|entity| get_component!(entity_manager, *entity, Render));
+            .filter_map(|entity| get_component!(entity_manager, *entity, Render));
 
         let position_components  = entities.iter()
-            .map(|entity| get_component!(entity_manager, *entity, Position));
+            .filter_map(|entity| get_component!(entity_manager, *entity, Position));
 
         let mut sorted_entities: Vec<(&Entity, (&Render, &Position))> = entities.iter()
             .zip(render_components.zip(position_components))

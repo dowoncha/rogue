@@ -10,34 +10,9 @@ impl CollisionSystem {
     fn get_occupied_spaces(&self, em: &EntityManager) -> Vec<(Entity, (i32, i32))> {
         em.get_entities_with_components(Collidable::get_component_type())
             .iter()
-            .map(|entity| (entity, get_component!(em, *entity, Position)))
+            .filter_map(|entity| get_component!(em, *entity, Position).map(|position| (entity, position)))
             .map(|(entity, position)| (*entity, (position.x, position.y)))
             .collect()
-    }
-
-    fn remove_occupied_update_position_commands(&mut self, em: &mut EntityManager) {
-        // Get all update component with position componen typeu
-        let occupied: Vec<(Entity, (i32, i32))> = self.get_occupied_spaces(em);
-
-        let commands = em.get_command_queue_mut();
-
-        commands.queue = commands.queue
-            .iter()
-            .filter(|command| {
-                match command {
-                    Command::UpdateComponent(_, _, serialized) => {
-                        if let Ok(position) = serde_json::from_str::<Position>(&serialized) {
-                            // return occupied.iter().find(|p| p.0 == position.x && p.1 == position.y).is_none();
-                            return false;
-                        } else {
-                            return false;
-                        }
-                    },
-                    _ => true
-                }
-            })
-            .cloned()
-            .collect();
     }
 }
 
@@ -52,10 +27,8 @@ impl System for CollisionSystem {
         let occupied_spaces = self.get_occupied_spaces(em);
 
         for entity in walk_entities {
-            let position = {
-                get_component!(em, entity, components::Position).clone()
-            };
-            let walk = *get_component!(em, entity, components::Walk);
+            let position = get_component!(em, entity, components::Position).unwrap().clone();
+            let walk = get_component!(em, entity, components::Walk).unwrap().clone();
 
             if walk.dx == 0 && walk.dy == 0 {
                 continue;
@@ -68,8 +41,7 @@ impl System for CollisionSystem {
 
             if let Some((occupier, _)) = occupied_spaces.iter().find(|(_, (x, y))| dest.x == *x && dest.y == *y) {
                 // debug!("Space ({}, {}) occupied", dest.x, dest.y);
-
-                let walk = get_component!(mut, em, entity, components::Walk);
+                let walk = get_component!(mut, em, entity, components::Walk).unwrap();
 
                 walk.dx = 0;
                 walk.dy = 0;

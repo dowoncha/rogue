@@ -20,7 +20,6 @@ use rogue::{
     CollisionSystem,
     Rect,
     WalkSystem,
-    PhysicsSystem,
     DamageSystem,
     MoveSystem,
     MapBuilder,
@@ -264,7 +263,6 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let mut event_system = EventSystem::new();
     let mut command_system = CommandSystem::new();
     let mut move_system = MoveSystem;
-    let mut physics_system = PhysicsSystem;
     let mut collision_system = CollisionSystem;
     let mut walk_system = WalkSystem;
     let mut damage_system = DamageSystem;

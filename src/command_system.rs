@@ -21,8 +21,6 @@ impl CommandSystem {
 
     fn cleanup(&self, em: &mut EntityManager, num: usize) {
         // Remove consumed events from queue
-        let command_queue_component = em.get_command_queue_mut();
-        command_queue_component.queue.drain(..num);
     }
 }
 

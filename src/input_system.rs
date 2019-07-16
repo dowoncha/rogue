@@ -21,7 +21,7 @@ pub struct InputSystem {
 
 /**
  * Keyboard input system
- * Describe how the tnityt wants to move, such as walk left, jump, attack 
+ * Describe how the user wants to move, such as walk left, jump, attack 
  */
 impl InputSystem {
     pub fn new() -> Self {
@@ -55,9 +55,10 @@ impl InputSystem {
 
         // Move all entities
         for entity in input_entities {
-            let input_component = get_component!(mut, entity_manager, entity, Input);
+            let input_component = get_component!(mut, entity_manager, entity, Input).unwrap();
             
             if let Ok(input_key) = self.event_receiver.try_recv() {
+                debug!("Keyboard input: {}", input_key);
                 input_component.input = input_key;
             } else {
                 input_component.input = 0;

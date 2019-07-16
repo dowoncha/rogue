@@ -18,17 +18,17 @@ impl EventSystem {
 
     pub fn cleanup(&self, em: &mut EntityManager) {
         // Remove all events
-        let events = em.get_event_queue_mut();
-        events.queue.drain(..);
+        // let events = em.get_event_queue_mut();
+        // events.queue.drain(..);
     }
 }
 
 impl System for EventSystem {
     fn process(&mut self, em: &mut EntityManager) {
-        let events = em.get_event_queue();
-        for event in events.queue.iter() {
-            info!("{:?}", event);
-        }
+        // let events = em.get_event_queue();
+        // for event in events.queue.iter() {
+        //     info!("{:?}", event);
+        // }
 
         // Write events to log
         // self.cleanup(em);
