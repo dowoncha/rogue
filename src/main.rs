@@ -21,6 +21,7 @@ use rogue::{
     Rect,
     WalkSystem,
     PhysicsSystem,
+    DamageSystem,
     MoveSystem,
     MapBuilder,
     Map,
@@ -30,7 +31,7 @@ use rogue::{
 use rogue::map::{bsp_map_generator, ca_map_gen};
 use rogue::event_system::{EventSystem};
 use rogue::command_system::{CommandSystem};
-use rogue::components::{Position, Input, Render, RenderLayer, Collidable, Walk};
+use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, Walk};
 
 use std::env;
 use std::fs::File;
@@ -166,10 +167,12 @@ mod save_load_tests {
 fn create_player(em: &mut EntityManager) {
     let player = em.create_entity();
 
+    em.add_component(player, components::Name { name: "gromash warhammer".to_string() });
     em.add_component(player, Input::new());
     em.add_component(player, Render { glyph: '@', layer: RenderLayer::Player });
     em.add_component(player, Position{ x: 1, y: 1});
     em.add_component(player, Collidable);
+    em.add_component(player, components::Health { health: 100, max_health: 100 });
     // em.add_component(player, Physics);
     em.add_component(player, Walk::new());
 }
@@ -177,8 +180,10 @@ fn create_player(em: &mut EntityManager) {
 fn create_monster(em: &mut EntityManager, x: i32, y: i32) {
     let monster = em.create_entity();
 
+    em.add_component(monster, components::Name { name: "goblin".to_string() });
     em.add_component(monster, Render { glyph: 'G', layer: RenderLayer::Player});
     em.add_component(monster, Position { x: x, y: y });
+    em.add_component(monster, components::Health { health: 10, max_health: 10 });
     em.add_component(monster, Collidable);
 }
 
@@ -262,7 +267,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let mut physics_system = PhysicsSystem;
     let mut collision_system = CollisionSystem;
     let mut walk_system = WalkSystem;
-    // let mut chronos = Chronos::new();
+    let mut damage_system = DamageSystem;
 
     render_system.mount();
     input_system.mount();
@@ -290,6 +295,8 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         // physics_system.process(&mut entity_manager);
 
         collision_system.process(&mut entity_manager);
+
+        damage_system.process(&mut entity_manager);
 
         move_system.process(&mut entity_manager);
 

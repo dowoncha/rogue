@@ -1,4 +1,4 @@
-use super::{System, EntityManager, Component};
+use super::{System, Entity, EntityManager, Component};
 
 use command_system::{Command};
 use components::{self, Position, Collidable};
@@ -7,17 +7,17 @@ use std::collections::{VecDeque};
 pub struct CollisionSystem;
 
 impl CollisionSystem {
-    fn get_occupied_spaces(&self, em: &EntityManager) -> Vec<(i32, i32)> {
+    fn get_occupied_spaces(&self, em: &EntityManager) -> Vec<(Entity, (i32, i32))> {
         em.get_entities_with_components(Collidable::get_component_type())
             .iter()
-            .map(|entity| get_component!(em, *entity, Position))
-            .map(|position| (position.x, position.y))
+            .map(|entity| (entity, get_component!(em, *entity, Position)))
+            .map(|(entity, position)| (*entity, (position.x, position.y)))
             .collect()
     }
 
     fn remove_occupied_update_position_commands(&mut self, em: &mut EntityManager) {
         // Get all update component with position componen typeu
-        let occupied: Vec<(i32, i32)> = self.get_occupied_spaces(em);
+        let occupied: Vec<(Entity, (i32, i32))> = self.get_occupied_spaces(em);
 
         let commands = em.get_command_queue_mut();
 
@@ -27,7 +27,8 @@ impl CollisionSystem {
                 match command {
                     Command::UpdateComponent(_, _, serialized) => {
                         if let Ok(position) = serde_json::from_str::<Position>(&serialized) {
-                            return occupied.iter().find(|p| p.0 == position.x && p.1 == position.y).is_none();
+                            // return occupied.iter().find(|p| p.0 == position.x && p.1 == position.y).is_none();
+                            return false;
                         } else {
                             return false;
                         }
@@ -54,19 +55,26 @@ impl System for CollisionSystem {
             let position = {
                 get_component!(em, entity, components::Position).clone()
             };
-            let walk = get_component!(mut, em, entity, components::Walk);
+            let walk = *get_component!(em, entity, components::Walk);
 
-            if !(walk.dx == 0 && walk.dy == 0) {
-                let dest = Position {
-                    x: position.x + walk.dx,
-                    y: position.y + walk.dy
-                };
+            if walk.dx == 0 && walk.dy == 0 {
+                continue;
+            }
 
-                if occupied_spaces.iter().any(|(x, y)| dest.x == *x && dest.y == *y) {
-                    debug!("Space ({}, {}) occupied", dest.x, dest.y);
-                    walk.dx = 0;
-                    walk.dy = 0;
-                }
+            let dest = Position {
+                x: position.x + walk.dx,
+                y: position.y + walk.dy
+            };
+
+            if let Some((occupier, _)) = occupied_spaces.iter().find(|(_, (x, y))| dest.x == *x && dest.y == *y) {
+                debug!("Space ({}, {}) occupied", dest.x, dest.y);
+
+                let walk = get_component!(mut, em, entity, components::Walk);
+
+                walk.dx = 0;
+                walk.dy = 0;
+
+                em.add_component(*occupier, components::Damage { amount: 3 });
             }
         }
     }

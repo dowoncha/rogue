@@ -55,6 +55,7 @@ macro_rules! get_component {
         }
     }
 }
+
 pub type Entity = i32;
 
 pub trait System {
@@ -317,16 +318,39 @@ impl System for MoveSystem {
             };
             let position = get_component!(mut, em, entity, components::Position);
 
-            info!("Entity position ({}, {}) - walk ({}, {})", position.x, position.y, walk.dx, walk.dy);
+            // info!("Entity position ({}, {}) - walk ({}, {})", position.x, position.y, walk.dx, walk.dy);
 
             if !(walk.dx == 0 && walk.dy == 0) {
                 let x = position.x + walk.dx;
                 let y = position.y + walk.dy;
 
-                info!("Moving entity {} ({}, {})", entity, x, y);
+                // info!("Moving entity {} ({}, {})", entity, x, y);
 
                 position.x = x;
                 position.y = y;
+            }
+        }
+    }
+}
+
+pub struct DamageSystem;
+
+impl System for DamageSystem {
+    fn process(&mut self, em: &mut EntityManager) {
+        let damage_entities = em.get_entities_with_components(components::Damage::get_component_type());
+
+        // Apply damage if they have a health component
+        for entity in damage_entities.into_iter() {
+            let damage = get_component!(em, entity, components::Damage).clone();
+            // let name = get_component!(em, entity, components::Name).clone();
+            // let health_component = get_component!(mut, em, entity, components::Health);
+            if let Some(health_component) = em.get_component_mut(entity, components::Health::get_component_type()) {
+                let health = health_component.as_any_mut().downcast_mut::<components::Health>().unwrap();
+                health.health -= damage.amount;
+
+                // info!("{} {}/{} hp", &name.name, health.health, health.max_health);
+
+                em.remove_component(entity, components::Damage::get_component_type());
             }
         }
     }

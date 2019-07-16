@@ -238,3 +238,21 @@ impl Component for Health {
 struct Physics {
 
 }
+
+#[derive(Copy, Clone)]
+pub struct Damage {
+    pub amount: i32,
+}
+
+impl Component for Damage {
+    derive_component!();
+}
+
+#[derive(Clone)]
+pub struct Name {
+    pub name: String
+}
+
+impl Component for Name {
+    derive_component!();
+}
