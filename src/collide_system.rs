@@ -1,8 +1,6 @@
 use super::{System, Entity, EntityManager, Component};
 
-use command_system::{Command};
 use components::{self, Position, Collidable};
-use std::collections::{VecDeque};
 
 pub struct CollisionSystem;
 
@@ -17,7 +15,7 @@ impl CollisionSystem {
 }
 
 impl System for CollisionSystem {
-    fn process(&mut self, em: &mut EntityManager) {
+    fn process(&self, em: &mut EntityManager) {
         //  Check whether entitiy's walk command moves them into an occupied space
         //  If the space is occupied, 
         //

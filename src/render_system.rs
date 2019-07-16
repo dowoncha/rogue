@@ -59,7 +59,7 @@ impl Drop for RenderSystem {
 }
 
 impl System for RenderSystem {
-    fn process(&mut self, entity_manager: &mut EntityManager) {
+    fn process(&self, entity_manager: &mut EntityManager) {
         let entities = entity_manager.get_entities_with_components(Render::get_component_type());
 
         let render_components = entities.iter()

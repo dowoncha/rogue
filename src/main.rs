@@ -28,8 +28,6 @@ use rogue::{
 };
 
 use rogue::map::{bsp_map_generator, ca_map_gen};
-use rogue::event_system::{EventSystem};
-use rogue::command_system::{CommandSystem};
 use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, Walk};
 
 use std::env;
@@ -260,8 +258,6 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let mut entity_manager = EntityManager::new();
     let mut render_system = RenderSystem::new();
     let mut input_system = InputSystem::new();
-    let mut event_system = EventSystem::new();
-    let mut command_system = CommandSystem::new();
     let mut move_system = MoveSystem;
     let mut collision_system = CollisionSystem;
     let mut walk_system = WalkSystem;
@@ -270,8 +266,6 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     render_system.mount();
     input_system.mount();
-    event_system.mount(&mut entity_manager);
-    command_system.mount(&mut entity_manager);
 
     // let map = create_map();
     let map = ca_map_gen(80, 40);

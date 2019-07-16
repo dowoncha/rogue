@@ -35,7 +35,7 @@ use std::collections::HashMap;
 
 #[macro_use]
 pub mod components;
-pub use components::{Component, ComponentType, EventQueue, CommandQueue};
+pub use components::{Component, ComponentType};
 
 #[macro_export]
 macro_rules! get_component {
@@ -59,7 +59,7 @@ macro_rules! get_component {
 pub type Entity = i32;
 
 pub trait System {
-    fn process(&mut self, entity_manager: &mut EntityManager);
+    fn process(&self, entity_manager: &mut EntityManager);
 }
 
 pub struct EntityManager {
@@ -247,7 +247,7 @@ mod entity_manager_tests {
 pub struct WalkSystem;
 
 impl System for WalkSystem {
-    fn process(&mut self, em: &mut EntityManager) {
+    fn process(&self, em: &mut EntityManager) {
         // Get all entities with input components,
         let input_entities = em.get_entities_with_components(components::Input::get_component_type());
 
@@ -274,7 +274,7 @@ impl System for WalkSystem {
 pub struct MoveSystem;
 
 impl System for MoveSystem {
-    fn process(&mut self, em: &mut EntityManager) {
+    fn process(&self, em: &mut EntityManager) {
         let walk_entities = em.get_entities_with_components(components::Walk::get_component_type());
 
         for entity in walk_entities {
@@ -313,7 +313,7 @@ fn test_move_system_process() {
 pub struct DamageSystem;
 
 impl System for DamageSystem {
-    fn process(&mut self, em: &mut EntityManager) {
+    fn process(&self, em: &mut EntityManager) {
         let damage_entities = em.get_entities_with_components(components::Damage::get_component_type());
 
         // Apply damage if they have a health component
@@ -336,7 +336,7 @@ impl System for DamageSystem {
 pub struct Reaper;
 
 impl System for Reaper {
-    fn process(&mut self, em: &mut EntityManager) {
+    fn process(&self, em: &mut EntityManager) {
         let health_entities = em.get_entities_with_components(components::Health::get_component_type());
 
         for entity in health_entities.into_iter() {
@@ -357,8 +357,6 @@ mod input_system;
 mod render_system;
 mod chronos_system;
 // mod move_system;
-pub mod command_system;
-pub mod event_system;
 mod collide_system;
 pub mod map;
 mod types;

@@ -1,9 +1,7 @@
 use ncurses as nc;
 
 use super::{System, Component, EntityManager};
-use components::{Input, EventQueue, CommandQueue};
-use event_system::{GameEvent};
-use command_system::{Command};
+use components::{Input};
 
 pub struct KeyboardController {
     keycode: i32,
@@ -68,7 +66,7 @@ impl InputSystem {
 }
 
 impl System for InputSystem {
-    fn process(&mut self, entity_manager: &mut EntityManager) {
+    fn process(&self, entity_manager: &mut EntityManager) {
         self.process_input_events(entity_manager);
     }
 }

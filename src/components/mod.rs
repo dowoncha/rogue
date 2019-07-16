@@ -3,9 +3,6 @@ use serde::{Serialize, Deserialize};
 use std::any::{Any, TypeId};
 use std::collections::VecDeque;
 
-use event_system::{GameEvent};
-use command_system::{Command};
-
 pub type ComponentType = TypeId;
 
 // TODO:
@@ -110,46 +107,6 @@ impl Collidable {
 }
 
 impl Component for Collidable {
-    derive_component!();
-}
-
-pub struct EventQueue {
-    pub queue: VecDeque<GameEvent>
-}
-
-impl EventQueue {
-    pub fn new() -> Self {
-        Self {
-            queue: VecDeque::new()
-        }
-    }
-
-    pub fn send(&mut self, event: GameEvent) {
-        self.queue.push_back(event);
-    }
-}
-
-impl Component for EventQueue {
-    derive_component!();
-}
-
-pub struct CommandQueue {
-    pub queue: VecDeque<Command>
-}
-
-impl CommandQueue {
-    pub fn new() -> Self {
-        Self {
-            queue: VecDeque::new()
-        }
-    }
-
-    pub fn send(&mut self, command: Command) {
-        self.queue.push_back(command);
-    }
-}
-
-impl Component for CommandQueue {
     derive_component!();
 }
 

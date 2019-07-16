@@ -40,7 +40,7 @@ impl Chronos {
 }
 
 impl System for Chronos {
-    fn process(&mut self, em: &mut EntityManager) {
+    fn process(&self, em: &mut EntityManager) {
 
     }
 }
