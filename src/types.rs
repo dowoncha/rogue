@@ -29,6 +29,7 @@ impl Color {
     }
 }
 
+#[derive(Debug)]
 pub struct Rect {
     pub x1: i32,
     pub y1: i32,
@@ -46,6 +47,14 @@ impl Rect {
         }
     }
 
+    pub fn width(&self) -> i32 {
+        self.x2 - self.x1
+    }
+
+    pub fn height(&self) -> i32 {
+        self.y2 - self.y1
+    }
+
     pub fn center(&self) -> (i32, i32) {
         let center_x = (self.x1 + self.x2) / 2;
         let center_y = (self.y1 + self.y2) / 2;
@@ -57,5 +66,3 @@ impl Rect {
             && self.y1 <= other.y2 && self.y2 >= other.y1
     }
 }
-
-pub type BoxResult<T> = Result<T, Box<dyn std::error::Error>>;

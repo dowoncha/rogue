@@ -1,16 +1,15 @@
 use std::fs::File;
 use std::io::prelude::*;
-use entities::Entity;
+
+use rand::{thread_rng, Rng};
+
 use types::{Rect, Dimension};
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Cell {
     pub glyph: char,
     pub blocked: bool,
     pub block_sight: bool
-    // prop: Option<Prop>,
-    // item: Option<Item>,
-    // entity: Option<Entity>
 }
 
 impl Cell {
@@ -36,14 +35,24 @@ pub struct Map {
 
 impl Map {
     pub fn new(width: usize, height: usize) -> Self {
-        let cells = Map::init_cells(width, height);
-
         Self {
             width: width,
             height: height,
-            cells: cells,
+            cells: vec![Cell { glyph: '#', blocked: false, block_sight: false }; width * height],
             rooms: Vec::new()
         }
+    }
+
+    pub fn fill(&mut self, cell: Cell) {
+        self.cells = vec![cell; self.width * self.height];
+    }
+
+    pub fn width(&self) -> usize {
+        self.width
+    }
+
+    pub fn height(&self) -> usize {
+        self.height
     }
 
     /**
@@ -75,7 +84,7 @@ impl Map {
         // false
     }
 
-    fn get_cells(&self) -> &[Cell] {
+    pub fn get_cells(&self) -> &[Cell] {
         &self.cells
     }
 
@@ -112,6 +121,15 @@ impl Map {
         &mut self.cells[y as usize * self.width + x as usize]
     }
 
+    pub fn set_cell(&mut self, x: i32, y: i32, cell: Cell) {
+        let index = self.index(x, y);
+        self.cells[index] = cell;
+    }
+
+    fn index(&self, x: i32, y: i32) -> usize {
+        y as usize * self.width + x as usize
+    }
+
     pub fn get_rooms(&self) -> &[Rect] {
         &self.rooms
     }
@@ -124,7 +142,7 @@ impl Map {
 pub struct MapBuilder {
     width: usize,
     height: usize,
-    map: Map
+    map: Map,
 }
 
 impl MapBuilder {
@@ -207,6 +225,180 @@ fn create_cells_from_buffer(buffer: &str, width: usize, height: usize) -> Vec<Ce
     cells
 }
 
+pub const Wall: Cell = Cell { glyph: '#', blocked: true, block_sight: true };
+
+struct Arena<T: std::fmt::Debug> {
+    pub nodes: Vec<Node<T>>
+}
+
+#[derive(Debug, Copy, Clone)]
+pub struct NodeId {
+    index: usize 
+}
+
+#[derive(Debug)]
+pub struct Node<T: std::fmt::Debug> {
+    parent: Option<NodeId>,
+    previous_sibling: Option<NodeId>,
+    next_sibling: Option<NodeId>,
+    first_child: Option<NodeId>,
+    last_child:Option<NodeId>,
+    pub data: T
+}
+
+impl<T: std::fmt::Debug> Arena<T> {
+    pub fn new() -> Self {
+        Self {
+            nodes: Vec::new()
+        }
+    }
+
+    pub fn get(&self, node_id: NodeId) -> Option<&Node<T>> {
+        self.nodes.get(node_id.index)
+    }
+
+    pub fn new_node(&mut self, data: T) -> NodeId {
+        let next_index = self.nodes.len();
+
+        self.nodes.push(Node {
+            parent: None,
+            first_child: None,
+            last_child: None,
+            previous_sibling: None,
+            next_sibling: None,
+            data: data
+        });
+
+        NodeId { index: next_index }
+    }
+
+    pub fn get_all_leaf_nodes(&self, node_id: NodeId) -> Vec<NodeId> {
+        let mut leaf_node_ids = vec![];
+
+        let node = &self.nodes[node_id.index];
+
+        if node.first_child.is_none() {
+            leaf_node_ids.push(node_id);
+        } else {
+            if let Some(left_node_id) = node.first_child {
+                leaf_node_ids.append(&mut self.get_all_leaf_nodes(left_node_id))
+            } else if let Some(right_node_id) = node.last_child {
+                leaf_node_ids.append(&mut self.get_all_leaf_nodes(right_node_id))
+            }
+        }
+
+        return leaf_node_ids
+    }
+}
+
+fn split_dungeon(node_id: NodeId, arena: &mut Arena<Rect>) {
+    use rand::Rng;
+
+    let mut rng = rand::thread_rng();
+
+    let max_room_count = 2;
+
+    if node_id.index > max_room_count {
+        return;
+    }
+
+    let horizontal = false;
+
+    let node = &mut arena.nodes[node_id.index];
+
+    let (left, right) = if horizontal {
+        let y = rng.gen_range(node.data.y1, node.data.y2);
+
+        let top_room = Rect::new(node.data.x1, node.data.y1, node.data.width(), y - node.data.y1);
+        let bottom_room = Rect::new(node.data.x1, y, node.data.width(), node.data.y2 - y);
+
+        (top_room, bottom_room)
+    } else {
+        let x = rng.gen_range(node.data.x1, node.data.x2);
+
+        let left_room = Rect::new(node.data.x1, node.data.y1, x - node.data.x1, node.data.height());
+        let right_room = Rect::new(x, node.data.y1, node.data.x2 - x, node.data.height());
+
+        (left_room, right_room)
+    };
+
+    let left_node_id = arena.new_node(left);
+    let right_node_id = arena.new_node(right);
+
+    if let Some(mut parent_node) = arena.nodes.get_mut(node_id.index) {
+        parent_node.first_child = Some(left_node_id);
+        parent_node.last_child = Some(right_node_id);
+    }
+
+    if let Some(mut left_node) = arena.nodes.get_mut(left_node_id.index) {
+        left_node.parent = Some(node_id);
+    }
+
+    if let Some(mut right_node) = arena.nodes.get_mut(right_node_id.index) {
+        right_node.parent = Some(node_id);
+    }
+
+    split_dungeon(left_node_id, arena);
+    split_dungeon(right_node_id, arena);
+}
+
+pub fn bsp_map_generator(width: usize, height: usize) -> Map {
+    let map = Map::new(width, height);
+
+    let root_rect = Rect::new(0, 0, width as i32, height as i32);
+
+    let mut bsp = Arena::new();
+    let root_node_id = bsp.new_node(root_rect);
+
+    split_dungeon(root_node_id, &mut bsp);
+    // Recursively split room
+    // Choose a random position
+    // Split the dungeon into two sub dungeons
+
+    debug!("{:?}", bsp.nodes);
+    let leaves = bsp.get_all_leaf_nodes(NodeId { index: 0 });
+    debug!("Leaves {:?}", leaves);
+
+    // Shrink Resize each room into random sizes
+    // Build corriders through all the leafs of the tree
+    // Connecting each leaf to its sister
+
+    map
+}
+
+pub fn ca_map_gen(width: usize, height: usize) -> Map {
+    let mut map = Map::new(width, height);
+
+    let mut rng = rand::thread_rng();
+
+    map.fill(Cell { glyph: '.', blocked: false, block_sight: false });
+
+    // Fil 45% of the map
+    let original_fill_amount = 45;
+
+    for _ in 0..original_fill_amount {
+        let x = rng.gen_range(0, map.width() as i32);
+        let y = rng.gen_range(0, map.height() as i32);
+
+        map.set_cell(x, y, Wall);
+    }
+
+    for _ in 0..5 {
+        for y in 0..map.height() {
+            for x in 0..map.width() {
+                let mut wall_neighbors = 0;
+
+                if x > 0 {
+
+                }
+            }
+        }
+    }
+
+    map
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -270,4 +462,33 @@ fn test_map_create_cells_from_buffer() {
     assert_eq!(cells.iter().filter(|cell| cell.glyph == ' ').count(), 8);
 }
 
+}
+
+
+#[cfg(test)]
+mod map_tests {
+    use super::*;
+
+    #[test]
+    fn test_rect_room_collision() {
+        let room = Rect {
+            x: 0,
+            y: 0,
+            width: 20,
+            height: 20,
+        };
+
+        for i in 0..20 {
+            assert!(!room.is_walkable(i, 0));
+            assert!(!room.is_walkable(i, 20));
+            assert!(!room.is_walkable(0, i));
+            assert!(!room.is_walkable(20, i));
+        }
+
+        for y in 1..19 {
+            for x in 1..19 {
+                assert!(room.is_walkable(x, y));
+            }
+        }
+    }
 }

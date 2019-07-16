@@ -50,12 +50,26 @@ impl Component for TestComponent {
     derive_component!();
 }
 
+/**
+ * Keyboard input system
+ */
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub enum Key {
+    w,
+    a,
+    s,
+    d,
+    q
+}
+
 pub struct Input {
+    pub input: i32
 }
 
 impl Input {
     pub fn new() -> Self {
         Self {
+            input: 0
         }
     }
 }
@@ -137,4 +151,90 @@ impl CommandQueue {
 
 impl Component for CommandQueue {
     derive_component!();
+}
+
+#[derive(Debug, Copy, Clone)]
+pub struct Walk {
+    pub dx: i32,
+    pub dy: i32
+}
+
+impl Walk {
+    pub fn new() -> Self {
+        Self {
+            dx: 0,
+            dy: 0
+        }
+    }
+}
+
+impl Component for Walk {
+    derive_component!();
+}
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+struct GameTime {
+    pub sec: i32,
+    pub min: i32,
+    pub hour: i32,
+    pub day: i32,
+    pub year: i32,
+}
+
+impl GameTime {
+    pub fn new() -> Self {
+        Self {
+            sec: 0,
+            min: 0,
+            hour: 0,
+            day: 0,
+            year: 0,
+        }
+    }
+
+    pub fn tick(&self) -> Self {
+        let mut new_time = self.clone();
+
+        new_time.sec += 1;
+        if new_time.sec == 60 {
+            new_time.min += 1;
+        } else if new_time.min == 60 {
+            new_time.hour += 1;
+        } else if self.hour == 24 {
+            new_time.day += 1;
+        } else if self.day == 365 {
+            new_time.year += 1;
+        }
+
+        new_time.sec %= 60;
+        new_time.min %= 60;
+        new_time.hour %= 24;
+        new_time.day %= 365;
+
+        new_time
+    }
+}
+
+#[test]
+fn test_game_time_tick() {
+    let game_time = GameTime::new();
+
+    let new_time = game_time.tick();
+    let new_time2 = game_time.tick();
+
+    assert_ne!(game_time, new_time);
+    assert_eq!(new_time, new_time2);
+}
+
+pub struct Health {
+    pub health: i32,
+    pub max_health: i32
+}
+
+impl Component for Health {
+    derive_component!();
+}
+
+struct Physics {
+
 }

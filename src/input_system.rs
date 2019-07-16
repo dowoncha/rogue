@@ -5,13 +5,12 @@ use components::{Input, EventQueue, CommandQueue};
 use event_system::{GameEvent};
 use command_system::{Command};
 
-#[derive(Copy, Clone, Debug, PartialEq)]
-pub enum Key {
-    w,
-    a,
-    s,
-    d,
-    q
+pub struct KeyboardController {
+    keycode: i32,
+}
+
+impl Component for KeyboardController {
+    derive_component!();
 }
 
 pub struct InputSystem {
@@ -20,6 +19,10 @@ pub struct InputSystem {
     join_handle: Option<std::thread::JoinHandle<()>>
 }
 
+/**
+ * Keyboard input system
+ * Describe how the tnityt wants to move, such as walk left, jump, attack 
+ */
 impl InputSystem {
     pub fn new() -> Self {
         let (sender, receiver) = std::sync::mpsc::channel();
@@ -48,16 +51,16 @@ impl InputSystem {
     fn process_input_events(&self, entity_manager: &mut EntityManager) {
         // Check for any key events
         // Get all entities with input component
+        let input_entities = entity_manager.get_entities_with_components(Input::get_component_type());
 
         // Move all entities
-        if let Ok(input) = self.event_receiver.try_recv() {
-            if let Some(input_event) = handle_input(input) {
-                // Send input key to Event queue
-                let event_queue = entity_manager.get_event_queue_mut();
-
-                // Push input event to all input components
-                // for input_entity in input_entities {
-                event_queue.send(GameEvent::Input(input_event));
+        for entity in input_entities {
+            let input_component = get_component!(mut, entity_manager, entity, Input);
+            
+            if let Ok(input_key) = self.event_receiver.try_recv() {
+                input_component.input = input_key;
+            } else {
+                input_component.input = 0;
             }
         }
     }
@@ -92,19 +95,19 @@ fn start_input_thread(input_listener: std::sync::mpsc::Sender<i32>) -> std::thre
     handle
 }
 
-fn handle_input(input: i32) -> Option<Key> {
-    match input {
-        119 => {
-            //'w'
-            Some(Key::w)
-        }
-        100 => Some(Key::d),
-        115 => Some(Key::s),
-        97 => Some(Key::a),
-        113 => Some(Key::q),
-        _ => None,
-    }
-}
+// fn handle_input(input: i32) -> Option<Key> {
+//     match input {
+//         119 => {
+//             //'w'
+//             Some(Key::w)
+//         }
+//         100 => Some(Key::d),
+//         115 => Some(Key::s),
+//         97 => Some(Key::a),
+//         113 => Some(Key::q),
+//         _ => None,
+//     }
+// }
 
 #[cfg(test)]
 mod input_system_tests {

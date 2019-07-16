@@ -29,29 +29,30 @@ impl CommandSystem {
 impl System for CommandSystem {
     fn process(&mut self, em: &mut EntityManager) {
         // Take a copy of the current command queue and don't process any new ones
-        let commands = em.get_command_queue_mut();
-        let mut commands_queue = commands.queue.clone();
+        // let commands = em.get_command_queue_mut();
+        // let mut commands_queue = commands.queue.clone();
 
-        let num_commands = commands_queue.len();
+        // let num_commands = commands_queue.len();
 
-        for command in commands_queue.drain(..) {
-            // Record the command
-            info!("{:?}", command);
+        // for command in commands_queue.drain(..) {
+        //     // Record the command
+        //     info!("{:?}", command);
 
-            match command {
-                Command::UpdateComponent(entity, component_type, component) => {
-                    if component_type == Position::get_component_type() {
-                        let old = get_component!(mut, em, entity, Position);
-                        *old = serde_json::from_str::<Position>(&component).unwrap();
-                    }
-                    // let new_component: Position = serde_json::from_str(&component).unwrap();l
-                    // self.update_component(em, component_type, new_component);
-                }
-                _ => {}
-            }
-        }
+        //     match command {
+        //         Command::UpdateComponent(entity, component_type, component) => {
+        //             if component_type == Position::get_component_type() {
+        //                 let old = get_component!(mut, em, entity, Position);
+        //                 *old = serde_json::from_str::<Position>(&component).unwrap();
+        //             }
 
-        self.cleanup(em, num_commands);
+        //             // let new_component: Position = serde_json::from_str(&component).unwrap();l
+        //             // self.update_component(em, component_type, new_component);
+        //         }
+        //         _ => {}
+        //     }
+        // }
+
+        // self.cleanup(em, num_commands);
     }
 }
 

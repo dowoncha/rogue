@@ -4,6 +4,10 @@
 #![feature(option_flattening)]
 #![recursion_limit = "1024"]
 
+/**
+ * Input -> Walk -> Collision -> Move
+ */
+
 extern crate backtrace;
 
 // #[macro_use]
@@ -36,10 +40,10 @@ pub use components::{Component, ComponentType, EventQueue, CommandQueue};
 macro_rules! get_component {
     ($em:expr, $entity:expr, $component:ty) => {
         {
-            let generic_component = $em.get_component($entity, <$component>::get_component_type()).unwrap();
-            let concrete = generic_component.as_any().downcast_ref::<$component>().unwrap();
-
-            concrete
+            $em.get_component($entity, <$component>::get_component_type())
+                .map(|component| component.as_any().downcast_ref::<$component>())
+                .flatten()
+                .expect("No component found for entity")
         }
     };
     ($i:ident, $em: expr, $entity: expr, $component:ty) => {
@@ -61,6 +65,7 @@ pub struct EntityManager {
     entities: Vec<Entity>,
     component_data_tables: HashMap<ComponentType, HashMap<Entity, Box<dyn Component>>>,
 }
+
 impl EntityManager {
     pub fn new() -> Self {
         Self {
@@ -197,6 +202,12 @@ impl EntityManager {
     }
 }
 
+impl std::fmt::Debug for EntityManager {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Entities\n{:?}", self.entities)
+    }
+}
+
 #[cfg(test)]
 mod entity_manager_tests {
     use components::{TestComponent};
@@ -252,18 +263,91 @@ mod entity_manager_tests {
     }
 }
 
+pub struct WalkSystem;
+
+impl System for WalkSystem {
+    fn process(&mut self, em: &mut EntityManager) {
+        // Get all entities with input components,
+        let input_entities = em.get_entities_with_components(components::Input::get_component_type());
+
+        // Get their position components
+        for entity in input_entities {
+            let input_component = get_component!(em, entity, components::Input);
+
+            let (dx, dy) = match input_component.input {
+                119 => (0, -1),             // w
+                100 => (1, 0),              // d
+                115 => (0, 1),                    // s
+                97 => (-1, 0),         // a
+                _ => (0, 0),
+            };
+
+            let walk = get_component!(mut, em, entity, components::Walk);
+            walk.dx = dx;
+            walk.dy = dy;
+        }
+    }
+}
+
+pub struct PhysicsSystem;
+
+impl System for PhysicsSystem {
+    fn process(&mut self, em: &mut EntityManager) {
+        // Get walk actions
+        let walk_entities = em.get_entities_with_components(components::Walk::get_component_type());
+
+        for entity in walk_entities {
+            let walk = {
+                let walk = get_component!(em, entity, components::Walk);
+                (walk.dx, walk.dy)
+            };
+        }
+    }
+}
+
+pub struct MoveSystem;
+
+impl System for MoveSystem {
+    fn process(&mut self, em: &mut EntityManager) {
+        let walk_entities = em.get_entities_with_components(components::Walk::get_component_type());
+
+        for entity in walk_entities {
+            let walk = {
+                get_component!(em, entity, components::Walk).clone()
+            };
+            let position = get_component!(mut, em, entity, components::Position);
+
+            info!("Entity position ({}, {}) - walk ({}, {})", position.x, position.y, walk.dx, walk.dy);
+
+            if !(walk.dx == 0 && walk.dy == 0) {
+                let x = position.x + walk.dx;
+                let y = position.y + walk.dy;
+
+                info!("Moving entity {} ({}, {})", entity, x, y);
+
+                position.x = x;
+                position.y = y;
+            }
+        }
+    }
+}
+
 mod input_system;
 mod render_system;
 mod chronos_system;
-mod move_system;
+// mod move_system;
 pub mod command_system;
 pub mod event_system;
 mod collide_system;
+pub mod map;
+mod types;
 
+pub use types::{Rect};
+pub use map::{Map, MapBuilder};
 pub use input_system::{InputSystem};
 pub use render_system::{RenderSystem, drop_ncurses};
 pub use chronos_system::{Chronos};
-pub use move_system::{MovementSystem};
+// pub use move_system::{MovementSystem};
 pub use collide_system::{CollisionSystem};
 // pub use command_system::{CommandSystem};
 

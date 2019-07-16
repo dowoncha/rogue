@@ -1,9 +1,7 @@
 use super::{Component, System, EntityManager};
 
 #[macro_use]
-use components::{EventQueue};
-
-use input_system::Key;
+use components::{Key, EventQueue};
 
 pub struct EventSystem {
 }

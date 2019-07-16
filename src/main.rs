@@ -3,6 +3,7 @@
 #[macro_use]
 extern crate log;
 extern crate ncurses;
+extern crate rand;
 
 #[macro_use]
 extern crate rogue;
@@ -16,276 +17,28 @@ use rogue::{
     System, 
     InputSystem, 
     RenderSystem, 
-    MovementSystem,
+    CollisionSystem,
+    Rect,
+    WalkSystem,
+    PhysicsSystem,
+    MoveSystem,
+    MapBuilder,
+    Map,
     Chronos, 
 };
 
+use rogue::map::{bsp_map_generator, ca_map_gen};
 use rogue::event_system::{EventSystem};
 use rogue::command_system::{CommandSystem};
-use rogue::components::{Position, Input, Render, RenderLayer, Collidable};
+use rogue::components::{Position, Input, Render, RenderLayer, Collidable, Walk};
 
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 use std::panic;
 
-/** Entity code */
-trait Health {
-    fn max_health(&self) -> i32;
-    fn health(&self) -> i32;
-    fn set_health(&mut self, health: i32);
-    fn is_dead(&self) -> bool {
-        self.health() <= 0
-    }
-}
-
-struct Rect {
-    x: i32,
-    y: i32,
-    width: i32,
-    height: i32,
-}
-
-impl Map for Rect {
-    fn width(&self) -> i32 {
-        self.width
-    }
-
-    fn height(&self) -> i32 {
-        self.height
-    }
-
-    fn is_walkable(&self, x: i32, y: i32) -> bool {
-        x > self.x && x < self.x + self.width - 1 && y > 0 && y < self.y + self.height - 1
-    }
-
-    fn get_buffer(&self) -> String {
-        let mut buffer = String::new();
-
-        for y in self.y..(self.y + self.height) {
-            for x in self.x..(self.x + self.width) {
-                if y == self.y || y == self.y + self.height - 1 {
-                    // nc::mvaddch(y, x, '-' as u64);
-                    buffer.push('-');
-                } else if x == self.x || x == self.x + self.width - 1 {
-                    // nc::mvaddch(y, x, '|' as u64);
-                    buffer.push('|');
-                } else {
-                    // nc::mvaddch(y, x, '.' as u64);
-                    buffer.push('.');
-                }
-            }
-        }
-
-        assert_eq!(buffer.len(), (self.width() * self.height()) as usize);
-
-        buffer
-    }
-
-    fn save(&self, filename: &str) -> std::io::Result<SaveResult> {
-        use std::fmt::Write;
-
-        let mut file = File::create(filename)?;
-
-        write!(file, "{}", self.get_buffer());
-
-        Ok(SaveResult {
-            filename: filename.to_string(),
-        })
-    }
-}
-
-trait Map {
-    fn width(&self) -> i32;
-
-    fn height(&self) -> i32;
-
-    fn is_walkable(&self, x: i32, y: i32) -> bool;
-
-    fn save(&self, filename: &str) -> std::io::Result<SaveResult> {
-        // let mut savefile = File::create(filename).unwrap();
-        std::fs::write(filename, "MAP\nENDMAP\n")?;
-
-        Ok(SaveResult {
-            filename: filename.to_string(),
-        })
-    }
-
-    fn get_buffer(&self) -> String;
-}
-
-#[cfg(test)]
-mod map_tests {
-    use super::*;
-
-    #[test]
-    fn test_rect_room_collision() {
-        let room = Rect {
-            x: 0,
-            y: 0,
-            width: 20,
-            height: 20,
-        };
-
-        for i in 0..20 {
-            assert!(!room.is_walkable(i, 0));
-            assert!(!room.is_walkable(i, 20));
-            assert!(!room.is_walkable(0, i));
-            assert!(!room.is_walkable(20, i));
-        }
-
-        for y in 1..19 {
-            for x in 1..19 {
-                assert!(room.is_walkable(x, y));
-            }
-        }
-    }
-}
-
 struct SaveResult {
     filename: String,
-}
-
-#[derive(Debug, PartialEq)]
-enum MoveError {
-    Blocked(String),
-}
-
-struct Game {
-    map: Box<dyn Map>,
-    // entities: HashMap<String, Box<dyn Entity>>,
-}
-
-impl Game {
-    pub fn new() -> Self {
-        // TODO: randomly generate
-
-        Self {
-            map: Box::new(Rect {
-                x: 0,
-                y: 0,
-                width: 10,
-                height: 10,
-            })
-            // entities: HashMap::new(),
-        }
-    }
-
-    // pub fn move_player(&mut self, x: i32, y: i32) -> Result<(), MoveError> {
-    //     if !self.map.is_walkable(x, y) {
-    //         return Err(MoveError::Blocked("tile".to_string()));
-    //     }
-
-    //     let mut blocker = None;
-
-    //     for monster in self.get_monsters() {
-    //         if monster.position() == (x, y) {
-    //             blocker = Some(monster.name().to_string());
-    //         }
-    //     }
-
-    //     // Player should attack blocking monster
-    //     if let Some(monster_name) = blocker {
-    //         let mut monster = self.monsters.get_mut(&monster_name).unwrap();
-
-    //         self.player.attack(&mut monster);
-
-    //         return Err(MoveError::Blocked(monster_name.to_string()));
-    //     }
-
-    //     self.player.set_position(x, y);
-
-    //     Ok(())
-    // }
-
-    // pub fn register_entity(&mut self, id: &str, entity: impl Entity + 'static) {
-    //     self.entities.insert(id.to_string(), Box::new(entity));
-    // }
-
-    // pub fn get_entities(&self) -> impl Iterator<Item = &Box<dyn Entity>> {
-    //     self.entities.values()
-    // }
-
-    // pub fn get_entities_mut(&mut self) -> impl Iterator<Item = &mut Box<dyn Entity>> {
-    //     self.entities.values_mut()
-    // }
-
-    pub fn serialize(&self) -> Result<String, Box<std::error::Error>> {
-        use std::fmt::Write;
-
-        let mut buffer = String::new();
-
-        // write game header
-        writeln!(buffer, "Rogue")?;
-
-        let game_version = 0.1;
-
-        // write game version
-        writeln!(buffer, "v{}", game_version)?;
-
-        // Write player info
-        // writeln!(buffer, "{}", self.player.name())?;
-
-        // write save_date
-
-        // write map
-        writeln!(buffer, "MAP\n{}\nENDMAP", &self.get_map().get_buffer())?;
-
-        // write entities
-        // for (id, monster) in self.monsters.iter() {
-        //     writeln!(buffer, "ENTITY {}", id)?;
-        //     writeln!(buffer, "name\t{}", monster.name())?;
-        //     writeln!(
-        //         buffer,
-        //         "hp/max\t{}/{}",
-        //         monster.health(),
-        //         monster.max_health()
-        //     )?;
-        //     writeln!(buffer, "ENDENTITY")?;
-        // }
-
-        Ok(buffer)
-    }
-
-    pub fn save(&self, filename: Option<&str>) -> std::io::Result<SaveResult> {
-        use std::fmt::Write;
-
-        // let player_name = self.player.name();
-        // let filename = format!("{}-datetime.save", player_name);
-        let filename = "game.save";
-        let mut savefile = File::create(&filename)?;
-
-        let buffer = self.serialize().unwrap();
-
-        write!(savefile, "{}", buffer)?;
-
-        Ok(SaveResult {
-            filename: filename.to_string(),
-        })
-    }
-
-    pub fn get_map(&self) -> &dyn Map {
-        &*self.map
-    }
-
-    pub fn set_map(&mut self, map: impl Map + 'static) {
-        self.map = Box::new(map);
-    }
-}
-
-// impl Render for Game {
-//     fn render(&self) {
-//         
-//     }
-// }
-
-fn validate_save(buffer: &str) -> bool {
-    let mut lines = buffer.lines();
-    if lines.next().unwrap() != "Rogue" {
-        return false;
-    }
-
-    true
 }
 
 #[cfg(test)]
@@ -410,69 +163,15 @@ mod save_load_tests {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
-struct GameTime {
-    pub sec: i32,
-    pub min: i32,
-    pub hour: i32,
-    pub day: i32,
-    pub year: i32,
-}
-
-impl GameTime {
-    pub fn new() -> Self {
-        Self {
-            sec: 0,
-            min: 0,
-            hour: 0,
-            day: 0,
-            year: 0,
-        }
-    }
-
-    pub fn tick(&self) -> Self {
-        let mut new_time = self.clone();
-
-        new_time.sec += 1;
-        if new_time.sec == 60 {
-            new_time.min += 1;
-        } else if new_time.min == 60 {
-            new_time.hour += 1;
-        } else if self.hour == 24 {
-            new_time.day += 1;
-        } else if self.day == 365 {
-            new_time.year += 1;
-        }
-
-        new_time.sec %= 60;
-        new_time.min %= 60;
-        new_time.hour %= 24;
-        new_time.day %= 365;
-
-        new_time
-    }
-}
-
-#[test]
-fn test_game_time_tick() {
-    let game_time = GameTime::new();
-
-    let new_time = game_time.tick();
-    let new_time2 = game_time.tick();
-
-    assert_ne!(game_time, new_time);
-    assert_eq!(new_time, new_time2);
-}
-
-
-
 fn create_player(em: &mut EntityManager) {
     let player = em.create_entity();
 
     em.add_component(player, Input::new());
     em.add_component(player, Render { glyph: '@', layer: RenderLayer::Player });
-    em.add_component(player, Position{ x: 0, y: 0});
+    em.add_component(player, Position{ x: 1, y: 1});
     em.add_component(player, Collidable);
+    // em.add_component(player, Physics);
+    em.add_component(player, Walk::new());
 }
 
 fn create_monster(em: &mut EntityManager, x: i32, y: i32) {
@@ -480,31 +179,65 @@ fn create_monster(em: &mut EntityManager, x: i32, y: i32) {
 
     em.add_component(monster, Render { glyph: 'G', layer: RenderLayer::Player});
     em.add_component(monster, Position { x: x, y: y });
+    em.add_component(monster, Collidable);
 }
 
-fn create_map(entity_manager: &mut EntityManager ) {
-    let map = Rect {
-        x: 0,
-        y: 0,
-        width: 20,
-        height: 20,
-    };
+fn create_map() -> Map {
+    use rand::{Rng};
 
-    let buffer = map.get_buffer();
-    let mut tiles = buffer.chars();
+    let mut rng = rand::thread_rng();
 
+    let map_width = 200;
+    let map_height = 200;
+
+    // Generate rooms
+
+    let min_room_size = 5;
+    let max_room_size = 20;
+
+    let max_room_count = 10;
+
+    let mut rooms: Vec<Rect> = vec![];
+
+    for i in 0..max_room_count {
+        let new_room = Rect::new(
+            rng.gen_range(0, map_width - max_room_size),
+            rng.gen_range(0, map_height - max_room_size),
+            rng.gen_range(min_room_size, max_room_size),
+            rng.gen_range(min_room_size, max_room_size)
+        );
+
+        let intersected = rooms.iter().any(|room| room.intersect(&new_room));
+
+        if !intersected {
+            rooms.push(new_room);
+        }
+    }
+
+    let mut map_builder = MapBuilder::new(map_width as usize, map_height as usize);
+
+    for room in rooms {
+        map_builder = map_builder.create_room(&room);
+    }
+
+    map_builder.build()
+}
+
+fn create_map_entities(map: &Map, em: &mut EntityManager) {
     for y in 0..map.height() {
         for x in 0..map.width() {
-            let tile = entity_manager.create_entity();
+            let tile = em.create_entity();
             let index = (y * map.width() + x) as usize;
 
-            let glyph = tiles.next().expect("No tile at index");
+            let cell = map.get_cell_ref(x as i32, y as i32);
 
-            entity_manager.add_component(tile, Render { glyph: glyph, layer: RenderLayer::Map });
-            entity_manager.add_component(tile, Position{ x: x, y: y });
+            let glyph = cell.glyph;
 
-            if glyph == '-' || glyph == '|' {
-                entity_manager.add_component(tile, Collidable);
+            em.add_component(tile, Render { glyph: glyph, layer: RenderLayer::Map });
+            em.add_component(tile, Position{ x: x as i32, y: y as i32});
+
+            if glyph == '-' || glyph == '|' || glyph == '#' {
+                em.add_component(tile, Collidable);
             }
         }
     }
@@ -520,22 +253,25 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // Initialize ncurses
     // init_ncurses();
 
-    let mut game = Game::new();
-
     let mut entity_manager = EntityManager::new();
     let mut render_system = RenderSystem::new();
     let mut input_system = InputSystem::new();
-    let mut movement_system = MovementSystem::new();
     let mut event_system = EventSystem::new();
     let mut command_system = CommandSystem::new();
-    let mut chronos = Chronos::new();
+    let mut move_system = MoveSystem;
+    let mut physics_system = PhysicsSystem;
+    let mut collision_system = CollisionSystem;
+    let mut walk_system = WalkSystem;
+    // let mut chronos = Chronos::new();
 
     render_system.mount();
     input_system.mount();
     event_system.mount(&mut entity_manager);
     command_system.mount(&mut entity_manager);
 
-    create_map(&mut entity_manager);
+    // let map = create_map();
+    let map = ca_map_gen(80, 40);
+    create_map_entities(&map, &mut entity_manager);
     create_player(&mut entity_manager);
     create_monster(&mut entity_manager, 5, 7);
 
@@ -543,41 +279,23 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     // game.register_entity("gametime", game_time);
 
+    // debug!("{:?}", entity_manager);
+
     'main: loop {
+        // event_system.process(&mut entity_manager);
         input_system.process(&mut entity_manager);
 
-        event_system.process(&mut entity_manager);
+        walk_system.process(&mut entity_manager);
 
-        movement_system.process(&mut entity_manager);
+        // physics_system.process(&mut entity_manager);
 
-        command_system.process(&mut entity_manager);
+        collision_system.process(&mut entity_manager);
+
+        move_system.process(&mut entity_manager);
+
+        // command_system.process(&mut entity_manager);
 
         render_system.process(&mut entity_manager);
-
-        chronos.process(&mut entity_manager);
-
-        event_system.cleanup(&mut entity_manager);
-
-        // Update
-        // Whos turn is it?
-
-        // this needs to be moved into player's turn
-        // let input = get_input();
-
-        // if let Some(input_event) = handle_input(input) {
-        //     match input_event {
-        //         InputEvent::MovePlayer(dx, dy) => {
-        //             let (x1, y1) = {
-        //                 let player = game.get_player();
-
-        //                 (player.x + dx, player.y + dy)
-        //             };
-
-        //             let _ = game.move_player(x1, y1);
-        //         }
-        //         InputEvent::Quit => break 'main
-        //     }
-        // }
     }
 
     // game.save(None)?;
@@ -595,4 +313,19 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // }
 
     // Ok(())
+}
+
+trait Subject {
+    fn register(&mut self, observer: &dyn Observer);
+    fn unregister(&mut self, observer: &dyn Observer);
+    fn observers(&self) -> &[&dyn Observer];
+    fn notify(&self, event: String) {
+        for o in self.observers() {
+            o.update(event.clone());
+        }
+    }
+}
+
+trait Observer {
+    fn update(&self, event: String);
 }
