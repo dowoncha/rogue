@@ -1,47 +1,5 @@
-DEBUG - Space (5, 7) occupied
-DEBUG - Space (5, 7) occupied
-DEBUG - Space (5, 7) occupied
-DEBUG - Space (5, 7) occupied
-DEBUG - Space (5, 7) occupied
-DEBUG - Space (5, 7) occupied
-DEBUG - Space (7, 14) occupied
-DEBUG - Space (7, 14) occupied
-DEBUG - Space (7, 14) occupied
-DEBUG - Space (7, 14) occupied
-DEBUG - Space (7, 14) occupied
-DEBUG - Space (7, 14) occupied
-DEBUG - Space (7, 14) occupied
-DEBUG - Space (7, 14) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (14, 13) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
-DEBUG - Space (13, 24) occupied
+INFO - goblin 7/10 hp
+INFO - goblin 4/10 hp
+INFO - goblin 1/10 hp
+INFO - goblin -2/10 hp
+INFO - goblin has died

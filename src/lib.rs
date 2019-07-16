@@ -2,6 +2,7 @@
 #![crate_type = "lib"]
 #![feature(duration_float)]
 #![feature(option_flattening)]
+#![feature(vec_remove_item)]
 #![recursion_limit = "1024"]
 
 /**
@@ -201,6 +202,14 @@ impl EntityManager {
 
         commands
     }
+
+    pub fn kill_entity(&mut self, entity: Entity) {
+        for (_, table) in self.component_data_tables.iter_mut() {
+            let _ = table.remove(&entity);
+        }
+
+        self.entities.remove_item(&entity).unwrap();
+    }
 }
 
 impl std::fmt::Debug for EntityManager {
@@ -342,15 +351,33 @@ impl System for DamageSystem {
         // Apply damage if they have a health component
         for entity in damage_entities.into_iter() {
             let damage = get_component!(em, entity, components::Damage).clone();
-            // let name = get_component!(em, entity, components::Name).clone();
+            let name = get_component!(em, entity, components::Name).clone();
             // let health_component = get_component!(mut, em, entity, components::Health);
             if let Some(health_component) = em.get_component_mut(entity, components::Health::get_component_type()) {
                 let health = health_component.as_any_mut().downcast_mut::<components::Health>().unwrap();
                 health.health -= damage.amount;
 
-                // info!("{} {}/{} hp", &name.name, health.health, health.max_health);
+                info!("{} {}/{} hp", &name.name, health.health, health.max_health);
 
                 em.remove_component(entity, components::Damage::get_component_type());
+            }
+        }
+    }
+}
+
+pub struct Reaper;
+
+impl System for Reaper {
+    fn process(&mut self, em: &mut EntityManager) {
+        let health_entities = em.get_entities_with_components(components::Health::get_component_type());
+
+        for entity in health_entities.into_iter() {
+            let name = get_component!(em, entity, components::Name);
+            let health = get_component!(em, entity, components::Health);
+
+            if health.health <= 0 {
+                info!("{} has died", &name.name);
+                em.kill_entity(entity);
             }
         }
     }

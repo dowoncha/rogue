@@ -268,6 +268,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let mut collision_system = CollisionSystem;
     let mut walk_system = WalkSystem;
     let mut damage_system = DamageSystem;
+    let mut reaper = rogue::Reaper;
 
     render_system.mount();
     input_system.mount();
@@ -300,7 +301,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
         move_system.process(&mut entity_manager);
 
-        // command_system.process(&mut entity_manager);
+        reaper.process(&mut entity_manager);
 
         render_system.process(&mut entity_manager);
     }

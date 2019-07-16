@@ -67,7 +67,7 @@ impl System for CollisionSystem {
             };
 
             if let Some((occupier, _)) = occupied_spaces.iter().find(|(_, (x, y))| dest.x == *x && dest.y == *y) {
-                debug!("Space ({}, {}) occupied", dest.x, dest.y);
+                // debug!("Space ({}, {}) occupied", dest.x, dest.y);
 
                 let walk = get_component!(mut, em, entity, components::Walk);
 
