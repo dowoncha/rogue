@@ -9,6 +9,11 @@ use ncurses as nc;
 
 #[macro_use]
 extern crate rogue;
+
+extern crate rlua; 
+
+use rlua::{Function, Lua};
+
 use rogue::{
     file_logger, 
     EntityManager, 
@@ -32,6 +37,7 @@ use rogue::map::{simple_map_gen, ca_map_gen};
 use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, Walk};
 
 use std::env;
+use std::collections::HashMap;
 
 fn create_player(em: &mut EntityManager, x: i32, y: i32) {
     let player = em.create_entity();
@@ -126,6 +132,54 @@ fn populate_map(map: &Map, em: &mut EntityManager) {
     }
 }
 
+fn load_breeds(filename: &str, em: &mut EntityManager) -> Result<(), Box<dyn std::error::Error>> {
+    use std::io::prelude::*;
+
+    info!("Loading {}", filename);
+    let lua = Lua::new();
+
+    let mut file = std::fs::File::open(filename)?;
+    let mut buffer = String::new();
+
+    file.read_to_string(&mut buffer)?;
+
+    let mut breeds = None;
+
+    let _: rlua::Result<()> = lua.context(|ctx| {
+        ctx.load(&buffer)
+            .set_name("breeds")
+            .expect("Failed to set name")
+            .exec()
+            .expect("Failed to exec chunk");
+
+        let globals = ctx.globals();
+
+        breeds = globals.get::<_, HashMap<String, HashMap<String, String>>>("breeds").ok();
+
+        Ok(())
+    });
+
+    debug!("{:?}", breeds);
+
+    for (breed, attributes) in breeds.unwrap().iter() {
+        let entity_template = em.create_entity();
+
+        em.add_component(entity_template, components::Name { name: breed.to_string() });
+
+        for (attribute, value) in attributes.iter() {
+            match attribute.as_str() {
+                "glyph" => {
+                    let glyph = value.chars().next().unwrap();
+                    // em.add_component(entity_template, components::Render { glyph: glyph, layer: RenderLayer::Player });
+                }
+                _ => { debug!("Unimplemented attribute {}", attribute); }
+            }
+        }
+    }
+
+    Ok(())
+}
+
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // println!("\u{001b}[31mHelloWorld");
     let args: Vec<_> = env::args().collect();
@@ -153,6 +207,10 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let map = simple_map_gen(200, 200);
 
     let player_pos = map.rooms.first().unwrap().center();
+
+    load_breeds("assets/breeds.lua", &mut entity_manager)?;
+
+    info!("Assets loaded");
 
     create_map_entities(&map, &mut entity_manager);
     create_player(&mut entity_manager, player_pos.0, player_pos.1);

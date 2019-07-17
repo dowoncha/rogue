@@ -1,2 +1,0 @@
-name, glyph, color
-goblin, 'g', green

@@ -17,6 +17,7 @@ time = "0.1"
 error-chain = "*"
 lazy_static = "*"
 serde_json = "*"
+rlua = "^0.16.3"
 
 [dependencies.serde]
 version = "*"
