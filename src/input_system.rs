@@ -56,7 +56,7 @@ impl InputSystem {
         // let input_key = nc::getch();
 
         // If an input event is received, notify all input components
-        if let Ok(input_key) = self.event_receiver.try_recv() {
+        if let Ok(input_key) = self.event_receiver.iter_recv() {
         // if input_key != 0 {
             debug!("Received input {}", input_key);
 

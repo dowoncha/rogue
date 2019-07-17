@@ -69,13 +69,33 @@ impl RenderSystem {
         let map_window = nc::newwin(screen_height - map_window_y, screen_width - map_window_x, 0, map_window_x);
         self.map_window = Some(map_window);
     }
-}
 
-impl Drop for RenderSystem {
-    fn drop(&mut self) {
-        // let _ = nc::delwin(map_window);
+    fn get_camera_position(&self, em: &EntityManager) -> Position {
+        let map_window = self.map_window.unwrap();
 
-        drop_ncurses();
+        let player = em.get_entities_with_components(components::Player::get_component_type())[0];
+        let player_position = get_component!(em, player, components::Position).unwrap();
+
+        let mut map_window_width = 0;
+        let mut map_window_height = 0;
+
+        nc::getmaxyx(map_window, &mut map_window_height, &mut map_window_width);
+
+        let camera_pos = Position { 
+            x: player_position.x - map_window_width / 2, 
+            y: player_position.y - map_window_height / 2
+        };
+
+        camera_pos
+    }
+
+    fn get_world_position(&self, camera_pos: &Position, entity_pos: &Position) -> Position {
+        let world_position = Position {
+            x: entity_pos.x - camera_pos.x, 
+            y: entity_pos.y - camera_pos.y
+        };
+
+        world_position
     }
 }
 
@@ -90,19 +110,6 @@ impl System for RenderSystem {
         let position_components  = entities.iter()
             .filter_map(|entity| get_component!(entity_manager, *entity, Position));
 
-        let map_window = self.map_window.unwrap();
-
-        let camera_position = {
-            let player = entity_manager.get_entities_with_components(components::Player::get_component_type())[0];
-            let player_position = get_component!(entity_manager, player, components::Position).unwrap();
-
-            let mut map_window_width = 0;
-            let mut map_window_height = 0;
-
-            nc::getmaxyx(map_window, &mut map_window_height, &mut map_window_width);
-
-            (player_position.x - map_window_width / 2, player_position.y - map_window_height / 2)
-        };
 
         let mut sorted_entities: Vec<(&Entity, (&Render, &Position))> = entities.iter()
             .zip(render_components.zip(position_components))
@@ -110,9 +117,21 @@ impl System for RenderSystem {
 
             sorted_entities.sort_by(|(_, (a, _)), (_, (b, _))| a.layer.cmp(&b.layer));
 
+        let camera_pos = self.get_camera_position(entity_manager);
+        let map_window = self.map_window.unwrap();
+
+        // TODO
+        // Cache this
+        let mut map_window_width = 0;
+        let mut map_window_height = 0;
+
+        nc::getmaxyx(map_window, &mut map_window_height, &mut map_window_width);
 
         for (_, (render, position)) in sorted_entities {
-            nc::mvwaddch(map_window, position.y, position.x, render.glyph as u64);
+            let world_pos = self.get_world_position(&camera_pos, &position);
+            if world_pos.x > 0 && world_pos.y > 0 && world_pos.x < map_window_width && world_pos.y < map_window_height {
+                nc::mvwaddch(map_window, world_pos.y, world_pos.x, render.glyph as u64);
+            }
         }
 
         nc::box_(map_window, 0, 0);
@@ -120,5 +139,13 @@ impl System for RenderSystem {
         nc::wrefresh(map_window);
 
         // nc::refresh();
+    }
+}
+
+impl Drop for RenderSystem {
+    fn drop(&mut self) {
+        // let _ = nc::delwin(map_window);
+
+        drop_ncurses();
     }
 }
