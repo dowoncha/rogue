@@ -32,6 +32,7 @@ extern crate ncurses;
 
 extern crate uuid;
 
+use rand::{Rng, thread_rng};
 use std::collections::HashMap;
 
 #[macro_use]
@@ -314,6 +315,27 @@ fn test_move_system_process() {
     em.add_component(entity, components::Walk { dx: 0, dy: 0 });
 }
 
+pub struct AttackSystem;
+
+impl System for AttackSystem {
+    fn process(&self, em: &mut EntityManager) {
+        // Get all entities that have a collision
+        let entities = em.get_entities_with_components(components::Event::get_component_type());
+
+        for entity in entities {
+            if let Some(event) = get_component!(em, entity, components::Event) {
+                if let components::Event::Collision(collider) = event {
+                    if em.has_component(*collider, components::Health::get_component_type()) {
+                        let mut rng = thread_rng();
+
+                        em.add_component(*collider, components::Damage { amount: rng.gen_range(1, 4) });
+                    }
+                }
+            }
+        }
+    }
+}
+
 pub struct DamageSystem;
 
 impl System for DamageSystem {
@@ -368,6 +390,32 @@ impl System for Reaper {
 
                 em.kill_entity(entity);
             }
+        }
+    }
+}
+
+pub struct EventLogSystem;
+
+impl System for EventLogSystem {
+    fn process(&self, em: &mut EntityManager) {
+        let entities_with_events = em.get_entities_with_components(components::Event::get_component_type());
+
+        for entity in entities_with_events {
+            let event = get_component!(em, entity, components::Event).unwrap();
+            info!("{:?}", event);
+        }
+    }
+}
+
+pub struct Janitor;
+
+impl System for Janitor {
+    fn process(&self, em: &mut EntityManager) {
+        // Remove all events
+        let entities_with_events = em.get_entities_with_components(components::Event::get_component_type());
+
+        for entity in entities_with_events {
+            em.remove_component(entity, components::Event::get_component_type());
         }
     }
 }

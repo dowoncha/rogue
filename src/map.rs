@@ -28,7 +28,7 @@ impl Cell {
 // A map is a 2d grid of tiles
 pub struct Map {
     cells: Vec<Cell>,
-    rooms: Vec<Rect>,
+    pub rooms: Vec<Rect>,
     width: usize,
     height: usize,
 }
@@ -297,7 +297,7 @@ impl<T: std::fmt::Debug> Arena<T> {
 pub fn simple_map_gen(width: usize, height: usize) -> Map {
     let mut map = MapBuilder::new(width, height);
 
-    let mut rooms = vec![Rect::new(20, 15, 10, 15), Rect::new(50, 15, 10, 15)];
+    let mut rooms = vec![];
 
     let min_room_size = 3;
     let max_room_size = 30;
@@ -317,9 +317,24 @@ pub fn simple_map_gen(width: usize, height: usize) -> Map {
         let failed = rooms.iter().any(|room| new_room.intersect(room));
 
         if !failed {
-            rooms.push(new_room);
-        } else {
+            // No intersections, valid room
+            // Get previous room center
+            if rooms.len() > 0 {
+                let prev_room = rooms.last().expect("No rooms found");
+                let new_center = new_room.center();
+                let center = prev_room.center();
 
+                // coinflip horizontal or vertical
+                if rng.gen::<bool>() {
+                    map = map.create_h_tunnel(center.0, new_center.0, center.1);
+                    map = map.create_v_tunnel(center.1, new_center.1, center.0);
+                } else {
+                    map = map.create_v_tunnel(center.1, new_center.1, center.0);
+                    map = map.create_h_tunnel(center.0, new_center.0, new_center.1);
+                } 
+            }
+
+            rooms.push(new_room);
         }
     }
 

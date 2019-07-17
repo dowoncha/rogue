@@ -1,8 +1,171 @@
-INFO - Screen size, 91x24
+INFO - Screen size, 80x24
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Input Thread: 100
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Input Thread: 100
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 100
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(16254)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 97
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 97
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Input Thread: 115
@@ -19,7 +182,317 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 0)
 DEBUG - Processing collision
 DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 0)
+DEBUG - Processing collision
 DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Input Thread: 115
+DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -29,463 +502,158 @@ DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
-DEBUG - Input Thread: 100
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
-DEBUG - Received input 100
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
-DEBUG - Damage System - Logging Damage
 DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin took 3 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
-DEBUG - Received input 100
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
-DEBUG - Damage System - Logging Damage
 DEBUG - Rendering
-DEBUG - Logging goblin took 2 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin took 2 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin took 2 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin took 2 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin took 2 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
-DEBUG - Received input 100
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
-DEBUG - Damage System - Logging Damage
 DEBUG - Rendering
-DEBUG - Logging goblin took 1 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin took 1 damage.
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin took 1 damage.
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin took 1 damage.
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin took 1 damage.
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Damage System - Logging Damage
-DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin took 3 damage.
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Damage System - Logging Damage
-DEBUG - Rendering
-DEBUG - Logging goblin took 3 damage.
-INFO - goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 119
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 115
-DEBUG - Logging goblin has died
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -494,17 +662,6 @@ DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 115
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -512,605 +669,7 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 97
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 97
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 97
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 100
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 119
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Input Thread: 119
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 119
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Input Thread: 119
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 119
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 97
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 115
-DEBUG - Rendering
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -1118,15 +677,7 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 115
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -1134,45 +685,8 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 97
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Rendering
-DEBUG - Input Thread: 115
-DEBUG - Logging goblin has died
+DEBUG - Input Thread: 100
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -1180,8 +694,7 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Input Thread: 115
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -1189,8 +702,7 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Input Thread: 115
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -1198,16 +710,7 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision
-DEBUG - Input Thread: 115
-DEBUG - Rendering
-DEBUG - Input Thread: 115
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -1215,16 +718,7 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 115
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 1)
-DEBUG - Processing collision
-DEBUG - Input Thread: 115
-DEBUG - Rendering
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
 DEBUG - Received input 115
@@ -1232,69 +726,205 @@ DEBUG - WalkSystem ----- Processing
 DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Input Thread: 100
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+INFO - Collision(27053)
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
 DEBUG - Input Thread: 119
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
-DEBUG - Received input 119
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, -1)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Input Thread: 97
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
-DEBUG - Received input 97
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
+INFO - Collision(27053)
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
+DEBUG - Received input 115
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
+DEBUG - Walking 40000, (0, 1)
 DEBUG - Processing collision
 DEBUG - Rendering
-DEBUG - Logging goblin has died
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 0)
-DEBUG - Processing collision

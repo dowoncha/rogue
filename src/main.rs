@@ -17,12 +17,15 @@ use rogue::{
     InputSystem, 
     RenderSystem, 
     CollisionSystem,
+    AttackSystem,
     Rect,
     WalkSystem,
     DamageSystem,
     MoveSystem,
     MapBuilder,
+    EventLogSystem,
     Map,
+    Janitor
 };
 
 use rogue::map::{simple_map_gen, ca_map_gen};
@@ -30,14 +33,14 @@ use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, 
 
 use std::env;
 
-fn create_player(em: &mut EntityManager) {
+fn create_player(em: &mut EntityManager, x: i32, y: i32) {
     let player = em.create_entity();
 
     em.add_component(player, components::Name { name: "gromash warhammer".to_string() });
     em.add_component(player, components::Player);
     em.add_component(player, Input::new());
     em.add_component(player, Render { glyph: '@', layer: RenderLayer::Player });
-    em.add_component(player, Position{ x: 25, y: 23});
+    em.add_component(player, Position{ x: x, y: y});
     em.add_component(player, Collidable);
     em.add_component(player, components::Health { health: 100, max_health: 100 });
     em.add_component(player, Walk::new());
@@ -129,16 +132,22 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let move_system = MoveSystem;
     let collision_system = CollisionSystem;
     let walk_system = WalkSystem;
+    let attack_system = AttackSystem;
     let damage_system = DamageSystem;
+    let event_log_system = EventLogSystem;
     let reaper = rogue::Reaper;
+    let janitor = Janitor;
 
     render_system.mount();
     input_system.mount();
 
     // let map = create_map();
     let map = simple_map_gen(200, 200);
+
+    let player_pos = map.rooms.first().unwrap().center();
+
     create_map_entities(&map, &mut entity_manager);
-    create_player(&mut entity_manager);
+    create_player(&mut entity_manager, player_pos.0, player_pos.1);
     create_monster(&mut entity_manager, 27, 23);
 
     'main: loop {
@@ -148,6 +157,8 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
         collision_system.process(&mut entity_manager);
 
+        attack_system.process(&mut entity_manager);
+
         damage_system.process(&mut entity_manager);
 
         move_system.process(&mut entity_manager);
@@ -155,6 +166,10 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         render_system.process(&mut entity_manager);
 
         reaper.process(&mut entity_manager);
+
+        event_log_system.process(&mut entity_manager);
+
+        janitor.process(&mut entity_manager);
     }
 
     // game.save(None)?;

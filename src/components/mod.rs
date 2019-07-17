@@ -2,6 +2,8 @@ use serde::{Serialize, Deserialize};
 
 use std::any::{Any, TypeId};
 
+use super::{Entity};
+
 pub type ComponentType = TypeId;
 
 // TODO:
@@ -192,7 +194,6 @@ impl Component for Health {
 }
 
 struct Physics {
-
 }
 
 #[derive(Copy, Clone)]
@@ -232,5 +233,14 @@ impl Log {
 }
 
 impl Component for Log {
+    derive_component!();
+}
+
+#[derive(Debug)]
+pub enum Event {
+    Collision(Entity)
+}
+
+impl Component for Event {
     derive_component!();
 }
