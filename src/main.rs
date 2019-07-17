@@ -258,11 +258,11 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let mut entity_manager = EntityManager::new();
     let mut render_system = RenderSystem::new();
     let mut input_system = InputSystem::new();
-    let mut move_system = MoveSystem;
-    let mut collision_system = CollisionSystem;
-    let mut walk_system = WalkSystem;
-    let mut damage_system = DamageSystem;
-    let mut reaper = rogue::Reaper;
+    let move_system = MoveSystem;
+    let collision_system = CollisionSystem;
+    let walk_system = WalkSystem;
+    let damage_system = DamageSystem;
+    let reaper = rogue::Reaper;
 
     render_system.mount();
     input_system.mount();
@@ -280,12 +280,9 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // debug!("{:?}", entity_manager);
 
     'main: loop {
-        // event_system.process(&mut entity_manager);
         input_system.process(&mut entity_manager);
 
         walk_system.process(&mut entity_manager);
-
-        // physics_system.process(&mut entity_manager);
 
         collision_system.process(&mut entity_manager);
 
@@ -293,9 +290,10 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
         move_system.process(&mut entity_manager);
 
+        render_system.process(&mut entity_manager);
+
         reaper.process(&mut entity_manager);
 
-        render_system.process(&mut entity_manager);
     }
 
     // game.save(None)?;

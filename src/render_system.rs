@@ -60,6 +60,7 @@ impl Drop for RenderSystem {
 
 impl System for RenderSystem {
     fn process(&self, entity_manager: &mut EntityManager) {
+        debug!("Rendering");
         let entities = entity_manager.get_entities_with_components(Render::get_component_type());
 
         let render_components = entities.iter()
@@ -77,5 +78,7 @@ impl System for RenderSystem {
         for (_, (render, position)) in sorted_entities {
             nc::mvaddch(position.y, position.x, render.glyph as u64);
         }
+
+        nc::refresh();
     }
 }

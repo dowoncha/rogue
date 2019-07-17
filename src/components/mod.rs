@@ -1,7 +1,6 @@
 use serde::{Serialize, Deserialize};
 
 use std::any::{Any, TypeId};
-use std::collections::VecDeque;
 
 pub type ComponentType = TypeId;
 

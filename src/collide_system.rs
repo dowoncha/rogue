@@ -16,6 +16,7 @@ impl CollisionSystem {
 
 impl System for CollisionSystem {
     fn process(&self, em: &mut EntityManager) {
+        debug!("Processing collision");
         //  Check whether entitiy's walk command moves them into an occupied space
         //  If the space is occupied, 
         //

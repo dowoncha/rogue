@@ -47,18 +47,27 @@ impl InputSystem {
     }
 
     fn process_input_events(&self, entity_manager: &mut EntityManager) {
+        debug!("Processing input");
         // Check for any key events
         // Get all entities with input component
         let input_entities = entity_manager.get_entities_with_components(Input::get_component_type());
 
-        // Move all entities
-        for entity in input_entities {
-            let input_component = get_component!(mut, entity_manager, entity, Input).unwrap();
-            
-            if let Ok(input_key) = self.event_receiver.try_recv() {
-                debug!("Keyboard input: {}", input_key);
+        debug!("Found {} entities with input", input_entities.len());
+        // let input_key = nc::getch();
+
+        // If an input event is received, notify all input components
+        if let Ok(input_key) = self.event_receiver.recv() {
+        // if input_key != 0 {
+            debug!("Received input {}", input_key);
+
+            // Move all entities
+            for entity in input_entities {
+                let input_component = get_component!(mut, entity_manager, entity, Input).unwrap();
                 input_component.input = input_key;
-            } else {
+            }
+        } else {
+            for entity in input_entities {
+                let input_component = get_component!(mut, entity_manager, entity, Input).unwrap();
                 input_component.input = 0;
             }
         }
@@ -72,11 +81,10 @@ impl System for InputSystem {
 }
 
 impl Drop for InputSystem {
-    
     fn drop(&mut self) {
-        // if let Some(handle) = &self.join_handle {
-        //     handle.join().unwrap();
-        // }
+        if let Some(handle) = self.join_handle.take() {
+            handle.join().unwrap();
+        }
     }
 }
 
@@ -85,7 +93,9 @@ fn start_input_thread(input_listener: std::sync::mpsc::Sender<i32>) -> std::thre
 
     let handle = thread::spawn(move || {
         loop {
-            let input = nc::getch();
+            let input = nc::getch() as i32;
+
+            debug!("Input Thread: {}", input);
 
             input_listener.send(input).unwrap();
         }

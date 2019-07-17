@@ -1,16 +1,330 @@
-DEBUG - Keyboard input: 115
-DEBUG - Keyboard input: 115
-DEBUG - Keyboard input: 115
-DEBUG - Keyboard input: 115
-DEBUG - Keyboard input: 100
-DEBUG - Keyboard input: 100
-DEBUG - Keyboard input: 100
-DEBUG - Keyboard input: 115
-DEBUG - Keyboard input: 115
-DEBUG - Keyboard input: 100
-DEBUG - Keyboard input: 100
-DEBUG - Keyboard input: 100
-DEBUG - Keyboard input: 100
-INFO - goblin has died
-DEBUG - Keyboard input: 100
-DEBUG - Keyboard input: 100
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, -1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (0, 1)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking 3200, (1, 0)
+DEBUG - Processing collision
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
