@@ -61,9 +61,9 @@ macro_rules! get_component {
 pub type Entity = i32;
 
 pub trait System {
-    fn mount(&mut self, entity_manager: &mut EntityManager) { }
+    fn mount(&mut self, _: &mut EntityManager) { }
     fn process(&self, entity_manager: &mut EntityManager);
-    fn unmount(&mut self, entity_manager: &mut EntityManager) { }
+    fn unmount(&mut self, _: &mut EntityManager) { }
 }
 
 pub struct EntityManager {
@@ -108,6 +108,7 @@ impl EntityManager {
 
         table.insert(entity, Box::new(component));
 
+        // em.listen()
         // listeners.notify("add_component entity, component_type ")
     }
 

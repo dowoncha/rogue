@@ -212,11 +212,11 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     system_manager.register_system(RenderSystem::new());
     system_manager.register_system(InputSystem::new());
     system_manager.register_system(RandomWalkAiSystem);
-    system_manager.register_system(MoveSystem);
-    system_manager.register_system(CollisionSystem);
     system_manager.register_system(WalkSystem);
+    system_manager.register_system(CollisionSystem);
     system_manager.register_system(AttackSystem);
     system_manager.register_system(DamageSystem);
+    system_manager.register_system(MoveSystem);
     system_manager.register_system(EventLogSystem);
     system_manager.register_system(rogue::Reaper);
     system_manager.register_system(Janitor);
