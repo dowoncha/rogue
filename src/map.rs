@@ -70,6 +70,7 @@ impl Map {
             }
         }
 
+
         cells
     }
 
@@ -163,6 +164,8 @@ impl MapBuilder {
                 MapBuilder::dig_cell(&mut cell);
             }
         }
+
+        self.map.rooms.push(*room);
 
         self
     }
@@ -289,6 +292,44 @@ impl<T: std::fmt::Debug> Arena<T> {
 
         return leaf_node_ids
     }
+}
+
+pub fn simple_map_gen(width: usize, height: usize) -> Map {
+    let mut map = MapBuilder::new(width, height);
+
+    let mut rooms = vec![Rect::new(20, 15, 10, 15), Rect::new(50, 15, 10, 15)];
+
+    let min_room_size = 3;
+    let max_room_size = 30;
+    let max_room_count = 30;
+
+    let mut rng = thread_rng();
+
+    for _ in 0..max_room_count {
+        let room_width = rng.gen_range(min_room_size, max_room_size);
+        let room_height = rng.gen_range(min_room_size, max_room_size);
+
+        let x = rng.gen_range(0, width - room_width - 1);
+        let y = rng.gen_range(0, height - room_height - 1);
+
+        let new_room = Rect::new(x as i32, y as i32, room_width as i32, room_height as i32);
+
+        let failed = rooms.iter().any(|room| new_room.intersect(room));
+
+        if !failed {
+            rooms.push(new_room);
+        } else {
+
+        }
+    }
+
+    for room in rooms {
+        map = map.create_room(&room);
+    }
+
+    map = map.create_h_tunnel(25, 55, 23);
+
+    map.build()
 }
 
 fn split_dungeon(node_id: NodeId, arena: &mut Arena<Rect>) {

@@ -212,3 +212,9 @@ pub struct Name {
 impl Component for Name {
     derive_component!();
 }
+
+pub struct Player;
+
+impl Component for Player {
+    derive_component!();
+}

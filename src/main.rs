@@ -25,7 +25,7 @@ use rogue::{
     Map,
 };
 
-use rogue::map::{ca_map_gen};
+use rogue::map::{simple_map_gen, ca_map_gen};
 use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, Walk};
 
 use std::env;
@@ -34,12 +34,12 @@ fn create_player(em: &mut EntityManager) {
     let player = em.create_entity();
 
     em.add_component(player, components::Name { name: "gromash warhammer".to_string() });
+    em.add_component(player, components::Player);
     em.add_component(player, Input::new());
     em.add_component(player, Render { glyph: '@', layer: RenderLayer::Player });
-    em.add_component(player, Position{ x: 1, y: 1});
+    em.add_component(player, Position{ x: 25, y: 23});
     em.add_component(player, Collidable);
     em.add_component(player, components::Health { health: 100, max_health: 100 });
-    // em.add_component(player, Physics);
     em.add_component(player, Walk::new());
 }
 
@@ -135,7 +135,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     input_system.mount();
 
     // let map = create_map();
-    let map = ca_map_gen(80, 40);
+    let map = simple_map_gen(200, 200);
     create_map_entities(&map, &mut entity_manager);
     create_player(&mut entity_manager);
     create_monster(&mut entity_manager, 5, 7);
