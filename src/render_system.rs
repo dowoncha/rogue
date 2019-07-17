@@ -96,25 +96,6 @@ impl RenderSystem {
         nc::newwin(height, width, y, x)
     }
 
-    pub fn mount(&mut self) {
-        init_ncurses();
-
-        // Create Windows
-        // UI Initialization
-        let mut screen_width = 80;
-        let mut screen_height = 24;
-
-        nc::getmaxyx(nc::stdscr(), &mut screen_height, &mut screen_width);
-
-        info!("Screen size, {:?}x{:?}", screen_width, screen_height);
-
-        self.map_window = Some(self.create_map_window(screen_width, screen_height));
-
-        self.player_info_window = Some(self.create_player_info_window(screen_width, screen_height));
-
-        self.log_window = Some(self.create_log_window(screen_width, screen_height));
-    }
-
     fn get_camera_position(&self, em: &EntityManager) -> Position {
         let map_window = self.map_window.unwrap();
 
@@ -223,6 +204,25 @@ impl RenderSystem {
 }
 
 impl System for RenderSystem {
+    fn mount(&mut self, em: &mut EntityManager) {
+        init_ncurses();
+
+        // Create Windows
+        // UI Initialization
+        let mut screen_width = 80;
+        let mut screen_height = 24;
+
+        nc::getmaxyx(nc::stdscr(), &mut screen_height, &mut screen_width);
+
+        info!("Screen size, {:?}x{:?}", screen_width, screen_height);
+
+        self.map_window = Some(self.create_map_window(screen_width, screen_height));
+
+        self.player_info_window = Some(self.create_player_info_window(screen_width, screen_height));
+
+        self.log_window = Some(self.create_log_window(screen_width, screen_height));
+    }
+
     fn process(&self, entity_manager: &mut EntityManager) {
         debug!("Rendering");
 
@@ -238,12 +238,8 @@ impl System for RenderSystem {
 
         self.render_log(entity_manager);
     }
-}
 
-impl Drop for RenderSystem {
-    fn drop(&mut self) {
-        // let _ = nc::delwin(map_window);
-
+    fn unmount(&mut self, _: &mut EntityManager) {
         drop_ncurses();
     }
 }

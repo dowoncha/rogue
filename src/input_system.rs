@@ -24,12 +24,6 @@ impl InputSystem {
         }
     }
 
-    pub fn mount(&mut self) {
-        let handle = start_input_thread(self.event_sender.clone());
-
-        self.join_handle = Some(handle);
-    }
-
     pub fn get_thread_handle(&self) -> Option<&std::thread::JoinHandle<()>> {
         self.join_handle.as_ref()
     }
@@ -67,6 +61,12 @@ impl InputSystem {
 }
 
 impl System for InputSystem {
+    fn mount(&mut self, _: &mut EntityManager) {
+        let handle = start_input_thread(self.event_sender.clone());
+
+        self.join_handle = Some(handle);
+    }
+
     fn process(&self, entity_manager: &mut EntityManager) {
         self.process_input_events(entity_manager);
     }
@@ -95,20 +95,6 @@ fn start_input_thread(input_listener: std::sync::mpsc::Sender<i32>) -> std::thre
 
     handle
 }
-
-// fn handle_input(input: i32) -> Option<Key> {
-//     match input {
-//         119 => {
-//             //'w'
-//             Some(Key::w)
-//         }
-//         100 => Some(Key::d),
-//         115 => Some(Key::s),
-//         97 => Some(Key::a),
-//         113 => Some(Key::q),
-//         _ => None,
-//     }
-// }
 
 #[cfg(test)]
 mod input_system_tests {

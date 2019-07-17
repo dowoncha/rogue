@@ -41,6 +41,10 @@ impl Chronos {
 
 impl System for Chronos {
     fn process(&self, em: &mut EntityManager) {
+        // Get all entities that have a timer
 
+        // Determine turn
+
+        // Give Turn component to whosever turn it is
     }
 }

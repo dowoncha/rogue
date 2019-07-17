@@ -19,6 +19,7 @@ use rogue::{
     Component,
     file_logger, 
     EntityManager, 
+    SystemManager,
     drop_ncurses, 
     System, 
     InputSystem, 
@@ -188,22 +189,6 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         .expect("Failed to init file logger");
 
     let mut entity_manager = EntityManager::new();
-    let mut render_system = RenderSystem::new();
-
-    let mut input_system = InputSystem::new();
-    let move_system = MoveSystem;
-    let collision_system = CollisionSystem;
-    let walk_system = WalkSystem;
-    let attack_system = AttackSystem;
-    let damage_system = DamageSystem;
-    let event_log_system = EventLogSystem;
-    let ai_system = RandomWalkAiSystem;
-    let reaper = rogue::Reaper;
-    let janitor = Janitor;
-
-    render_system.mount();
-    input_system.mount();
-
     let map_width = 200;
     let map_height = 200;
 
@@ -222,31 +207,26 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     create_zombie(&mut entity_manager, player_pos.0 + 2, player_pos.1);
 
-    'main: loop {
-        input_system.process(&mut entity_manager);
+    let mut system_manager = SystemManager::new(&mut entity_manager);
 
-        ai_system.process(&mut entity_manager);
+    system_manager.register_system(RenderSystem::new());
+    system_manager.register_system(InputSystem::new());
+    system_manager.register_system(RandomWalkAiSystem);
+    system_manager.register_system(MoveSystem);
+    system_manager.register_system(CollisionSystem);
+    system_manager.register_system(WalkSystem);
+    system_manager.register_system(AttackSystem);
+    system_manager.register_system(DamageSystem);
+    system_manager.register_system(EventLogSystem);
+    system_manager.register_system(rogue::Reaper);
+    system_manager.register_system(Janitor);
 
-        walk_system.process(&mut entity_manager);
+    system_manager.mount();
 
-        collision_system.process(&mut entity_manager);
+    system_manager.run();
 
-        attack_system.process(&mut entity_manager);
+    system_manager.unmount();
 
-        damage_system.process(&mut entity_manager);
-
-        move_system.process(&mut entity_manager);
-
-        render_system.process(&mut entity_manager);
-
-        reaper.process(&mut entity_manager);
-
-        event_log_system.process(&mut entity_manager);
-
-        janitor.process(&mut entity_manager);
-    }
-
-    // game.save(None)?;
     drop_ncurses();
 
     Ok(())

@@ -61,7 +61,9 @@ macro_rules! get_component {
 pub type Entity = i32;
 
 pub trait System {
+    fn mount(&mut self, entity_manager: &mut EntityManager) { }
     fn process(&self, entity_manager: &mut EntityManager);
+    fn unmount(&mut self, entity_manager: &mut EntityManager) { }
 }
 
 pub struct EntityManager {
@@ -105,6 +107,8 @@ impl EntityManager {
             .unwrap();
 
         table.insert(entity, Box::new(component));
+
+        // listeners.notify("add_component entity, component_type ")
     }
 
     pub fn get_component(
@@ -243,6 +247,46 @@ mod entity_manager_tests {
         let entities = em.get_entities_with_components(TestComponent::get_component_type());
 
         assert_eq!(entities.len(), 1);
+    }
+}
+
+pub struct SystemManager<'em> {
+    entity_manager: &'em mut EntityManager,
+    systems: Vec<Box<dyn System>>
+}
+
+impl<'em> SystemManager<'em> {
+    pub fn new(entity_manager: &'em mut EntityManager) -> Self {
+        Self {
+            entity_manager: entity_manager,
+            systems: Vec::new()
+        }
+    }
+
+    pub fn mount(&mut self) {
+        for system in &mut self.systems {
+            system.mount(&mut self.entity_manager);
+        }
+    }
+
+    pub fn register_system<S: 'static + Sized + System>(&mut self, system: S) {
+        self.systems.push(Box::new(system));
+    }
+
+    pub fn run(&mut self) {
+        let mut current_time = 0i64;
+
+        loop {
+            for system in &self.systems {
+                system.process(self.entity_manager);
+            }
+        }
+    }
+
+    pub fn unmount(&mut self) {
+        for system in &mut self.systems {
+            system.unmount(&mut self.entity_manager);
+        }
     }
 }
 
@@ -455,6 +499,7 @@ impl System for RandomWalkAiSystem {
         }
     }
 }
+
 
 mod input_system;
 mod render_system;

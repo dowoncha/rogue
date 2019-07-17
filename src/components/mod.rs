@@ -248,6 +248,13 @@ impl Component for RandomWalkAi {
     derive_component!();
 }
 
+pub struct TurnTimer {
+}
+
+impl Component for TurnTimer {
+    derive_component!();
+}
+
 // pub struct AttackAI;
 
 // impl Component for AttackAi {
