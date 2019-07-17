@@ -118,6 +118,14 @@ fn create_map_entities(map: &Map, em: &mut EntityManager) {
     }
 }
 
+fn populate_map(map: &Map, em: &mut EntityManager) {
+    // Create a monster at the center of each room
+    for room in &map.rooms {
+        let center = room.center();
+        create_monster(em, center.0, center.1);
+    }
+}
+
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // println!("\u{001b}[31mHelloWorld");
     let args: Vec<_> = env::args().collect();
@@ -148,7 +156,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     create_map_entities(&map, &mut entity_manager);
     create_player(&mut entity_manager, player_pos.0, player_pos.1);
-    create_monster(&mut entity_manager, 27, 23);
+    populate_map(&map, &mut entity_manager);
 
     'main: loop {
         input_system.process(&mut entity_manager);

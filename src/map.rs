@@ -299,7 +299,7 @@ pub fn simple_map_gen(width: usize, height: usize) -> Map {
 
     let mut rooms = vec![];
 
-    let min_room_size = 3;
+    let min_room_size = 5;
     let max_room_size = 30;
     let max_room_count = 30;
 
@@ -453,7 +453,6 @@ pub fn ca_map_gen(width: usize, height: usize) -> Map {
 
     map
 }
-
 
 #[cfg(test)]
 mod tests {
