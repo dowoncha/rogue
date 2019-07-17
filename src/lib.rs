@@ -266,6 +266,8 @@ impl System for WalkSystem {
                 _ => (0, 0),
             };
 
+            // Check if there are any walk commands
+
             debug!("Walking {}, ({}, {})", entity, dx, dy);
 
             if let Some(walk) = get_component!(mut, em, entity, components::Walk) {
@@ -283,6 +285,7 @@ impl System for MoveSystem {
         let walk_entities = em.get_entities_with_components(components::Walk::get_component_type());
 
         for entity in walk_entities {
+            debug!("Moving entity, {}", entity);
             let walk = {
                 get_component!(em, entity, components::Walk).unwrap().clone()
             };
@@ -315,11 +318,26 @@ fn test_move_system_process() {
     em.add_component(entity, components::Walk { dx: 0, dy: 0 });
 }
 
+pub struct AiSystem;
+
+impl System for AiSystem {
+    fn process(&self, em: &mut EntityManager) {
+        // Whose turn is it?
+
+        // Does the entity have a script
+
+        // run the script
+    }
+}
+
 pub struct AttackSystem;
 
 impl System for AttackSystem {
     fn process(&self, em: &mut EntityManager) {
-        // Get all entities that have a collision
+        // Get all entities with an attack component on them
+        // Get collision components
+        // Check if health component exists
+        // Add damage component
         let entities = em.get_entities_with_components(components::Event::get_component_type());
 
         for entity in entities {
@@ -420,6 +438,24 @@ impl System for Janitor {
     }
 }
 
+pub struct RandomWalkAiSystem;
+
+impl System for RandomWalkAiSystem {
+    fn process(&self, em: &mut EntityManager) {
+        debug!("Processing random walk ai system");
+        let mut rng = thread_rng();
+
+        let entities = em.get_entities_with_components(components::RandomWalkAi::get_component_type());
+
+        for entity in entities {
+            if let Some(walk) = get_component!(mut, em, entity, components::Walk) {
+                walk.dx = rng.gen_range(-1, 2);
+                walk.dy = rng.gen_range(-1, 2);
+            }
+        }
+    }
+}
+
 mod input_system;
 mod render_system;
 mod chronos_system;
@@ -438,3 +474,19 @@ pub use collide_system::{CollisionSystem};
 // pub use command_system::{CommandSystem};
 
 pub mod file_logger;
+
+pub trait Subject {
+    fn register(&mut self, observer: &dyn Observer);
+    fn unregister(&mut self, observer: &dyn Observer);
+    fn observers(&self) -> &[&dyn Observer];
+    fn notify(&self, event: String) {
+        for o in self.observers() {
+            o.update(event.clone());
+        }
+    }
+}
+
+pub trait Observer {
+    fn update(&self, event: String);
+}
+

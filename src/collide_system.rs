@@ -46,10 +46,7 @@ impl System for CollisionSystem {
                 walk.dx = 0;
                 walk.dy = 0;
 
-                let mut rng = thread_rng();
                 em.add_component(entity, components::Event::Collision(*occupier));
-
-                em.add_component(*occupier, components::Damage { amount: rng.gen_range(1, 4) });
             }
         }
     }

@@ -193,9 +193,6 @@ impl Component for Health {
     derive_component!();
 }
 
-struct Physics {
-}
-
 #[derive(Copy, Clone)]
 pub struct Damage {
     pub amount: i32,
@@ -244,3 +241,15 @@ pub enum Event {
 impl Component for Event {
     derive_component!();
 }
+
+pub struct RandomWalkAi;
+
+impl Component for RandomWalkAi {
+    derive_component!();
+}
+
+// pub struct AttackAI;
+
+// impl Component for AttackAi {
+//     derive_component!();
+// ai}

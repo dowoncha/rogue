@@ -15,6 +15,8 @@ extern crate rlua;
 use rlua::{Function, Lua};
 
 use rogue::{
+    Entity,
+    Component,
     file_logger, 
     EntityManager, 
     drop_ncurses, 
@@ -29,6 +31,7 @@ use rogue::{
     MoveSystem,
     MapBuilder,
     EventLogSystem,
+    RandomWalkAiSystem,
     Map,
     Janitor
 };
@@ -53,55 +56,52 @@ fn create_player(em: &mut EntityManager, x: i32, y: i32) {
     em.add_component(player, components::Log::new());
 }
 
-fn create_monster(em: &mut EntityManager, x: i32, y: i32) {
+fn create_monster(
+    em: &mut EntityManager, 
+    name: &str,
+    x: i32, 
+    y: i32,
+    glyph: char,
+    baseHitPoints: i32
+) -> Entity {
     let monster = em.create_entity();
 
-    em.add_component(monster, components::Name { name: "goblin".to_string() });
-    em.add_component(monster, Render { glyph: 'G', layer: RenderLayer::Player});
+    em.add_component(monster, components::Name { name: name.to_string() });
+    em.add_component(monster, Render { glyph: glyph, layer: RenderLayer::Player});
     em.add_component(monster, Position { x: x, y: y });
-    em.add_component(monster, components::Health { health: 10, max_health: 10 });
+    em.add_component(monster, components::Health { health: baseHitPoints, max_health: baseHitPoints });
+    em.add_component(monster, components::Walk { dx: 0, dy: 0 });
     em.add_component(monster, Collidable);
+
+    monster
 }
 
-fn create_map() -> Map {
-    use rand::{Rng};
+fn create_goblin(em: &mut EntityManager, x: i32, y: i32) -> Entity {
+   let goblin = create_monster(
+       em,
+       "goblin",
+       x,
+       y,
+       'g',
+       8
+   );
 
-    let mut rng = rand::thread_rng();
+   goblin
+}
 
-    let map_width = 200;
-    let map_height = 200;
+fn create_zombie(em: &mut EntityManager, x: i32, y: i32) -> Entity {
+    let zombie = create_monster(
+        em,
+        "zombie",
+        x,
+        y,
+        'z',
+        10
+    );
 
-    // Generate rooms
+    em.add_component(zombie, components::RandomWalkAi);
 
-    let min_room_size = 5;
-    let max_room_size = 20;
-
-    let max_room_count = 10;
-
-    let mut rooms: Vec<Rect> = vec![];
-
-    for i in 0..max_room_count {
-        let new_room = Rect::new(
-            rng.gen_range(0, map_width - max_room_size),
-            rng.gen_range(0, map_height - max_room_size),
-            rng.gen_range(min_room_size, max_room_size),
-            rng.gen_range(min_room_size, max_room_size)
-        );
-
-        let intersected = rooms.iter().any(|room| room.intersect(&new_room));
-
-        if !intersected {
-            rooms.push(new_room);
-        }
-    }
-
-    let mut map_builder = MapBuilder::new(map_width as usize, map_height as usize);
-
-    for room in rooms {
-        map_builder = map_builder.create_room(&room);
-    }
-
-    map_builder.build()
+    zombie
 }
 
 fn create_map_entities(map: &Map, em: &mut EntityManager) {
@@ -128,7 +128,7 @@ fn populate_map(map: &Map, em: &mut EntityManager) {
     // Create a monster at the center of each room
     for room in &map.rooms {
         let center = room.center();
-        create_monster(em, center.0, center.1);
+        create_zombie(em, center.0, center.1);
     }
 }
 
@@ -182,7 +182,7 @@ fn load_breeds(filename: &str, em: &mut EntityManager) -> Result<(), Box<dyn std
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     // println!("\u{001b}[31mHelloWorld");
-    let args: Vec<_> = env::args().collect();
+    // let args: Vec<_> = env::args().collect();
 
     file_logger::init()
         .expect("Failed to init file logger");
@@ -197,18 +197,22 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let attack_system = AttackSystem;
     let damage_system = DamageSystem;
     let event_log_system = EventLogSystem;
+    let ai_system = RandomWalkAiSystem;
     let reaper = rogue::Reaper;
     let janitor = Janitor;
 
     render_system.mount();
     input_system.mount();
 
+    let map_width = 200;
+    let map_height = 200;
+
     // let map = create_map();
-    let map = simple_map_gen(200, 200);
+    let map = simple_map_gen(map_width, map_height);
 
     let player_pos = map.rooms.first().unwrap().center();
 
-    load_breeds("assets/breeds.lua", &mut entity_manager)?;
+    // load_breeds("assets/breeds.lua", &mut entity_manager)?;
 
     info!("Assets loaded");
 
@@ -216,8 +220,12 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     create_player(&mut entity_manager, player_pos.0, player_pos.1);
     populate_map(&map, &mut entity_manager);
 
+    create_zombie(&mut entity_manager, player_pos.0 + 2, player_pos.1);
+
     'main: loop {
         input_system.process(&mut entity_manager);
+
+        ai_system.process(&mut entity_manager);
 
         walk_system.process(&mut entity_manager);
 
@@ -242,30 +250,5 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     drop_ncurses();
 
     Ok(())
-
-    // let mut game = GameClient::new();
-    // game.init(
-    //     args
-    // ).expect("Failed to init game");
-
-    // if let Err(error) = game.run() {
-    //     error!("{}", error);
-    // }
-
-    // Ok(())
 }
 
-trait Subject {
-    fn register(&mut self, observer: &dyn Observer);
-    fn unregister(&mut self, observer: &dyn Observer);
-    fn observers(&self) -> &[&dyn Observer];
-    fn notify(&self, event: String) {
-        for o in self.observers() {
-            o.update(event.clone());
-        }
-    }
-}
-
-trait Observer {
-    fn update(&self, event: String);
-}
