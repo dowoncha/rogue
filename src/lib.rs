@@ -3,6 +3,7 @@
 #![feature(duration_float)]
 #![feature(option_flattening)]
 #![feature(vec_remove_item)]
+#![feature(let_chains)]
 #![recursion_limit = "1024"]
 
 /**
@@ -322,15 +323,24 @@ impl System for DamageSystem {
         // Apply damage if they have a health component
         for entity in damage_entities.into_iter() {
             let damage = get_component!(em, entity, components::Damage).unwrap().clone();
-            // let name = get_component!(em, entity, components::Name).unwrap_or(&components::Name { name: "noname".to_string()});
+            let name = get_component!(em, entity, components::Name).map(|c| c.name.clone()).unwrap_or(entity.to_string());
 
-            // let health_component = get_component!(mut, em, entity, components::Health);
+            let mut damaged = None;
+
             if let Some(health) = get_component!(mut, em, entity, components::Health) {
                 health.health -= damage.amount;
 
-                // info!("{} {}/{} hp", &name.name, health.health, health.max_health);
-
                 em.remove_component(entity, components::Damage::get_component_type());
+
+                damaged = Some(damage.amount);
+            }
+
+            if let Some(damaged) = damaged {
+                let player = em.get_entities_with_components(components::Player::get_component_type())[0];
+                if let Some(log) = get_component!(mut, em, player, components::Log) {
+                    debug!("Damage System - Logging Damage");
+                    log.history.push(format!("{} took {} damage.", name, damaged));
+                }
             }
         }
     }
@@ -347,7 +357,12 @@ impl System for Reaper {
 
             if health.health <= 0 {
                 if let Some(name) = get_component!(em, entity, components::Name) {
-                    info!("{} has died", &name.name);
+                    let message = format!("{} has died", &name.name);
+                    info!("{}", message);
+                    let player = em.get_entities_with_components(components::Player::get_component_type())[0];
+                    if let Some(log) = get_component!(mut, em, player, components::Log) {
+                        log.history.push(message);
+                    }
                 }
 
                 em.kill_entity(entity);

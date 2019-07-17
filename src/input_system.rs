@@ -3,14 +3,6 @@ use ncurses as nc;
 use super::{System, Component, EntityManager};
 use components::{Input};
 
-pub struct KeyboardController {
-    keycode: i32,
-}
-
-impl Component for KeyboardController {
-    derive_component!();
-}
-
 pub struct InputSystem {
     event_sender: std::sync::mpsc::Sender<i32>,
     event_receiver: std::sync::mpsc::Receiver<i32>,

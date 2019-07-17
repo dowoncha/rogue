@@ -218,3 +218,19 @@ pub struct Player;
 impl Component for Player {
     derive_component!();
 }
+
+pub struct Log {
+    pub history: Vec<String>
+}
+
+impl Log {
+    pub fn new() -> Self {
+        Self {
+            history: Vec::new()
+        }
+    }
+}
+
+impl Component for Log {
+    derive_component!();
+}

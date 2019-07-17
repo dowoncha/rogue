@@ -1,7 +1,11 @@
+// Scrolling map guide
+// http://www.roguebasin.com/index.php?title=Scrolling_map
+
 use ncurses as nc;
 
 use super::{System, EntityManager, Component, Entity};
 use components::{self, Render, Position};
+use types::{Rect};
 
 /**
  * Render code
@@ -41,14 +45,55 @@ pub fn drop_ncurses() {
 }
 
 pub struct RenderSystem {
-    map_window: Option<*mut i8>
+    map_window: Option<*mut i8>,
+    player_info_window: Option<*mut i8>,
+    log_window: Option<*mut i8>
 }
 
 impl RenderSystem {
     pub fn new() -> Self {
         Self {
-            map_window: None
+            map_window: None,
+            player_info_window: None,
+            log_window: None
         }
+    }
+
+    fn create_map_window(&self, screen_width: i32, screen_height: i32) -> *mut i8 {
+        let map_window_x = 20;
+        let map_window_y = 0;
+        let map_window_width = screen_width - map_window_x;
+        let map_window_height = screen_height - 4;
+
+        let map_window = nc::newwin(map_window_height, map_window_width, map_window_y, map_window_x);
+
+        map_window
+    }
+
+    fn create_player_info_window(&self, _screen_width: i32, _screen_height: i32) -> *mut i8 {
+        let player_info_window_x = 0;
+        let player_info_window_y = 0;
+        let player_info_window_width = 20;
+        let player_info_window_height = 5;
+
+        let player_info_window = nc::newwin(
+            player_info_window_height, 
+            player_info_window_width, 
+            player_info_window_y, 
+            player_info_window_x
+        );
+
+        player_info_window
+    }
+
+    fn create_log_window(&self, screen_width: i32, screen_height: i32) -> *mut i8 {
+        let x = 20;
+        let width = screen_width - x;
+
+        let height = 4;
+        let y = screen_height - height;
+
+        nc::newwin(height, width, y, x)
     }
 
     pub fn mount(&mut self) {
@@ -63,11 +108,11 @@ impl RenderSystem {
 
         info!("Screen size, {:?}x{:?}", screen_width, screen_height);
 
-        let map_window_x = 20;
-        let map_window_y = 5;
+        self.map_window = Some(self.create_map_window(screen_width, screen_height));
 
-        let map_window = nc::newwin(screen_height - map_window_y, screen_width - map_window_x, 0, map_window_x);
-        self.map_window = Some(map_window);
+        self.player_info_window = Some(self.create_player_info_window(screen_width, screen_height));
+
+        self.log_window = Some(self.create_log_window(screen_width, screen_height));
     }
 
     fn get_camera_position(&self, em: &EntityManager) -> Position {
@@ -97,11 +142,44 @@ impl RenderSystem {
 
         world_position
     }
-}
 
-impl System for RenderSystem {
-    fn process(&self, entity_manager: &mut EntityManager) {
-        debug!("Rendering");
+    fn render_player_info(&self, entity_manager: &EntityManager) {
+        let window = self.player_info_window.unwrap();
+
+        // Player name
+        let player = entity_manager.get_entities_with_components(components::Player::get_component_type())[0];
+        let player_components = entity_manager.get_entity_all_components(player);
+
+        let player_name = get_component!(entity_manager, player, components::Name).unwrap();
+
+        nc::mvwaddstr(window, 1, 1, &player_name.name);
+
+        let player_health = get_component!(entity_manager, player, components::Health).unwrap();
+        nc::mvwaddstr(window, 2, 1, &format!("HP: {}/{}", player_health.health, player_health.max_health));
+
+        nc::box_(window, 0, 0);
+
+        nc::wrefresh(window);
+    }
+
+    fn render_log(&self, entity_manager: &EntityManager) {
+        let window = self.log_window.unwrap();
+
+        let player = entity_manager.get_entities_with_components(components::Player::get_component_type())[0];
+
+        let player_log = get_component!(entity_manager, player, components::Log).unwrap();
+
+        if let Some(message) = player_log.history.last() {
+            debug!("Logging {}", message);
+            nc::mvwaddstr(window, 1, 1, &message);
+        }
+
+        nc::box_(window, 0, 0);
+
+        nc::wrefresh(window);
+    }
+
+    fn render_map(&self, entity_manager: &EntityManager) {
         let entities = entity_manager.get_entities_with_components(Render::get_component_type());
 
         let render_components = entities.iter()
@@ -129,7 +207,7 @@ impl System for RenderSystem {
 
         for (_, (render, position)) in sorted_entities {
             let world_pos = self.get_world_position(&camera_pos, &position);
-            if world_pos.x > 0 && world_pos.y > 0 && world_pos.x < map_window_width && world_pos.y < map_window_height {
+            if world_pos.x > 0 && world_pos.y > 0 && world_pos.x < map_window_width - 1 && world_pos.y < map_window_height - 1 {
                 nc::mvwaddch(map_window, world_pos.y, world_pos.x, render.glyph as u64);
             }
         }
@@ -137,8 +215,24 @@ impl System for RenderSystem {
         nc::box_(map_window, 0, 0);
 
         nc::wrefresh(map_window);
+    }
+}
 
-        // nc::refresh();
+impl System for RenderSystem {
+    fn process(&self, entity_manager: &mut EntityManager) {
+        debug!("Rendering");
+
+        // Check window resize
+        let mut screen_size_x = 0;
+        let mut screen_size_y = 0;
+
+        nc::getmaxyx(nc::stdscr(), &mut screen_size_y, &mut screen_size_x);
+
+        self.render_map(entity_manager);
+
+        self.render_player_info(entity_manager);
+
+        self.render_log(entity_manager);
     }
 }
 

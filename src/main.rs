@@ -41,6 +41,7 @@ fn create_player(em: &mut EntityManager) {
     em.add_component(player, Collidable);
     em.add_component(player, components::Health { health: 100, max_health: 100 });
     em.add_component(player, Walk::new());
+    em.add_component(player, components::Log::new());
 }
 
 fn create_monster(em: &mut EntityManager, x: i32, y: i32) {
@@ -138,7 +139,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let map = simple_map_gen(200, 200);
     create_map_entities(&map, &mut entity_manager);
     create_player(&mut entity_manager);
-    create_monster(&mut entity_manager, 5, 7);
+    create_monster(&mut entity_manager, 27, 23);
 
     'main: loop {
         input_system.process(&mut entity_manager);
