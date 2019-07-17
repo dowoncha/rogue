@@ -1,3 +1,4 @@
+use rand::{thread_rng, Rng};
 use super::{System, Entity, EntityManager, Component};
 
 use components::{self, Position, Collidable};
@@ -45,7 +46,9 @@ impl System for CollisionSystem {
                 walk.dx = 0;
                 walk.dy = 0;
 
-                em.add_component(*occupier, components::Damage { amount: 3 });
+                let mut rng = thread_rng();
+
+                em.add_component(*occupier, components::Damage { amount: rng.gen_range(1, 4) });
             }
         }
     }

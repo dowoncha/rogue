@@ -318,6 +318,7 @@ pub struct DamageSystem;
 
 impl System for DamageSystem {
     fn process(&self, em: &mut EntityManager) {
+
         let damage_entities = em.get_entities_with_components(components::Damage::get_component_type());
 
         // Apply damage if they have a health component

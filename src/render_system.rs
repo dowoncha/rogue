@@ -169,6 +169,10 @@ impl RenderSystem {
 
         let player_log = get_component!(entity_manager, player, components::Log).unwrap();
 
+        // Clear input log
+        // nc::mvwaddch(window, 1, 1, ' ' as u64);
+        // nc::clrtoeol();
+
         if let Some(message) = player_log.history.last() {
             debug!("Logging {}", message);
             nc::mvwaddstr(window, 1, 1, &message);
