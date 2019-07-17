@@ -40,20 +40,40 @@ pub fn drop_ncurses() {
     nc::endwin();
 }
 
-pub struct RenderSystem;
+pub struct RenderSystem {
+    map_window: Option<*mut i8>
+}
 
 impl RenderSystem {
     pub fn new() -> Self {
-        Self {}
+        Self {
+            map_window: None
+        }
     }
 
     pub fn mount(&mut self) {
         init_ncurses();
+
+        // Create Windows
+        // UI Initialization
+        let mut screen_width = 80;
+        let mut screen_height = 40;
+
+        nc::getmaxyx(nc::stdscr(), &mut screen_height, &mut screen_width);
+
+        info!("Screen size, {:?}x{:?}", screen_width, screen_height);
+
+        let map_window = nc::newwin(screen_height - 5, screen_width - 20, 0, 20);
+        nc::box_(map_window, 0, 0);
+
+        self.map_window = Some(map_window);
     }
 }
 
 impl Drop for RenderSystem {
     fn drop(&mut self) {
+        // let _ = nc::delwin(map_window);
+
         drop_ncurses();
     }
 }
@@ -75,10 +95,14 @@ impl System for RenderSystem {
 
             sorted_entities.sort_by(|(_, (a, _)), (_, (b, _))| a.layer.cmp(&b.layer));
 
+        let map_window = self.map_window.unwrap();
+
         for (_, (render, position)) in sorted_entities {
-            nc::mvaddch(position.y, position.x, render.glyph as u64);
+            nc::mvwaddch(map_window, position.y, position.x, render.glyph as u64);
         }
 
-        nc::refresh();
+        nc::wrefresh(map_window);
+
+        // nc::refresh();
     }
 }

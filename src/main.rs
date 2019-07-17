@@ -5,13 +5,12 @@ extern crate log;
 extern crate ncurses;
 extern crate rand;
 
+use ncurses as nc;
+
 #[macro_use]
 extern crate rogue;
 use rogue::{
     file_logger, 
-    Component, 
-    ComponentType, 
-    Entity, 
     EntityManager, 
     drop_ncurses, 
     System, 
@@ -24,142 +23,12 @@ use rogue::{
     MoveSystem,
     MapBuilder,
     Map,
-    Chronos, 
 };
 
-use rogue::map::{bsp_map_generator, ca_map_gen};
+use rogue::map::{ca_map_gen};
 use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, Walk};
 
 use std::env;
-use std::fs::File;
-use std::io::prelude::*;
-use std::panic;
-
-struct SaveResult {
-    filename: String,
-}
-
-#[cfg(test)]
-mod game_tests {
-    use super::*;
-
-    struct TestEntity;
-
-    #[test]
-    fn test_set_player_name() {
-        let mut game = Game::new();
-
-        // game.get_mut_player().set_name("gromash");
-
-        // assert_eq!(game.get_player().name(), "gromash");
-
-        // game.get_mut_player().set_name("tinker");
-
-        // assert_eq!(game.get_player().name(), "tinker");
-    }
-
-    #[test]
-    fn test_spawn_player() {
-        // let room = Rect {
-        //     x: 0,
-        //     y: 0,
-        //     width: 10,
-        //     height: 10,
-        // };
-
-        // let mut game = Game::new();
-
-        // game.set_map(room);
-
-        // game.spawn_player();
-
-        // let player = game.get_player();
-        // let room = game.get_map();
-
-        // assert!(
-        //     player.x > 0 && player.x < room.width() && player.y > 0 && player.y < room.height()
-        // );
-    }
-
-    #[test]
-    fn test_time() {
-        let mut chronos = Chronos::new();
-
-        let entity_id = "";
-
-        chronos.register(entity_id);
-
-        chronos.release(entity_id);
-    }
-
-    // player movement into monster occupied tile */
-    // Moving into monster's tile attacks it */
-}
-
-#[cfg(test)]
-mod save_load_tests {
-    use super::*;
-
-    #[test]
-    fn test_serialize_game() {
-        let mut game = Game::new();
-
-        // game.get_mut_player().set_name("gromash");
-
-        // let game_save_buffer = game.serialize().unwrap();
-
-        // assert!(validate_save(&game_save_buffer));
-    }
-
-    #[test]
-    fn test_save_game() {
-        let mut game = Game::new();
-
-        // game.get_mut_player().set_name("gromash");
-
-        // let save_result = game.save(None).unwrap();
-
-        // let savefilename = save_result.filename;
-
-        // let savefile_buffer = &std::fs::read(&savefilename).expect("Save file not found");
-
-        // let savefile_str = String::from_utf8_lossy(&savefile_buffer);
-
-        // assert_eq!(savefile_str, game.serialize().unwrap());
-
-        // std::fs::remove_file(savefilename).unwrap();
-    }
-
-    /* test load game */
-    /**  test deserialize game **/
-
-    #[test]
-    fn test_save_rect_map_to_file() {
-        let filename = "test-save-rect-map-to-file.map";
-
-        let map = Rect {
-            x: 0,
-            y: 0,
-            width: 3,
-            height: 3,
-        };
-
-        let save_result = map.save(filename);
-
-        assert!(save_result.is_ok());
-
-        let loadedmap_buffer = std::fs::read(filename);
-
-        assert!(loadedmap_buffer.is_ok());
-
-        // assert!(loadedmap_buffer.unwrap() == map.get_buffer());
-
-        // cleanup
-        std::fs::remove_file(filename);
-
-        assert!(std::fs::read(filename).is_err());
-    }
-}
 
 fn create_player(em: &mut EntityManager) {
     let player = em.create_entity();
@@ -252,11 +121,9 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     file_logger::init()
         .expect("Failed to init file logger");
 
-    // Initialize ncurses
-    // init_ncurses();
-
     let mut entity_manager = EntityManager::new();
     let mut render_system = RenderSystem::new();
+
     let mut input_system = InputSystem::new();
     let move_system = MoveSystem;
     let collision_system = CollisionSystem;
@@ -273,12 +140,6 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     create_player(&mut entity_manager);
     create_monster(&mut entity_manager, 5, 7);
 
-    // let game_time = GameTime::new();
-
-    // game.register_entity("gametime", game_time);
-
-    // debug!("{:?}", entity_manager);
-
     'main: loop {
         input_system.process(&mut entity_manager);
 
@@ -293,7 +154,6 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         render_system.process(&mut entity_manager);
 
         reaper.process(&mut entity_manager);
-
     }
 
     // game.save(None)?;
