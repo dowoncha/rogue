@@ -33,6 +33,10 @@ impl InputSystem {
     }
 
     fn process_input_events(&self, entity_manager: &mut EntityManager) {
+        // Get entity that has the turn component
+
+        // Get its energy
+
         debug!("Processing input");
         // Check for any key events
         // Get all entities with input component
@@ -42,7 +46,7 @@ impl InputSystem {
         // let input_key = nc::getch();
 
         // If an input event is received, notify all input components
-        if let Ok(input_key) = self.event_receiver.try_recv() {
+        if let Ok(input_key) = self.event_receiver.recv() {
         // if input_key != 0 {
             debug!("Received input {}", input_key);
 

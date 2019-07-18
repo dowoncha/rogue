@@ -248,10 +248,19 @@ impl Component for RandomWalkAi {
     derive_component!();
 }
 
-pub struct TurnTimer {
+pub struct Energy {
+    pub amount: i32
 }
 
-impl Component for TurnTimer {
+impl Component for Energy {
+    derive_component!();
+}
+
+pub struct Speed {
+    pub amount: i32
+}
+
+impl Component for Speed {
     derive_component!();
 }
 

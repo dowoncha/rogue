@@ -62,13 +62,17 @@ pub type Entity = i32;
 
 pub trait System {
     fn mount(&mut self, _: &mut EntityManager) { }
-    fn process(&self, entity_manager: &mut EntityManager);
+    fn process(&self, entity_manager: &mut EntityManager) {}
+
+    fn process_mut(&mut self, entity_manager: &mut EntityManager) {}
+
     fn unmount(&mut self, _: &mut EntityManager) { }
 }
 
 pub struct EntityManager {
     entities: Vec<Entity>,
     component_data_tables: HashMap<ComponentType, HashMap<Entity, Box<dyn Component>>>,
+    listeners: Vec<std::sync::mpsc::Sender<String>>
 }
 
 impl EntityManager {
@@ -76,6 +80,7 @@ impl EntityManager {
         Self {
             entities: Vec::new(),
             component_data_tables: HashMap::new(),
+            listeners: Vec::new()
         }
     }
 
@@ -187,6 +192,10 @@ impl EntityManager {
         }
 
         self.entities.remove_item(&entity).unwrap();
+    }
+
+    pub fn subscribe(&mut self, listener: std::sync::mpsc::Sender<String>) {
+        self.listeners.push(listener);
     }
 }
 
@@ -500,7 +509,6 @@ impl System for RandomWalkAiSystem {
         }
     }
 }
-
 
 mod input_system;
 mod render_system;

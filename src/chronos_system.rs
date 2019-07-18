@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 
 use super::{EntityManager, Component, Entity, System};
+use components;
 
 /**
  * Chronos is the time keeper
@@ -8,43 +9,49 @@ use super::{EntityManager, Component, Entity, System};
  * And allocates time to entities for actions
  */
 pub struct Chronos {
-    time_travelers: VecDeque<(i32, String)>,
+    event_receiver: std::sync::mpsc::Receiver<String>,
+    event_sender: std::sync::mpsc::Sender<String>,
+    // turns: VecDeque<Entity>
 }
 
 impl Chronos {
     pub fn new() -> Self {
+        let (sender, receiver) = std::sync::mpsc::channel();
+
         Self {
-            time_travelers: VecDeque::new(),
+            event_sender: sender,
+            event_receiver: receiver,
         }
     }
 
-    pub fn travelers_len(&self) -> usize {
-        self.time_travelers.len()
-    }
+    // fn dependencies() -> [ComponentType] {
 
-    pub fn register(&mut self, entity_id: &str) {
-        let current_time = -100;
-        self.time_travelers
-            .push_back((current_time, entity_id.to_string()));
-    }
-
-    pub fn release(&mut self, entity_id: &str) {
-        if let Some(index) = self
-            .time_travelers
-            .iter()
-            .position(|(energy, traveler)| traveler == entity_id)
-        {
-            self.time_travelers.remove(index);
-        }
-    }
+    // }
 }
 
 impl System for Chronos {
+    fn mount(&mut self, em: &mut EntityManager) {
+        em.subscribe(self.event_sender.clone());
+    }
+
     fn process(&self, em: &mut EntityManager) {
-        // Get all entities that have a timer
+        // Preprocess events
+        // Any time a turn timer component is added,
+        // Add that entity into the turn queue
 
-        // Determine turn
+        // Give all entities with speed
+        let speed_entities = em.get_entities_with_components(components::Speed::get_component_type());
 
-        // Give Turn component to whosever turn it is
+        for entity in speed_entities {
+            let speed = {
+                let speed = get_component!(em, entity, components::Speed).unwrap();
+
+                speed.amount
+            };
+
+            if let Some(energy) = get_component!(mut, em, entity, components::Energy) {
+                energy.amount += speed;
+            }
+        }
     }
 }

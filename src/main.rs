@@ -12,7 +12,7 @@ extern crate rogue;
 
 extern crate rlua; 
 
-use rlua::{Function, Lua};
+use rlua::{Lua};
 
 use rogue::{
     Entity,
@@ -31,6 +31,7 @@ use rogue::{
     DamageSystem,
     MoveSystem,
     MapBuilder,
+    Chronos,
     EventLogSystem,
     RandomWalkAiSystem,
     Map,
@@ -55,6 +56,8 @@ fn create_player(em: &mut EntityManager, x: i32, y: i32) {
     em.add_component(player, components::Health { health: 100, max_health: 100 });
     em.add_component(player, Walk::new());
     em.add_component(player, components::Log::new());
+    em.add_component(player, components::Energy { amount: 0 });
+    em.add_component(player, components::Speed { amount: 50 });
 }
 
 fn create_monster(
@@ -209,8 +212,13 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     let mut system_manager = SystemManager::new(&mut entity_manager);
 
+    system_manager.register_system(Chronos::new());
     system_manager.register_system(RenderSystem::new());
     system_manager.register_system(InputSystem::new());
+    // register TimeSystem
+    // register_ai_system();
+    // register_gameplay_system();
+    // register_render_system();
     system_manager.register_system(RandomWalkAiSystem);
     system_manager.register_system(WalkSystem);
     system_manager.register_system(CollisionSystem);
