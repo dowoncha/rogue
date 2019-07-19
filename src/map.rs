@@ -1,6 +1,3 @@
-use std::fs::File;
-use std::io::prelude::*;
-
 use rand::{thread_rng, Rng};
 
 use types::{Rect, Dimension};

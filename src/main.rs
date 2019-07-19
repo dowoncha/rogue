@@ -173,7 +173,7 @@ fn load_breeds(filename: &str, em: &mut EntityManager) -> Result<(), Box<dyn std
         for (attribute, value) in attributes.iter() {
             match attribute.as_str() {
                 "glyph" => {
-                    let glyph = value.chars().next().unwrap();
+                    // let glyph = value.chars().next().unwrap();
                     // em.add_component(entity_template, components::Render { glyph: glyph, layer: RenderLayer::Player });
                 }
                 _ => { debug!("Unimplemented attribute {}", attribute); }
@@ -182,6 +182,18 @@ fn load_breeds(filename: &str, em: &mut EntityManager) -> Result<(), Box<dyn std
     }
 
     Ok(())
+}
+
+fn spawn_item(
+    em: &mut EntityManager,
+    x: i32,
+    y: i32
+) {
+    let health_potion = em.create_entity();
+
+    em.add_component(health_potion, components::Position { x: x, y: y });
+    em.add_component(health_potion, components::Render { glyph: '!', layer: RenderLayer::Item });
+    em.add_component(health_potion, components::Consumable);
 }
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
@@ -207,12 +219,14 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     create_map_entities(&map, &mut entity_manager);
     create_player(&mut entity_manager, player_pos.0, player_pos.1);
     populate_map(&map, &mut entity_manager);
+    spawn_item(&mut entity_manager, player_pos.0, player_pos.1 + 2);
 
-    create_zombie(&mut entity_manager, player_pos.0 + 2, player_pos.1);
+    // create_zombie(&mut entity_manager, player_pos.0 + 2, player_pos.1);
 
     let mut system_manager = SystemManager::new(&mut entity_manager);
 
     system_manager.register_system(Chronos::new());
+    system_manager.register_system(rogue::TurnSystem::new());
     system_manager.register_system(RenderSystem::new());
     system_manager.register_system(InputSystem::new());
     // register TimeSystem
@@ -225,6 +239,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     system_manager.register_system(AttackSystem);
     system_manager.register_system(DamageSystem);
     system_manager.register_system(MoveSystem);
+    system_manager.register_system(rogue::LootSystem);
     system_manager.register_system(EventLogSystem);
     system_manager.register_system(rogue::Reaper);
     system_manager.register_system(Janitor);

@@ -34,6 +34,8 @@ extern crate uuid;
 
 use rand::{Rng, thread_rng};
 use std::collections::HashMap;
+use std::collections::VecDeque;
+use std::cell::RefCell;
 
 #[macro_use]
 pub mod components;
@@ -58,7 +60,26 @@ macro_rules! get_component {
     }
 }
 
-pub type Entity = i32;
+#[derive(Copy, Clone, Debug, PartialEq, PartialOrd, Hash, Eq)]
+pub struct Entity {
+    id: i32
+}
+
+impl Entity {
+    fn new(id: i32) -> Self {
+        Self {
+            id: id
+        }
+    }
+}
+
+impl std::fmt::Display for Entity {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.id)?;
+
+        Ok(())
+    }
+}
 
 pub trait System {
     fn mount(&mut self, _: &mut EntityManager) { }
@@ -67,6 +88,8 @@ pub trait System {
     fn process_mut(&mut self, entity_manager: &mut EntityManager) {}
 
     fn unmount(&mut self, _: &mut EntityManager) { }
+
+    fn on_add_component(&mut self, entity: Entity, component_type: ComponentType) {}
 }
 
 pub struct EntityManager {
@@ -85,9 +108,11 @@ impl EntityManager {
     }
 
     pub fn create_entity(&mut self) -> Entity {
-        let index = self.entities.len() as Entity;
-        self.entities.push(index);
-        index
+        let index = self.entities.len() as i32;
+        let entity = Entity::new(index);
+        self.entities.push(Entity::new(index));
+
+        entity
     }
 
     pub fn add_component<T>(&mut self, entity: Entity, component: T ) 
@@ -201,7 +226,13 @@ impl EntityManager {
 
 impl std::fmt::Debug for EntityManager {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Entities\n{:?}", self.entities)
+        write!(f, "Entities")?;
+
+        for entity in &self.entities {
+            writeln!(f, "{:?}", entity)?;
+        }
+
+        Ok(())
     }
 }
 
@@ -284,8 +315,6 @@ impl<'em> SystemManager<'em> {
     }
 
     pub fn run(&mut self) {
-        let mut current_time = 0i64;
-
         loop {
             for system in &self.systems {
                 system.process(self.entity_manager);
@@ -300,6 +329,10 @@ impl<'em> SystemManager<'em> {
     }
 }
 
+/**
+ * Reads Input components and check if they have any input commands
+ * If so then set entity's walk component
+ */
 pub struct WalkSystem;
 
 impl System for WalkSystem {
@@ -322,11 +355,55 @@ impl System for WalkSystem {
 
             // Check if there are any walk commands
 
-            debug!("Walking {}, ({}, {})", entity, dx, dy);
+            debug!("Walking {:?}, ({}, {})", entity, dx, dy);
 
             if let Some(walk) = get_component!(mut, em, entity, components::Walk) {
                 walk.dx = dx;
                 walk.dy = dy;
+            }
+        }
+    }
+}
+
+pub struct PickupSystem;
+
+impl System for PickupSystem {
+    fn process(&self, em: &mut EntityManager) {
+        // Preprocess
+        // check if input was to pickup
+        let input_entities = em.get_entities_with_components(components::Input::get_component_type());
+
+        for entity in input_entities {
+            let input = get_component!(em, entity, components::Input).unwrap();
+
+            match input.input {
+                101 => {
+                    let position = get_component!(em, entity, components::Position).unwrap();
+                    // E, Pickup action
+                    // check if there is an item at the input entitiy's position
+                    // If there is then add a Pickup component to the item
+                    let item_entities = em.get_entities_with_components(components::Item::get_component_type());
+
+                    let mut target = None;
+
+                    for item_entity in item_entities {
+                        if let Some(item_position) = get_component!(em, entity, components::Position) {
+                            if item_position == position {
+                                target = Some(item_entity);
+                                // remove position component from entity
+                            }
+                        }
+                    }
+
+                    // Add the item's template to the entity's inventory
+                    if let Some(item) = target {
+                        let inventory = get_component!(mut, em, entity, components::Inventory).unwrap();
+                        inventory.add_item(item);
+
+                        em.remove_component(item, components::Position::get_component_type());
+                    }
+                }
+                _ => {}
             }
         }
     }
@@ -466,6 +543,33 @@ impl System for Reaper {
     }
 }
 
+/// Generate loot entity for all dead entities
+pub struct LootSystem;
+
+impl System for LootSystem {
+    fn process(&self, em: &mut EntityManager) {
+        let health_entities = em.get_entities_with_components(components::Health::get_component_type());
+
+        for entity in health_entities {
+            let health = get_component!(em, entity, components::Health).unwrap();
+            let position = get_component!(em, entity, components::Position).unwrap().clone();
+
+            if health.health <= 0 {
+                let loot = em.create_entity();
+
+                // TODO
+                // Spawn entity item template
+
+                em.add_component(loot, position);
+                em.add_component(loot, components::Render { glyph: '!', layer: components::RenderLayer::Item });
+                em.add_component(loot, components::Name { name: "Potion of Health".to_string() });
+                em.add_component(loot, components::Item);
+                em.add_component(loot, components::Consumable);
+            }
+        }
+    }
+}
+
 pub struct EventLogSystem;
 
 impl System for EventLogSystem {
@@ -506,6 +610,61 @@ impl System for RandomWalkAiSystem {
                 walk.dx = rng.gen_range(-1, 2);
                 walk.dy = rng.gen_range(-1, 2);
             }
+        }
+    }
+}
+
+pub struct TurnSystem {
+    entities: RefCell<VecDeque<Entity>>
+}
+
+impl TurnSystem {
+    pub fn new() -> Self {
+        Self {
+            entities: RefCell::new(VecDeque::new())
+        }
+    }
+}
+
+impl System for TurnSystem {
+    fn mount(&mut self, em: &mut EntityManager) {
+        // Add all entities with speed and energy
+        let living_entities = em.get_entities_with_components(components::Energy::get_component_type());
+
+        for entity in living_entities {
+            self.entities.borrow_mut().push_back(entity);
+        }
+    }
+
+    fn process(&self, em: &mut EntityManager) {
+        // Check if current turn's entity's still has energy
+        let current_turn_entity = *self.entities.borrow().front().unwrap();
+
+        let energy = get_component!(em, current_turn_entity, components::Energy).unwrap();
+
+        if energy.amount <= 0 {
+            debug!("Current entity {} has no more energy", current_turn_entity);
+            self.entities.borrow_mut().rotate_right(1);
+            let new_turn_entity = *self.entities.borrow().front().unwrap();
+
+            // Remove turn component from current entity
+            // Give to entity
+            em.remove_component(current_turn_entity, components::Turn::get_component_type());
+            em.add_component(new_turn_entity, components::Turn);
+
+            // Give energy to new entity
+            let new_speed = {
+                let speed = get_component!(em, new_turn_entity, components::Speed).unwrap();
+                speed.amount
+            };
+
+            {
+                let new_energy = get_component!(mut, em, new_turn_entity, components::Energy).unwrap();
+
+                new_energy.amount += new_speed;
+            }
+
+            debug!("Added turn to new entity {:?}", new_turn_entity);
         }
     }
 }

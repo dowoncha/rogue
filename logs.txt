@@ -1,69 +1,5 @@
 INFO - Assets loaded
-INFO - Screen size, 80x24
-DEBUG - Rendering
-DEBUG - Input Thread: 100
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Received input 100
-DEBUG - Processing random walk ai system
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Moving entity, 40010
-DEBUG - Moving entity, 40006
-DEBUG - Moving entity, 40016
-DEBUG - Moving entity, 40017
-DEBUG - Moving entity, 40000
-DEBUG - Moving entity, 40012
-DEBUG - Moving entity, 40001
-DEBUG - Moving entity, 40013
-DEBUG - Moving entity, 40014
-DEBUG - Moving entity, 40021
-DEBUG - Moving entity, 40008
-DEBUG - Moving entity, 40004
-DEBUG - Moving entity, 40020
-DEBUG - Moving entity, 40005
-DEBUG - Moving entity, 40002
-DEBUG - Moving entity, 40009
-DEBUG - Moving entity, 40019
-DEBUG - Moving entity, 40015
-DEBUG - Moving entity, 40022
-DEBUG - Moving entity, 40018
-DEBUG - Moving entity, 40007
-DEBUG - Moving entity, 40011
-DEBUG - Moving entity, 40003
-DEBUG - Rendering
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Input Thread: 100
-DEBUG - Received input 100
-DEBUG - Processing random walk ai system
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (1, 0)
-DEBUG - Processing collision
-DEBUG - Moving entity, 40010
-DEBUG - Moving entity, 40006
-DEBUG - Moving entity, 40016
-DEBUG - Moving entity, 40017
-DEBUG - Moving entity, 40000
-DEBUG - Moving entity, 40012
-DEBUG - Moving entity, 40001
-DEBUG - Moving entity, 40013
-DEBUG - Moving entity, 40014
-DEBUG - Moving entity, 40021
-DEBUG - Moving entity, 40008
-DEBUG - Moving entity, 40004
-DEBUG - Moving entity, 40020
-DEBUG - Moving entity, 40005
-DEBUG - Moving entity, 40002
-DEBUG - Moving entity, 40009
-DEBUG - Moving entity, 40019
-DEBUG - Moving entity, 40015
-DEBUG - Moving entity, 40022
-DEBUG - Moving entity, 40018
-DEBUG - Moving entity, 40007
-DEBUG - Moving entity, 40011
-DEBUG - Moving entity, 40003
+INFO - Screen size, 94x49
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
@@ -71,32 +7,239 @@ DEBUG - Input Thread: 115
 DEBUG - Received input 115
 DEBUG - Processing random walk ai system
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (0, 1)
+DEBUG - Walking Entity { id: 40000 }, (0, 1)
 DEBUG - Processing collision
 DEBUG - Moving entity, 40010
-DEBUG - Moving entity, 40006
-DEBUG - Moving entity, 40016
-DEBUG - Moving entity, 40017
-DEBUG - Moving entity, 40000
 DEBUG - Moving entity, 40012
-DEBUG - Moving entity, 40001
-DEBUG - Moving entity, 40013
-DEBUG - Moving entity, 40014
-DEBUG - Moving entity, 40021
-DEBUG - Moving entity, 40008
-DEBUG - Moving entity, 40004
-DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
 DEBUG - Moving entity, 40005
-DEBUG - Moving entity, 40002
-DEBUG - Moving entity, 40009
-DEBUG - Moving entity, 40019
-DEBUG - Moving entity, 40015
-DEBUG - Moving entity, 40022
-DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
 DEBUG - Moving entity, 40007
 DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
 DEBUG - Moving entity, 40003
-INFO - Collision(18438)
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Input Thread: 115
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Input Thread: 100
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
@@ -104,31 +247,217 @@ DEBUG - Input Thread: 97
 DEBUG - Received input 97
 DEBUG - Processing random walk ai system
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking 40000, (-1, 0)
+DEBUG - Walking Entity { id: 40000 }, (-1, 0)
 DEBUG - Processing collision
 DEBUG - Moving entity, 40010
-DEBUG - Moving entity, 40006
-DEBUG - Moving entity, 40016
-DEBUG - Moving entity, 40017
-DEBUG - Moving entity, 40000
 DEBUG - Moving entity, 40012
-DEBUG - Moving entity, 40001
-DEBUG - Moving entity, 40013
-DEBUG - Moving entity, 40014
-DEBUG - Moving entity, 40021
-DEBUG - Moving entity, 40008
-DEBUG - Moving entity, 40004
-DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
 DEBUG - Moving entity, 40005
-DEBUG - Moving entity, 40002
-DEBUG - Moving entity, 40009
-DEBUG - Moving entity, 40019
-DEBUG - Moving entity, 40015
-DEBUG - Moving entity, 40022
-DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
 DEBUG - Moving entity, 40007
 DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
 DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+INFO - Collision(Entity { id: 14269 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+INFO - Collision(Entity { id: 14267 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+INFO - Collision(Entity { id: 13041 })
+INFO - Collision(Entity { id: 14067 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+INFO - Collision(Entity { id: 14743 })
+INFO - Collision(Entity { id: 39360 })
+INFO - Collision(Entity { id: 14067 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 40000 }, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 40010
+DEBUG - Moving entity, 40012
+DEBUG - Moving entity, 40003
+DEBUG - Moving entity, 40006
+DEBUG - Moving entity, 40005
+DEBUG - Moving entity, 40013
+DEBUG - Moving entity, 40016
+DEBUG - Moving entity, 40004
+DEBUG - Moving entity, 40008
+DEBUG - Moving entity, 40017
+DEBUG - Moving entity, 40007
+DEBUG - Moving entity, 40011
+DEBUG - Moving entity, 40015
+DEBUG - Moving entity, 40009
+DEBUG - Moving entity, 40019
+DEBUG - Moving entity, 40001
+DEBUG - Moving entity, 40014
+DEBUG - Moving entity, 40002
+DEBUG - Moving entity, 40018
+DEBUG - Moving entity, 40020
+DEBUG - Moving entity, 40000
+INFO - Collision(Entity { id: 14743 })
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input

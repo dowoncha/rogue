@@ -85,6 +85,7 @@ impl Component for Timed {
 #[derive(PartialEq, PartialOrd, Eq, Ord, Copy, Clone)]
 pub enum RenderLayer {
     Player = 1000,
+    Item = 100,
     Map = 10
 }
 
@@ -261,6 +262,50 @@ pub struct Speed {
 }
 
 impl Component for Speed {
+    derive_component!();
+}
+
+pub struct Pickup {
+    target: Entity
+}
+
+pub struct Item;
+
+impl Component for Item {
+    derive_component!();
+}
+
+pub struct Consumable;
+
+impl Component for Consumable {
+    derive_component!();
+}
+
+pub struct Inventory {
+    items: Vec<Entity>
+}
+
+impl Inventory {
+    pub fn add_item(&mut self, item: Entity) {
+        self.items.push(item);
+    }
+}
+
+impl Component for Inventory {
+    derive_component!();
+}
+
+pub struct Prototype {
+    parent: Entity
+}
+
+impl Component for Prototype {
+    derive_component!();
+}
+
+pub struct Turn;
+
+impl Component for Turn {
     derive_component!();
 }
 
