@@ -109,6 +109,8 @@ fn create_zombie(em: &mut EntityManager, x: i32, y: i32) -> Entity {
 }
 
 fn create_map_entities(map: &Map, em: &mut EntityManager) {
+    // Create tile entity prototypes
+
     for y in 0..map.height() {
         for x in 0..map.width() {
             let tile = em.create_entity();
@@ -184,7 +186,7 @@ fn load_breeds(filename: &str, em: &mut EntityManager) -> Result<(), Box<dyn std
     Ok(())
 }
 
-fn spawn_item(
+fn spawn_potion_of_healing(
     em: &mut EntityManager,
     x: i32,
     y: i32
@@ -194,6 +196,7 @@ fn spawn_item(
     em.add_component(health_potion, components::Position { x: x, y: y });
     em.add_component(health_potion, components::Render { glyph: '!', layer: RenderLayer::Item });
     em.add_component(health_potion, components::Consumable);
+    // em.add_component(health_potion, components::Script)
 }
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
@@ -219,7 +222,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     create_map_entities(&map, &mut entity_manager);
     create_player(&mut entity_manager, player_pos.0, player_pos.1);
     populate_map(&map, &mut entity_manager);
-    spawn_item(&mut entity_manager, player_pos.0, player_pos.1 + 2);
+    spawn_potion_of_healing(&mut entity_manager, player_pos.0, player_pos.1 + 2);
 
     // create_zombie(&mut entity_manager, player_pos.0 + 2, player_pos.1);
 

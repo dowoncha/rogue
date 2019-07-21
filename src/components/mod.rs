@@ -197,6 +197,7 @@ impl Component for Health {
 #[derive(Copy, Clone)]
 pub struct Damage {
     pub amount: i32,
+    pub target: Entity
 }
 
 impl Component for Damage {
@@ -295,22 +296,29 @@ impl Component for Inventory {
     derive_component!();
 }
 
-pub struct Prototype {
-    parent: Entity
-}
-
-impl Component for Prototype {
-    derive_component!();
-}
-
 pub struct Turn;
 
 impl Component for Turn {
     derive_component!();
 }
 
-// pub struct AttackAI;
+pub struct Prototype {
+    pub prototype: Entity
+}
 
-// impl Component for AttackAi {
-//     derive_component!();
-// ai}
+impl Component for Prototype {
+    derive_component!();
+}
+
+pub struct Attributes {
+    strength: i32,
+    dexterity: i32,
+    constitution: i32,
+    intelligence: i32,
+    wisdom: i32,
+    charisma: i32
+}
+
+impl Component for Attributes {
+    derive_component!();
+}

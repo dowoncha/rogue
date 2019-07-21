@@ -60,15 +60,45 @@ macro_rules! get_component {
     }
 }
 
+pub struct Engine<'em> {
+    entity_manager: EntityManager,
+    system_manager: Option<SystemManager<'em>>
+}
+
+impl<'em> Engine<'em> {
+    pub fn new() -> Self {
+        Self {
+            entity_manager: EntityManager::new(),
+            system_manager: None
+        }
+    }
+
+    pub fn init(&'em mut self) {
+        let mut system_manager = SystemManager::new(&mut self.entity_manager);
+
+        system_manager.mount();
+
+        self.system_manager = Some(system_manager);
+    }
+
+    pub fn run(&mut self) {
+        self.system_manager.as_mut().unwrap().run();
+    }
+
+    pub fn unmount(&mut self) {
+        self.system_manager.as_mut().unwrap().unmount();
+    }
+}
+
 #[derive(Copy, Clone, Debug, PartialEq, PartialOrd, Hash, Eq)]
 pub struct Entity {
-    id: i32
+    id: i32,
 }
 
 impl Entity {
     fn new(id: i32) -> Self {
         Self {
-            id: id
+            id: id,
         }
     }
 }
@@ -103,7 +133,7 @@ impl EntityManager {
         Self {
             entities: Vec::new(),
             component_data_tables: HashMap::new(),
-            listeners: Vec::new()
+            listeners: Vec::new(),
         }
     }
 
@@ -113,6 +143,10 @@ impl EntityManager {
         self.entities.push(Entity::new(index));
 
         entity
+    }
+
+    pub fn extend(&mut self, prototype: Entity, child: Entity) {
+        self.add_component(child, components::Prototype { prototype: prototype });
     }
 
     pub fn add_component<T>(&mut self, entity: Entity, component: T ) 
@@ -126,7 +160,7 @@ impl EntityManager {
             // .contains_key(&component.get_object_type())
             .contains_key(&component_type)
         {
-            self.component_data_tables
+            let _ = self.component_data_tables
                 .insert(component_type, HashMap::new());
         }
 
@@ -136,10 +170,14 @@ impl EntityManager {
             .get_mut(&component_type)
             .unwrap();
 
-        table.insert(entity, Box::new(component));
+        let _ = table.insert(entity, Box::new(component));
 
         // em.listen()
         // listeners.notify("add_component entity, component_type ")
+    }
+
+    fn get_prototype(&self, entity: Entity) -> Option<Entity> {
+        get_component!(self, entity, components::Prototype).map(|prototype| prototype.prototype)
     }
 
     pub fn get_component(
@@ -150,17 +188,29 @@ impl EntityManager {
         // Get the table
         if let Some(table) = self.component_data_tables.get(&component_type) {
             return table.get(&entity);
-        }
+        } else if let Some(prototype) = self.get_prototype(entity) {
+            // Check the prototype
+            self.get_component(prototype, component_type)
+        } else {
+            // Check for key not present tag
 
-        None
+            None
+        }
     }
 
-    pub fn get_component_mut(&mut self, entity: Entity, component_type: ComponentType) -> Option<&mut Box<dyn Component>> {
-        if let Some(table) = self.component_data_tables.get_mut(&component_type) {
-            return table.get_mut(&entity);
-        }
+    // pub fn get_generic_component<T: Component>(&self, entity: Entity) -> Option<&T> {
+    //     let component = self.get_component(entity, T::get_component_type());
+    //     component.map(|c| c.as_ref())
+    // }
 
-        None
+    pub fn get_component_mut(&mut self, entity: Entity, component_type: ComponentType) -> Option<&mut Box<dyn Component>> {
+        let mut component = None;
+        if let Some(table) = self.component_data_tables.get_mut(&component_type) {
+            component = table.get_mut(&entity);
+        }
+        // } else if let Some(prototype) = self.get_prototype(entity) {
+            // self.get_component_mut(prototype, component_type)
+        component
     }
 
     pub fn get_entity_all_components(&self, entity: Entity) -> Vec<&Box<dyn Component>> {
@@ -246,8 +296,6 @@ mod entity_manager_tests {
         let mut entity_manager = EntityManager::new();
 
         let entity = entity_manager.create_entity();
-
-        assert_eq!(entity, 0);
 
         let entity2 = entity_manager.create_entity();
         assert_eq!(entity2, 1);
@@ -477,7 +525,14 @@ impl System for AttackSystem {
                     if em.has_component(*collider, components::Health::get_component_type()) {
                         let mut rng = thread_rng();
 
-                        em.add_component(*collider, components::Damage { amount: rng.gen_range(1, 4) });
+                        let damage_amount = rng.gen_range(1, 4);
+                        // let damage_entity = {
+                        //     let entity = em.create_entity();
+                        //     entity
+                        // };
+                        // em.add_component(damage_entity, components::Damage { amount: damage_amount, target: *collider });
+
+                        em.add_component(*collider, components::Damage { amount: damage_amount, target: *collider });
                     }
                 }
             }
@@ -702,4 +757,3 @@ pub trait Subject {
 pub trait Observer {
     fn update(&self, event: String);
 }
-

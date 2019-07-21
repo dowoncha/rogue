@@ -1,10 +1,12 @@
-function onMount() 
+local script_name = "move_system"
 
+function on_mount() 
 end
 
-function onProcess(entity_manager)
+function on_process(entity_manager)
+    player.add_item WeapSteelLongsword 1
 end
 
-function onUnmount() 
+function on_unmount() 
 
 end
