@@ -2,11 +2,13 @@ use ncurses as nc;
 
 use super::{System, Component, EntityManager};
 use components::{Input};
+use std::cell::RefCell;
 
 pub struct InputSystem {
     event_sender: std::sync::mpsc::Sender<i32>,
     event_receiver: std::sync::mpsc::Receiver<i32>,
-    join_handle: Option<std::thread::JoinHandle<()>>
+    join_handle: Option<std::thread::JoinHandle<()>>,
+    history: RefCell<Vec<i32>>
 }
 
 /**
@@ -20,7 +22,8 @@ impl InputSystem {
         Self {
             event_sender: sender,
             event_receiver: receiver,
-            join_handle: None
+            join_handle: None,
+            history: RefCell::new(Vec::new())
         }
     }
 
@@ -49,6 +52,7 @@ impl InputSystem {
         if let Ok(input_key) = self.event_receiver.recv() {
         // if input_key != 0 {
             debug!("Received input {}", input_key);
+            self.history.borrow_mut().push(input_key);
 
             // Move all entities
             for entity in input_entities {
@@ -61,6 +65,10 @@ impl InputSystem {
                 input_component.input = 0;
             }
         }
+    }
+
+    pub fn get_last_input(&self) -> Option<i32> {
+        self.history.borrow().last().cloned()
     }
 }
 

@@ -5,7 +5,6 @@ use ncurses as nc;
 
 use super::{System, EntityManager, Component, Entity};
 use components::{self, Render, Position};
-use types::{Rect};
 
 /**
  * Render code

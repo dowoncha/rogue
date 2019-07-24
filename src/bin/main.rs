@@ -98,8 +98,8 @@ fn load_game_entities(entity_manager: &mut EntityManager) {
 fn load_game_systems(system_manager: &mut SystemManager) {
     system_manager.register_system(Chronos::new());
     system_manager.register_system(rogue::TurnSystem::new());
-    system_manager.register_system(RenderSystem::new());
-    system_manager.register_system(InputSystem::new());
+    // system_manager.register_system(RenderSystem::new());
+    // system_manager.register_system(InputSystem::new());
     system_manager.register_system(RandomWalkAiSystem);
     system_manager.register_system(WalkSystem);
     system_manager.register_system(CollisionSystem);
@@ -113,7 +113,6 @@ fn load_game_systems(system_manager: &mut SystemManager) {
 }
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
-    // println!("\u{001b}[31mHelloWorld");
     // let args: Vec<_> = env::args().collect();
 
     file_logger::init()
@@ -123,15 +122,45 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     load_game_entities(&mut entity_manager);
 
-    let mut system_manager = SystemManager::new(&mut entity_manager);
+    let render_system = {
+        let mut rs = RenderSystem::new();
+        rs.mount(&mut entity_manager);
 
-    load_game_systems(&mut system_manager);
+        rs
+    };
 
-    system_manager.mount();
+    let input_system = {
+        let mut is = InputSystem::new();
+        is.mount(&mut entity_manager);
+        is
+    };
 
-    system_manager.run();
+    let mut system_manager = {
+        let mut sm = SystemManager::new();
 
-    system_manager.unmount();
+        sm.mount(&mut entity_manager);
+
+        load_game_systems(&mut sm);
+
+        sm
+    };
+
+    'main: loop {
+        render_system.process(&mut entity_manager);
+
+        input_system.process(&mut entity_manager);
+
+        if let Some(key) = input_system.get_last_input() {
+            if key == 113 {
+                break 'main;
+            }
+        }
+
+        system_manager.process_systems(&mut entity_manager);
+
+    }
+
+    system_manager.unmount(&mut entity_manager);
 
     drop_ncurses();
 

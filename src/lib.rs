@@ -83,13 +83,13 @@ impl std::fmt::Display for Entity {
 
 pub trait System {
     fn mount(&mut self, _: &mut EntityManager) { }
-    fn process(&self, entity_manager: &mut EntityManager) {}
+    fn process(&self, _: &mut EntityManager) {}
 
-    fn process_mut(&mut self, entity_manager: &mut EntityManager) {}
+    fn process_mut(&mut self, _: &mut EntityManager) {}
 
     fn unmount(&mut self, _: &mut EntityManager) { }
 
-    fn on_add_component(&mut self, entity: Entity, component_type: ComponentType) {}
+    fn on_add_component(&mut self, _: Entity, _: ComponentType) {}
 }
 
 pub struct EntityManager {
@@ -309,22 +309,20 @@ mod entity_manager_tests {
     }
 }
 
-pub struct SystemManager<'em> {
-    entity_manager: &'em mut EntityManager,
+pub struct SystemManager {
     systems: Vec<Box<dyn System>>
 }
 
-impl<'em> SystemManager<'em> {
-    pub fn new(entity_manager: &'em mut EntityManager) -> Self {
+impl SystemManager {
+    pub fn new() -> Self {
         Self {
-            entity_manager: entity_manager,
             systems: Vec::new()
         }
     }
 
-    pub fn mount(&mut self) {
+    pub fn mount(&mut self, em: &mut EntityManager) {
         for system in &mut self.systems {
-            system.mount(&mut self.entity_manager);
+            system.mount(em);
         }
     }
 
@@ -332,21 +330,15 @@ impl<'em> SystemManager<'em> {
         self.systems.push(Box::new(system));
     }
 
-    pub fn run(&mut self) {
-        loop {
-            self.process_systems(); 
-        }
-    }
-
-    pub fn process_systems(&mut self) {
+    pub fn process_systems(&self, em: &mut EntityManager) {
         for system in &self.systems {
-            system.process(self.entity_manager);
+            system.process(em);
         }
     }
 
-    pub fn unmount(&mut self) {
+    pub fn unmount(&mut self, em: &mut EntityManager) {
         for system in &mut self.systems {
-            system.unmount(&mut self.entity_manager);
+            system.unmount(em);
         }
     }
 }
@@ -667,7 +659,14 @@ impl System for TurnSystem {
 
     fn process(&self, em: &mut EntityManager) {
         // Check if current turn's entity's still has energy
-        let current_turn_entity = *self.entities.borrow().front().unwrap();
+        let entities = self.entities.borrow();
+        let current_turn_entity = entities.front();
+
+        if current_turn_entity.is_none() {
+            return;
+        }
+
+        let current_turn_entity = *current_turn_entity.unwrap();
 
         let energy = get_component!(em, current_turn_entity, components::Energy).unwrap();
 
@@ -716,18 +715,3 @@ pub use chronos_system::{Chronos};
 pub use collide_system::{CollisionSystem};
 
 pub mod file_logger;
-
-pub trait Subject {
-    fn register(&mut self, observer: &dyn Observer);
-    fn unregister(&mut self, observer: &dyn Observer);
-    fn observers(&self) -> &[&dyn Observer];
-    fn notify(&self, event: String) {
-        for o in self.observers() {
-            o.update(event.clone());
-        }
-    }
-}
-
-pub trait Observer {
-    fn update(&self, event: String);
-}
