@@ -5,14 +5,7 @@ extern crate log;
 extern crate ncurses;
 extern crate rand;
 
-use ncurses as nc;
-
-#[macro_use]
 extern crate rogue;
-
-extern crate rlua; 
-
-use rlua::{Lua};
 
 use rogue::{
     Entity,
@@ -38,11 +31,8 @@ use rogue::{
     Janitor
 };
 
-use rogue::map::{simple_map_gen, ca_map_gen};
+use rogue::map::{simple_map_gen};
 use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, Walk};
-
-use std::env;
-use std::collections::HashMap;
 
 fn create_player(em: &mut EntityManager, x: i32, y: i32) {
     let player = em.create_entity();
@@ -58,54 +48,6 @@ fn create_player(em: &mut EntityManager, x: i32, y: i32) {
     em.add_component(player, components::Log::new());
     em.add_component(player, components::Energy { amount: 0 });
     em.add_component(player, components::Speed { amount: 50 });
-}
-
-fn create_monster(
-    em: &mut EntityManager, 
-    name: &str,
-    x: i32, 
-    y: i32,
-    glyph: char,
-    baseHitPoints: i32
-) -> Entity {
-    let monster = em.create_entity();
-
-    em.add_component(monster, components::Name { name: name.to_string() });
-    em.add_component(monster, Render { glyph: glyph, layer: RenderLayer::Player});
-    em.add_component(monster, Position { x: x, y: y });
-    em.add_component(monster, components::Health { health: baseHitPoints, max_health: baseHitPoints });
-    em.add_component(monster, components::Walk { dx: 0, dy: 0 });
-    em.add_component(monster, Collidable);
-
-    monster
-}
-
-fn create_goblin(em: &mut EntityManager, x: i32, y: i32) -> Entity {
-   let goblin = create_monster(
-       em,
-       "goblin",
-       x,
-       y,
-       'g',
-       8
-   );
-
-   goblin
-}
-
-fn create_zombie(em: &mut EntityManager, x: i32, y: i32) -> Entity {
-    let zombie = create_monster(
-        em,
-        "zombie",
-        x,
-        y,
-        'z',
-        10
-    );
-
-    em.add_component(zombie, components::RandomWalkAi);
-
-    zombie
 }
 
 fn create_map_entities(map: &Map, em: &mut EntityManager) {
@@ -134,79 +76,11 @@ fn populate_map(map: &Map, em: &mut EntityManager) {
     // Create a monster at the center of each room
     for room in &map.rooms {
         let center = room.center();
-        create_zombie(em, center.0, center.1);
+        rogue::monsters::create_zombie(em, center.0, center.1);
     }
 }
 
-fn load_breeds(filename: &str, em: &mut EntityManager) -> Result<(), Box<dyn std::error::Error>> {
-    use std::io::prelude::*;
-
-    info!("Loading {}", filename);
-    let lua = Lua::new();
-
-    let mut file = std::fs::File::open(filename)?;
-    let mut buffer = String::new();
-
-    file.read_to_string(&mut buffer)?;
-
-    let mut breeds = None;
-
-    let _: rlua::Result<()> = lua.context(|ctx| {
-        ctx.load(&buffer)
-            .set_name("breeds")
-            .expect("Failed to set name")
-            .exec()
-            .expect("Failed to exec chunk");
-
-        let globals = ctx.globals();
-
-        breeds = globals.get::<_, HashMap<String, HashMap<String, String>>>("breeds").ok();
-
-        Ok(())
-    });
-
-    debug!("{:?}", breeds);
-
-    for (breed, attributes) in breeds.unwrap().iter() {
-        let entity_template = em.create_entity();
-
-        em.add_component(entity_template, components::Name { name: breed.to_string() });
-
-        for (attribute, value) in attributes.iter() {
-            match attribute.as_str() {
-                "glyph" => {
-                    // let glyph = value.chars().next().unwrap();
-                    // em.add_component(entity_template, components::Render { glyph: glyph, layer: RenderLayer::Player });
-                }
-                _ => { debug!("Unimplemented attribute {}", attribute); }
-            }
-        }
-    }
-
-    Ok(())
-}
-
-fn spawn_potion_of_healing(
-    em: &mut EntityManager,
-    x: i32,
-    y: i32
-) {
-    let health_potion = em.create_entity();
-
-    em.add_component(health_potion, components::Position { x: x, y: y });
-    em.add_component(health_potion, components::Render { glyph: '!', layer: RenderLayer::Item });
-    em.add_component(health_potion, components::Consumable);
-    // em.add_component(health_potion, components::Script)
-}
-
-fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
-    // println!("\u{001b}[31mHelloWorld");
-    // let args: Vec<_> = env::args().collect();
-
-    file_logger::init()
-        .expect("Failed to init file logger");
-
-    let mut entity_manager = EntityManager::new();
+fn load_game_entities(entity_manager: &mut EntityManager) {
     let map_width = 200;
     let map_height = 200;
 
@@ -215,27 +89,17 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     let player_pos = map.rooms.first().unwrap().center();
 
-    // load_breeds("assets/breeds.lua", &mut entity_manager)?;
+    create_map_entities(&map, entity_manager);
+    create_player(entity_manager, player_pos.0, player_pos.1);
+    populate_map(&map, entity_manager);
+    rogue::items::spawn_potion_of_healing(entity_manager, player_pos.0, player_pos.1 + 2);
+}
 
-    info!("Assets loaded");
-
-    create_map_entities(&map, &mut entity_manager);
-    create_player(&mut entity_manager, player_pos.0, player_pos.1);
-    populate_map(&map, &mut entity_manager);
-    spawn_potion_of_healing(&mut entity_manager, player_pos.0, player_pos.1 + 2);
-
-    // create_zombie(&mut entity_manager, player_pos.0 + 2, player_pos.1);
-
-    let mut system_manager = SystemManager::new(&mut entity_manager);
-
+fn load_game_systems(system_manager: &mut SystemManager) {
     system_manager.register_system(Chronos::new());
     system_manager.register_system(rogue::TurnSystem::new());
     system_manager.register_system(RenderSystem::new());
     system_manager.register_system(InputSystem::new());
-    // register TimeSystem
-    // register_ai_system();
-    // register_gameplay_system();
-    // register_render_system();
     system_manager.register_system(RandomWalkAiSystem);
     system_manager.register_system(WalkSystem);
     system_manager.register_system(CollisionSystem);
@@ -246,6 +110,22 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     system_manager.register_system(EventLogSystem);
     system_manager.register_system(rogue::Reaper);
     system_manager.register_system(Janitor);
+}
+
+fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
+    // println!("\u{001b}[31mHelloWorld");
+    // let args: Vec<_> = env::args().collect();
+
+    file_logger::init()
+        .expect("Failed to init file logger");
+
+    let mut entity_manager = EntityManager::new();
+
+    load_game_entities(&mut entity_manager);
+
+    let mut system_manager = SystemManager::new(&mut entity_manager);
+
+    load_game_systems(&mut system_manager);
 
     system_manager.mount();
 

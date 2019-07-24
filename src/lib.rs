@@ -60,36 +60,6 @@ macro_rules! get_component {
     }
 }
 
-pub struct Engine<'em> {
-    entity_manager: EntityManager,
-    system_manager: Option<SystemManager<'em>>
-}
-
-impl<'em> Engine<'em> {
-    pub fn new() -> Self {
-        Self {
-            entity_manager: EntityManager::new(),
-            system_manager: None
-        }
-    }
-
-    pub fn init(&'em mut self) {
-        let mut system_manager = SystemManager::new(&mut self.entity_manager);
-
-        system_manager.mount();
-
-        self.system_manager = Some(system_manager);
-    }
-
-    pub fn run(&mut self) {
-        self.system_manager.as_mut().unwrap().run();
-    }
-
-    pub fn unmount(&mut self) {
-        self.system_manager.as_mut().unwrap().unmount();
-    }
-}
-
 #[derive(Copy, Clone, Debug, PartialEq, PartialOrd, Hash, Eq)]
 pub struct Entity {
     id: i32,
@@ -364,9 +334,13 @@ impl<'em> SystemManager<'em> {
 
     pub fn run(&mut self) {
         loop {
-            for system in &self.systems {
-                system.process(self.entity_manager);
-            }
+            self.process_systems(); 
+        }
+    }
+
+    pub fn process_systems(&mut self) {
+        for system in &self.systems {
+            system.process(self.entity_manager);
         }
     }
 
@@ -731,15 +705,15 @@ mod chronos_system;
 mod collide_system;
 pub mod map;
 mod types;
+pub mod monsters;
+pub mod items;
 
 pub use types::{Rect};
 pub use map::{Map, MapBuilder};
 pub use input_system::{InputSystem};
 pub use render_system::{RenderSystem, drop_ncurses};
 pub use chronos_system::{Chronos};
-// pub use move_system::{MovementSystem};
 pub use collide_system::{CollisionSystem};
-// pub use command_system::{CommandSystem};
 
 pub mod file_logger;
 
