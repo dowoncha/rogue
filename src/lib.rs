@@ -119,11 +119,21 @@ impl EntityManager {
         self.add_component(child, components::Prototype { prototype: prototype });
     }
 
+    pub fn add_boxed_component(&mut self, entity: Entity, component: Box<dyn Component>) {
+        let component_type = component.get_type();
+
+        let table = self.get_mut_component_table(component_type);
+
+        let _ = table.insert(entity, component);
+    }
+
     pub fn add_component<T>(&mut self, entity: Entity, component: T ) 
         where T: 'static + Component 
     {
-        let component_type = <T as Component>::get_component_type();
+        self.add_boxed_component(entity, Box::new(component));
+    }
 
+    fn get_mut_component_table(&mut self, component_type: ComponentType) -> &mut HashMap<Entity, Box<dyn Component>> {
         // Check if table exists, create if it doesn't
         if !self
             .component_data_tables
@@ -140,10 +150,7 @@ impl EntityManager {
             .get_mut(&component_type)
             .unwrap();
 
-        let _ = table.insert(entity, Box::new(component));
-
-        // em.listen()
-        // listeners.notify("add_component entity, component_type ")
+        table
     }
 
     fn get_prototype(&self, entity: Entity) -> Option<Entity> {

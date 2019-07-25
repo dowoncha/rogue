@@ -15,6 +15,10 @@ macro_rules! derive_component {
             super::ComponentType::of::<Self>()
         }
 
+        fn get_type(&self) -> super::ComponentType {
+            super::ComponentType::of::<Self>()
+        }
+
         fn as_any(&self) -> &dyn std::any::Any {
             self
         }
@@ -27,6 +31,7 @@ macro_rules! derive_component {
 
 pub trait Component {
     fn get_component_type() -> ComponentType where Self: Sized;
+    fn get_type(&self) -> ComponentType;
     fn as_any(&self) -> &dyn Any;
     fn as_any_mut(&mut self) -> &mut dyn Any;
 }

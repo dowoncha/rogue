@@ -35,6 +35,10 @@ impl InputSystem {
         self.event_sender.clone()
     }
 
+    pub fn get_input(&self) -> Option<i32> {
+       self.event_receiver.recv().ok()
+    }
+
     fn process_input_events(&self, entity_manager: &mut EntityManager) {
         // Get entity that has the turn component
 
@@ -49,21 +53,27 @@ impl InputSystem {
         // let input_key = nc::getch();
 
         // If an input event is received, notify all input components
-        if let Ok(input_key) = self.event_receiver.recv() {
+        if let Some(input_key) = self.get_input() {
         // if input_key != 0 {
             debug!("Received input {}", input_key);
             self.history.borrow_mut().push(input_key);
 
-            // Move all entities
-            for entity in input_entities {
-                let input_component = get_component!(mut, entity_manager, entity, Input).unwrap();
-                input_component.input = input_key;
-            }
+            self.notify_input_components(entity_manager, input_key);
+            
         } else {
-            for entity in input_entities {
-                let input_component = get_component!(mut, entity_manager, entity, Input).unwrap();
-                input_component.input = 0;
-            }
+            self.notify_input_components(entity_manager, 0);
+        }
+    }
+
+    pub fn notify_input_components(&self, entity_manager: &mut EntityManager, key: i32) {
+        // Check for any key events
+        // Get all entities with input component
+        let input_entities = entity_manager.get_entities_with_components(Input::get_component_type());
+
+        // Move all entities
+        for entity in input_entities {
+            let input_component = get_component!(mut, entity_manager, entity, Input).unwrap();
+            input_component.input = key;
         }
     }
 

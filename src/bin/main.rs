@@ -34,21 +34,7 @@ use rogue::{
 use rogue::map::{simple_map_gen};
 use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, Walk};
 
-fn create_player(em: &mut EntityManager, x: i32, y: i32) {
-    let player = em.create_entity();
-
-    em.add_component(player, components::Name { name: "gromash warhammer".to_string() });
-    em.add_component(player, components::Player);
-    em.add_component(player, Input::new());
-    em.add_component(player, Render { glyph: '@', layer: RenderLayer::Player });
-    em.add_component(player, Position{ x: x, y: y});
-    em.add_component(player, Collidable);
-    em.add_component(player, components::Health { health: 100, max_health: 100 });
-    em.add_component(player, Walk::new());
-    em.add_component(player, components::Log::new());
-    em.add_component(player, components::Energy { amount: 0 });
-    em.add_component(player, components::Speed { amount: 50 });
-}
+use std::time::{Instant, Duration};
 
 fn create_map_entities(map: &Map, em: &mut EntityManager) {
     // Create tile entity prototypes
@@ -80,89 +66,165 @@ fn populate_map(map: &Map, em: &mut EntityManager) {
     }
 }
 
-fn load_game_entities(entity_manager: &mut EntityManager) {
-    let map_width = 200;
-    let map_height = 200;
-
-    // let map = create_map();
-    let map = simple_map_gen(map_width, map_height);
-
-    let player_pos = map.rooms.first().unwrap().center();
-
-    create_map_entities(&map, entity_manager);
-    create_player(entity_manager, player_pos.0, player_pos.1);
-    populate_map(&map, entity_manager);
-    rogue::items::spawn_potion_of_healing(entity_manager, player_pos.0, player_pos.1 + 2);
+struct Game {
+    // states: Vec<Box<dyn GameState>>,
+    entity_manager: EntityManager,
+    system_manager: SystemManager,
+    render_system: RenderSystem,
+    input_system: InputSystem,
+    running: bool
 }
 
-fn load_game_systems(system_manager: &mut SystemManager) {
-    system_manager.register_system(Chronos::new());
-    system_manager.register_system(rogue::TurnSystem::new());
-    // system_manager.register_system(RenderSystem::new());
-    // system_manager.register_system(InputSystem::new());
-    system_manager.register_system(RandomWalkAiSystem);
-    system_manager.register_system(WalkSystem);
-    system_manager.register_system(CollisionSystem);
-    system_manager.register_system(AttackSystem);
-    system_manager.register_system(DamageSystem);
-    system_manager.register_system(MoveSystem);
-    system_manager.register_system(rogue::LootSystem);
-    system_manager.register_system(EventLogSystem);
-    system_manager.register_system(rogue::Reaper);
-    system_manager.register_system(Janitor);
+impl Game {
+    pub fn new() -> Self {
+        Self {
+            input_system: InputSystem::new(),
+            render_system: RenderSystem::new(),
+            entity_manager: EntityManager::new(),
+            system_manager: SystemManager::new(),
+            running: false
+        }
+    }
+
+    pub fn init(&mut self) {
+        self.render_system.mount(&mut self.entity_manager);
+
+        self.input_system.mount(&mut self.entity_manager);
+
+        self.system_manager.mount(&mut self.entity_manager);
+
+        self.load_game_systems();
+
+        self.load_game_entities();
+
+        self.running = true;
+    }
+
+    fn load_game_systems(&mut self) {
+        let system_manager = &mut self.system_manager;
+        system_manager.register_system(Chronos::new());
+        system_manager.register_system(rogue::TurnSystem::new());
+        // system_manager.register_system(RenderSystem::new());
+        // system_manager.register_system(InputSystem::new());
+        system_manager.register_system(RandomWalkAiSystem);
+        system_manager.register_system(WalkSystem);
+        system_manager.register_system(CollisionSystem);
+        system_manager.register_system(AttackSystem);
+        system_manager.register_system(DamageSystem);
+        system_manager.register_system(MoveSystem);
+        system_manager.register_system(rogue::LootSystem);
+        system_manager.register_system(EventLogSystem);
+        system_manager.register_system(rogue::Reaper);
+        system_manager.register_system(Janitor);
+    }
+
+    fn load_game_entities(
+        &mut self, 
+    ) {
+        let map_width = 200;
+        let map_height = 200;
+
+        // let map = create_map();
+        let map = simple_map_gen(map_width, map_height);
+
+        let player_pos = map.rooms.first().unwrap().center();
+
+        create_map_entities(&map, &mut self.entity_manager);
+        let player_components = self.create_player("gromash", player_pos.0, player_pos.1);
+
+        let player = self.entity_manager.create_entity();
+
+        for component in player_components {
+            self.entity_manager.add_boxed_component(player, component);
+        }
+
+        populate_map(&map, &mut self.entity_manager);
+    }
+
+    fn create_player(
+        &self,
+        name: &str,
+        x: i32, 
+        y: i32
+    ) -> Vec<Box<dyn Component>> {
+        vec![
+            Box::new(components::Player),
+            Box::new(components::Name { name: name.to_string() }),
+            Box::new(Input::new()),
+            Box::new(Render { glyph: '@', layer: RenderLayer::Player }),
+            Box::new(Position{ x: x, y: y}),
+            Box::new(Collidable),
+            Box::new(components::Health { health: 100, max_health: 100 }),
+            Box::new(Walk::new()),
+            Box::new(components::Log::new()),
+            Box::new(components::Energy { amount: 0 }),
+            Box::new(components::Speed { amount: 50 })
+        ]
+    }
+
+    pub fn run(&mut self) {
+        let mut last_time = Instant::now();
+
+        while self.is_running() {
+            let current = Instant::now();
+
+            let elapsed: Duration = current.duration_since(last_time);
+
+            self.handle_input();
+
+            self.update(elapsed);
+
+            self.render();
+
+            last_time = current;
+        }
+
+        self.cleanup();
+    }
+
+    fn handle_input(&mut self) {
+        self.input_system.process(&mut self.entity_manager);
+
+        match self.input_system.get_last_input() { 
+            Some(113) => {
+                self.quit();
+            },
+            _ => {}
+        }
+    }
+    
+    fn update(&mut self, elapsed: Duration) {
+        self.system_manager.process_systems(&mut self.entity_manager);
+    }
+
+    fn render(&mut self) {
+        self.render_system.process(&mut self.entity_manager);
+    }
+
+    fn cleanup(&mut self) {
+        self.system_manager.unmount(&mut self.entity_manager);
+
+        self.render_system.unmount();
+    }
+
+    fn quit(&mut self) {
+        self.running = false;
+    }
+
+    fn is_running(&self) -> bool {
+        self.running
+    }
 }
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
-    // let args: Vec<_> = env::args().collect();
-
     file_logger::init()
         .expect("Failed to init file logger");
 
-    let mut entity_manager = EntityManager::new();
+    let mut game = Game::new();
 
-    load_game_entities(&mut entity_manager);
+    game.init();
 
-    let render_system = {
-        let mut rs = RenderSystem::new();
-        rs.mount(&mut entity_manager);
-
-        rs
-    };
-
-    let input_system = {
-        let mut is = InputSystem::new();
-        is.mount(&mut entity_manager);
-        is
-    };
-
-    let mut system_manager = {
-        let mut sm = SystemManager::new();
-
-        sm.mount(&mut entity_manager);
-
-        load_game_systems(&mut sm);
-
-        sm
-    };
-
-    'main: loop {
-        render_system.process(&mut entity_manager);
-
-        input_system.process(&mut entity_manager);
-
-        if let Some(key) = input_system.get_last_input() {
-            if key == 113 {
-                break 'main;
-            }
-        }
-
-        system_manager.process_systems(&mut entity_manager);
-
-    }
-
-    system_manager.unmount(&mut entity_manager);
-
-    drop_ncurses();
+    game.run();
 
     Ok(())
 }

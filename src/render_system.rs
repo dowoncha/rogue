@@ -40,6 +40,9 @@ fn init_ncurses() {
 }
 
 pub fn drop_ncurses() {
+    nc::curs_set(nc::CURSOR_VISIBILITY::CURSOR_VISIBLE);
+    nc::echo();
+
     nc::endwin();
 }
 
@@ -200,6 +203,11 @@ impl RenderSystem {
 
         nc::wrefresh(map_window);
     }
+
+    pub fn unmount(&self) {
+        debug!("Unmounting render system");
+        drop_ncurses();
+    }
 }
 
 impl System for RenderSystem {
@@ -238,7 +246,4 @@ impl System for RenderSystem {
         self.render_log(entity_manager);
     }
 
-    fn unmount(&mut self, _: &mut EntityManager) {
-        drop_ncurses();
-    }
 }
