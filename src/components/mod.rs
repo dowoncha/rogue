@@ -275,6 +275,14 @@ pub struct Pickup {
     target: Entity
 }
 
+impl Component for Pickup {
+    derive_component!();
+}
+
+impl Command for Pickup {
+
+}
+
 pub struct Item;
 
 impl Component for Item {
@@ -325,5 +333,14 @@ pub struct Attributes {
 }
 
 impl Component for Attributes {
+    derive_component!();
+}
+
+trait Command: Component {
+}
+
+pub struct Ownable;
+
+impl Component for Ownable {
     derive_component!();
 }

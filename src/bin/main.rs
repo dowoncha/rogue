@@ -5,6 +5,10 @@ extern crate log;
 extern crate ncurses;
 extern crate rand;
 
+extern crate rlua;
+
+use rlua::{Lua};
+
 extern crate rogue;
 
 use rogue::{
@@ -42,7 +46,6 @@ fn create_map_entities(map: &Map, em: &mut EntityManager) {
     for y in 0..map.height() {
         for x in 0..map.width() {
             let tile = em.create_entity();
-            let index = (y * map.width() + x) as usize;
 
             let cell = map.get_cell_ref(x as i32, y as i32);
 
@@ -67,7 +70,6 @@ fn populate_map(map: &Map, em: &mut EntityManager) {
 }
 
 struct Game {
-    // states: Vec<Box<dyn GameState>>,
     entity_manager: EntityManager,
     system_manager: SystemManager,
     render_system: RenderSystem,
@@ -92,6 +94,8 @@ impl Game {
         self.input_system.mount(&mut self.entity_manager);
 
         self.system_manager.mount(&mut self.entity_manager);
+
+        self.load_game_assets();
 
         self.load_game_systems();
 
@@ -141,6 +145,60 @@ impl Game {
         populate_map(&map, &mut self.entity_manager);
     }
 
+    fn load_game_assets(&mut self) {
+        self.load_asset("assets/goblin.lua");
+    }
+
+    fn load_asset(&mut self, asset_name: &str) {
+        use std::io::Read;
+
+        let lua = Lua::new();
+
+        let entities = std::sync::Arc::new(std::sync::Mutex::new(std::collections::HashMap::new()));
+
+        lua.context(|lua_ctx| {
+            let entities = std::sync::Arc::clone(&entities);
+            let register_entity = lua_ctx.create_function(move |_, (name, entity): (String, std::collections::HashMap<String, String>)| {
+                entities.lock().unwrap().insert(name, entity);
+
+                Ok(())
+            }).unwrap();
+            lua_ctx.globals().set("register_entity", register_entity).unwrap();
+        });
+
+        let mut buffer = String::new();
+        let mut asset_file = std::fs::File::open(asset_name).unwrap();
+
+        asset_file.read_to_string(&mut buffer).unwrap();
+
+        lua.context(|lua_ctx| {
+            lua_ctx.load(&buffer)
+                .exec().unwrap();
+        });
+
+        for (name, components) in entities.lock().unwrap().iter() {
+            self.load_entity(name, components);
+        }
+    }
+
+    fn load_entity(&mut self, name: &str, components: &std::collections::HashMap<String, String>) {
+        let entity = self.entity_manager.create_entity();
+
+        for (key, value) in components.iter() {
+            match key.as_str() {
+                "glyph" => {
+                    let glyph = value.chars().next().unwrap();
+                    self.entity_manager.add_component(entity, components::Render { glyph: glyph, layer: components::RenderLayer::Player });
+                }
+                "max_health" => {
+                    let max_health = value.parse::<i32>().unwrap();
+                    self.entity_manager.add_component(entity, components::Health { health: max_health, max_health: max_health });
+                }
+                _ => { }
+            }
+        }
+    }
+
     fn create_player(
         &self,
         name: &str,
@@ -172,7 +230,11 @@ impl Game {
 
             self.handle_input();
 
+            // Send inputs to engine
+
             self.update(elapsed);
+
+            // Get a copy of the world 
 
             self.render();
 
@@ -213,6 +275,32 @@ impl Game {
 
     fn is_running(&self) -> bool {
         self.running
+    }
+}
+
+struct Engine {
+    entity_manager: EntityManager,
+    system_manager: SystemManager,
+    connections: Vec<std::sync::mpsc::Receiver<String>>
+}
+
+impl Engine {
+    pub fn new() -> Self {
+        Self {
+            entity_manager: EntityManager::new(),
+            system_manager: SystemManager::new(),
+            connections: Vec::new()
+        }
+    }
+
+    pub fn init(&mut self) {
+
+    }
+
+    pub fn run(&mut self) {
+        loop {
+            self.system_manager.process_systems(&mut self.entity_manager);
+        }
     }
 }
 

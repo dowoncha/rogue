@@ -167,20 +167,13 @@ impl RenderSystem {
     }
 
     fn render_map(&self, entity_manager: &EntityManager) {
-        let entities = entity_manager.get_entities_with_components(Render::get_component_type());
+        let mut entities: Vec<_> = entity_manager.get_entities_with_components(Render::get_component_type())
+            .iter()
+            .filter_map(|entity| get_component!(entity_manager, *entity, Render).map(|render| (entity, render)))
+            .filter_map(|(entity, render)| get_component!(entity_manager, *entity, Position).map(|position| (*entity, render.clone(), position.clone())))
+            .collect();
 
-        // Only fetch entity's position componet if they have a render
-        let render_components = entities.iter()
-            .filter_map(|entity| get_component!(entity_manager, *entity, Render));
-
-        let position_components  = entities.iter()
-            .filter_map(|entity| get_component!(entity_manager, *entity, Position));
-
-        let mut sorted_entities: Vec<(&Entity, (&Render, &Position))> = entities.iter()
-            .zip(render_components.zip(position_components))
-            .collect::<Vec<_>>();
-
-            sorted_entities.sort_by(|(_, (a, _)), (_, (b, _))| a.layer.cmp(&b.layer));
+        entities.sort_by(|(_, render_a, _), (_, render_b, _)| render_a.layer.cmp(&render_b.layer));
 
         let camera_pos = self.get_camera_position(entity_manager);
         let map_window = self.map_window.unwrap();
@@ -192,7 +185,7 @@ impl RenderSystem {
 
         nc::getmaxyx(map_window, &mut map_window_height, &mut map_window_width);
 
-        for (_, (render, position)) in sorted_entities {
+        for (_, render, position) in entities.iter() {
             let world_pos = self.get_world_position(&camera_pos, &position);
             if world_pos.x > 0 && world_pos.y > 0 && world_pos.x < map_window_width - 1 && world_pos.y < map_window_height - 1 {
                 nc::mvwaddch(map_window, world_pos.y, world_pos.x, render.glyph as u64);
