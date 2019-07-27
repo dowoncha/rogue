@@ -5,6 +5,7 @@ use entities::*;
 use components::{Component, Input};
 use std::cell::RefCell;
 
+#[derive(Debug)]
 pub struct InputSystem {
     event_sender: std::sync::mpsc::Sender<i32>,
     event_receiver: std::sync::mpsc::Receiver<i32>,

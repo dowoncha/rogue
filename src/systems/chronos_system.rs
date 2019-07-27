@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 
 use super::{System};
+
 use entities::*;
 use components::{Component, self};
 
@@ -9,30 +10,21 @@ use components::{Component, self};
  * He has a reference to all entities
  * And allocates time to entities for actions
  */
-pub struct Chronos {
-    event_receiver: std::sync::mpsc::Receiver<String>,
-    event_sender: std::sync::mpsc::Sender<String>,
-    // turns: VecDeque<Entity>
-}
+#[derive(Debug)]
+pub struct Chronos;
 
 impl Chronos {
     pub fn new() -> Self {
-        let (sender, receiver) = std::sync::mpsc::channel();
-
-        Self {
-            event_sender: sender,
-            event_receiver: receiver,
-        }
+        Self
     }
-
-    // fn dependencies() -> [ComponentType] {
-
-    // }
 }
 
 impl System for Chronos {
     fn mount(&mut self, em: &mut EntityManager) {
-        em.subscribe(self.event_sender.clone());
+        // Create game time
+        let gametime = em.create_entity();
+        em.add_component(gametime, components::GameTime::new());
+        em.set_entity_name(gametime, "GameTime");
     }
 
     fn process(&self, em: &mut EntityManager) {
@@ -41,18 +33,35 @@ impl System for Chronos {
         // Add that entity into the turn queue
 
         // Give all entities with speed
-        let speed_entities = em.get_entities_with_components(components::Speed::get_component_type());
+        // let speed_entities = em.get_entities_with_components(components::Speed::get_component_type());
 
-        for entity in speed_entities {
-            let speed = {
-                let speed = get_component!(em, entity, components::Speed).unwrap();
+        // for entity in speed_entities {
+        //     let speed = {
+        //         let speed = get_component!(em, entity, components::Speed).unwrap();
 
-                speed.amount
-            };
+        //         speed.amount
+        //     };
 
-            if let Some(energy) = get_component!(mut, em, entity, components::Energy) {
-                energy.amount += speed;
-            }
-        }
+        //     if let Some(energy) = get_component!(mut, em, entity, components::Energy) {
+        //         energy.amount += speed;
+        //     }
+        // }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{System, Chronos, EntityManager};
+
+    #[test]
+    fn it_should_add_gametime_entity() {
+        let mut chronos = Chronos::new();
+
+        let mut em = EntityManager::new();
+
+        chronos.mount(&mut em);
+
+        let gametime = em.get_entity_by_name("GameTime")
+            .expect("No GameTime entity found");
     }
 }

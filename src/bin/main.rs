@@ -6,8 +6,9 @@ extern crate ncurses;
 extern crate rand;
 
 extern crate rlua;
-
 use rlua::{Lua, Table, RegistryKey};
+
+extern crate env_logger;
 
 extern crate rogue;
 
@@ -171,6 +172,7 @@ struct Game {
     system_manager: SystemManager,
     render_system: RenderSystem,
     input_system: InputSystem,
+    headless: bool,
     running: bool
 }
 
@@ -182,26 +184,42 @@ impl Game {
             entity_manager: EntityManager::new(),
             system_manager: SystemManager::new(),
             script_manager: ScriptManager::new(),
+            headless: false,
             running: false
         }
     }
 
-    pub fn init(&mut self) {
-        self.render_system.mount(&mut self.entity_manager);
+    pub fn init(&mut self, args: Vec<String>) {
+        info!("Initializing game");
 
-        self.input_system.mount(&mut self.entity_manager);
+        self.handle_args(args);
 
-        self.system_manager.mount(&mut self.entity_manager);
+        if !self.headless {
+            self.render_system.mount(&mut self.entity_manager);
+
+            self.input_system.mount(&mut self.entity_manager);
+        }
+
+        self.load_game_systems();
 
         self.script_manager.init();
 
         self.script_manager.load_game_assets();
 
-        self.load_game_systems();
-
         self.load_game_entities();
 
+        debug!("{:?}", self.entity_manager);
+
         self.running = true;
+    }
+
+    fn handle_args(&mut self, args: Vec<String>) {
+        info!("Handling args");
+
+        if args.iter().any(|arg| arg == "--headless") {
+            info!("Headless mode");
+            self.headless = true;
+        }
     }
 
     fn load_game_systems(&mut self) {
@@ -218,6 +236,8 @@ impl Game {
         system_manager.register_system(EventLogSystem);
         system_manager.register_system(Reaper);
         system_manager.register_system(Janitor);
+
+        self.system_manager.mount(&mut self.entity_manager);
     }
 
     fn load_game_entities(
@@ -274,11 +294,7 @@ impl Game {
 
             self.handle_input();
 
-            // Send inputs to engine
-
             self.update(elapsed);
-
-            // Get a copy of the world 
 
             self.render();
 
@@ -289,8 +305,13 @@ impl Game {
     }
 
     fn handle_input(&mut self) {
+        if self.headless { 
+            return;
+        }
+
         self.input_system.process(&mut self.entity_manager);
 
+        // check if quit was entered
         match self.input_system.get_last_input() { 
             Some(113) => {
                 self.quit();
@@ -304,13 +325,17 @@ impl Game {
     }
 
     fn render(&mut self) {
-        self.render_system.process(&mut self.entity_manager);
+        if !self.headless {
+            self.render_system.process(&mut self.entity_manager);
+        }
     }
 
     fn cleanup(&mut self) {
-        self.system_manager.unmount(&mut self.entity_manager);
+        if !self.headless {
+            self.system_manager.unmount(&mut self.entity_manager);
 
-        self.render_system.unmount();
+            self.render_system.unmount();
+        }
     }
 
     fn quit(&mut self) {
@@ -322,39 +347,33 @@ impl Game {
     }
 }
 
-struct Engine {
-    entity_manager: EntityManager,
-    system_manager: SystemManager,
-    connections: Vec<std::sync::mpsc::Receiver<String>>
-}
+#[test]
+fn it_should_have_gametime_entity() {
+    let mut game = Game::new();
 
-impl Engine {
-    pub fn new() -> Self {
-        Self {
-            entity_manager: EntityManager::new(),
-            system_manager: SystemManager::new(),
-            connections: Vec::new()
-        }
-    }
+    game.init(vec!["--headless".to_string()]);
 
-    pub fn init(&mut self) {
-
-    }
-
-    pub fn run(&mut self) {
-        loop {
-            self.system_manager.process_systems(&mut self.entity_manager);
-        }
-    }
+    game.entity_manager.get_entity_by_name("GameTime").unwrap();
 }
 
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
-    file_logger::init()
-        .expect("Failed to init file logger");
+    let args = std::env::args().collect::<Vec<_>>();
+    
+    if args.iter().any(|arg| arg == "--headless") {
+        env_logger::init()
+            .expect("Failed to init env logger");
+
+        info!("Env logger initialized");
+    } else {
+        file_logger::init()
+            .expect("Failed to init file logger");
+
+        info!("File logger initialized");
+    }
 
     let mut game = Game::new();
 
-    game.init();
+    game.init(args);
 
     game.run();
 

@@ -3,10 +3,9 @@
 
 use ncurses as nc;
 
-
+use entities::*;
 #[macro_use]
 use super::{System};
-use entities::*;
 use components::{Component, self, Position};
 
 /**
@@ -49,6 +48,7 @@ pub fn drop_ncurses() {
     nc::endwin();
 }
 
+#[derive(Debug)]
 pub struct RenderSystem {
     map_window: Option<*mut i8>,
     player_info_window: Option<*mut i8>,
@@ -148,9 +148,26 @@ impl RenderSystem {
         let speed = get_component!(entity_manager, player, components::Speed).unwrap();
         nc::mvwaddstr(window, 4, 1, &format!("Speed: {}", speed.amount));
 
+        // let (gte, _) = entity_manager.get_entity_by_name("GameTime")
+            // .expect("No gametime found");
+        // let gt = get_component!(entity_manager, gte, components::GameTime).cloned().unwrap();
+
+        // self.render_time(5, 1, gt);
+
         nc::box_(window, 0, 0);
 
         nc::wrefresh(window);
+    }
+
+    fn render_time(
+        &self,
+        x: i32,
+        y: i32,
+        gt: components::GameTime) 
+    {
+        let window = self.player_info_window.unwrap();
+
+        nc::mvwaddstr(window, x, y, &format!("{}-{} {}:{};{}", gt.year, gt.day, gt.hour, gt.min, gt.sec));
     }
 
     fn render_log(&self, entity_manager: &EntityManager) {

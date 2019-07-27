@@ -18,6 +18,5 @@ GoblinShaman = {
     max_health = 20
 }
 
-
 register_entity("Goblin", Goblin)
 register_entity("GoblinShaman", GoblinShaman)

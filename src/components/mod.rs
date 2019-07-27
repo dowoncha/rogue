@@ -50,13 +50,6 @@ impl Component for Position {
     derive_component!();
 }
 
-#[derive(Debug)]
-pub struct TestComponent;
-
-impl Component for TestComponent {
-    derive_component!();
-}
-
 /**
  * Keyboard input system
  */
@@ -145,7 +138,7 @@ impl Component for Walk {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-struct GameTime {
+pub struct GameTime {
     pub sec: i32,
     pub min: i32,
     pub hour: i32,
@@ -185,6 +178,10 @@ impl GameTime {
 
         new_time
     }
+}
+
+impl Component for GameTime {
+    derive_component!();
 }
 
 #[test]
@@ -366,3 +363,72 @@ pub struct Ownable;
 impl Component for Ownable {
     derive_component!();
 }
+
+#[derive(Debug)]
+pub struct ActionQueue {
+    queue: Vec<String>,
+}
+
+impl ActionQueue {
+    pub fn new() -> Self {
+        Self {
+            queue: Vec::new()
+        }
+    }
+}
+
+impl Component for ActionQueue {
+    derive_component!();
+}
+
+pub struct Action<T: Executable> {
+    inner: T
+}
+
+impl<T> Action<T> 
+    where T: Executable
+{
+    pub fn execute(&self, entity: Entity, components: Vec<&mut Box<dyn Component>>) {
+        self.inner.execute(entity, components);
+    }
+}
+
+pub trait Executable {
+    fn execute(&self, entity: Entity, components: Vec<&mut Box<dyn Component>>);
+}
+
+// pub struct MoveAction {
+//     dx: i32,
+//     dy: i32
+// }
+
+// impl Executable for MoveAction {
+//     fn execute(&self, entity: Entity, components: Vec<&mut Box<dyn Component>>) {
+//         // if let Some(position) = components.iter().find(|component| component == Position::get_component_type()).unwrap() {
+//         //     position.x += self.dx;
+//         //     position.y += self.dy;
+//         // }
+//     }
+// }
+
+// #[test]
+// fn it_should_move_entitys_position() {
+//     let entity = Entity {
+//         id: 0
+//     };
+
+//     let mut position: Box<dyn Component> = Box::new(Position {
+//         x: 99,
+//         y: 99
+//     });
+
+//     let action = MoveAction {
+//         dx: 1, 
+//         dy: 1
+//     };
+
+//     action.execute(entity, vec![&mut position]);
+
+//     assert_eq!(position.as_any().downcast_ref::<Position>().unwrap().x, 100);
+//     assert_eq!(position.as_any().downcast_ref::<Position>().unwrap().y, 100);
+// }

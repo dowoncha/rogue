@@ -5,6 +5,7 @@ use systems::*;
 
 use components::{self, Position, Collidable};
 
+#[derive(Debug)]
 pub struct CollisionSystem;
 
 impl CollisionSystem {

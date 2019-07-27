@@ -37,7 +37,7 @@ pub use self::render_system::RenderSystem;
 mod input_system;
 pub use self::input_system::InputSystem;
 
-pub trait System {
+pub trait System: std::fmt::Debug {
     fn mount(&mut self, _: &mut EntityManager) { }
     fn process(&self, _: &mut EntityManager) {}
 
@@ -61,6 +61,7 @@ impl SystemManager {
 
     pub fn mount(&mut self, em: &mut EntityManager) {
         for system in &mut self.systems {
+            info!("Mounting {:?}", system);
             system.mount(em);
         }
     }
@@ -86,6 +87,7 @@ impl SystemManager {
  * Reads Input components and check if they have any input commands
  * If so then set entity's walk component
  */
+#[derive(Debug)]
 pub struct WalkSystem;
 
 impl System for WalkSystem {
@@ -118,6 +120,7 @@ impl System for WalkSystem {
     }
 }
 
+#[derive(Debug)]
 pub struct PickupSystem;
 
 impl System for PickupSystem {
@@ -179,6 +182,7 @@ impl System for PickupSystem {
     }
 }
 
+#[derive(Debug)]
 pub struct MoveSystem;
 
 impl System for MoveSystem {
@@ -219,6 +223,7 @@ fn test_move_system_process() {
     em.add_component(entity, components::Walk { dx: 0, dy: 0 });
 }
 
+#[derive(Debug)]
 pub struct AiSystem;
 
 impl System for AiSystem {
@@ -231,6 +236,7 @@ impl System for AiSystem {
     }
 }
 
+#[derive(Debug)]
 pub struct AttackSystem;
 
 impl System for AttackSystem {
@@ -262,6 +268,7 @@ impl System for AttackSystem {
     }
 }
 
+#[derive(Debug)]
 pub struct DamageSystem;
 
 impl System for DamageSystem {
@@ -295,6 +302,7 @@ impl System for DamageSystem {
     }
 }
 
+#[derive(Debug)]
 pub struct Reaper;
 
 impl System for Reaper {
@@ -321,6 +329,7 @@ impl System for Reaper {
 }
 
 /// Generate loot entity for all dead entities
+#[derive(Debug)]
 pub struct LootSystem;
 
 impl System for LootSystem {
@@ -353,6 +362,7 @@ impl System for LootSystem {
     }
 }
 
+#[derive(Debug)]
 pub struct EventLogSystem;
 
 impl System for EventLogSystem {
@@ -366,6 +376,7 @@ impl System for EventLogSystem {
     }
 }
 
+#[derive(Debug)]
 pub struct Janitor;
 
 impl System for Janitor {
@@ -379,6 +390,7 @@ impl System for Janitor {
     }
 }
 
+#[derive(Debug)]
 pub struct RandomWalkAiSystem;
 
 impl System for RandomWalkAiSystem {
@@ -397,6 +409,7 @@ impl System for RandomWalkAiSystem {
     }
 }
 
+#[derive(Debug)]
 pub struct TurnSystem {
     entities: RefCell<VecDeque<Entity>>
 }
@@ -407,19 +420,8 @@ impl TurnSystem {
             entities: RefCell::new(VecDeque::new())
         }
     }
-}
 
-impl System for TurnSystem {
-    fn mount(&mut self, em: &mut EntityManager) {
-        // Add all entities with speed and energy
-        let living_entities = em.get_entities_with_components(components::Energy::get_component_type());
-
-        for entity in living_entities {
-            self.entities.borrow_mut().push_back(entity);
-        }
-    }
-
-    fn process(&self, em: &mut EntityManager) {
+    fn process_turn(&self, em: &mut EntityManager) {
         // Check if current turn's entity's still has energy
         let entities = self.entities.borrow();
         let current_turn_entity = entities.front();
@@ -455,6 +457,46 @@ impl System for TurnSystem {
             }
 
             debug!("Added turn to new entity {:?}", new_turn_entity);
+        }
+    }
+}
+
+impl System for TurnSystem {
+    fn mount(&mut self, em: &mut EntityManager) {
+        // Add all entities with speed and energy
+        let living_entities = em.get_entities_with_components(components::Energy::get_component_type());
+
+        for entity in living_entities {
+            self.entities.borrow_mut().push_back(entity);
+        }
+    }
+
+    fn process(&self, em: &mut EntityManager) {
+        const turn_length: i32 = 24;
+
+        // Get all entities with energy
+        let entities_with_energy = em.get_entities_with_components(components::Energy::get_component_type());
+
+        for entity in entities_with_energy {
+            // 1. Subtract each entity's speed from it's energy
+            {
+                let speed = { get_component!(em, entity, components::Speed).cloned() };
+                let energy = get_component!(mut, em, entity, components::Energy).unwrap();
+
+                if let Some(speed) = speed {
+                    energy.amount -= speed.amount;
+                }
+            }
+
+            // 2. If energy is less than 0, give the entity a move
+            {
+                let energy = get_component!(mut, em, entity, components::Energy).unwrap();
+
+                if energy.amount < 0 {
+                    // Move entity to back of line
+                    energy.amount += turn_length;
+                }
+            }
         }
     }
 }

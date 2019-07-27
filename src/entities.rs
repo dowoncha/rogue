@@ -4,7 +4,7 @@ use components::{self, Component, ComponentType};
 
 #[derive(Copy, Clone, Debug, PartialEq, PartialOrd, Hash, Eq)]
 pub struct Entity {
-    id: i32,
+    pub id: i32,
 }
 
 impl Entity {
@@ -23,11 +23,21 @@ impl std::fmt::Display for Entity {
     }
 }
 
+pub struct ComponentTable {
+    component_data_tables: HashMap<ComponentType, HashMap<Entity, Box<dyn Component>>>,
+}
+
 pub struct EntityManager {
     entities: Vec<Entity>,
     entity_names: HashMap<Entity, String>,
     component_data_tables: HashMap<ComponentType, HashMap<Entity, Box<dyn Component>>>,
     listeners: Vec<std::sync::mpsc::Sender<String>>
+}
+
+pub struct GameObject {
+    entity: Entity,
+    name: String,
+    prototype: Option<Entity>,
 }
 
 impl EntityManager {
@@ -216,9 +226,9 @@ impl std::fmt::Debug for EntityManager {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Entities")?;
 
-        for entity in &self.entities {
-            writeln!(f, "{:?}", entity)?;
-        }
+        // for entity in &self.entities {
+        //     writeln!(f, "{:?}", entity)?;
+        // }
 
         Ok(())
     }
@@ -226,8 +236,14 @@ impl std::fmt::Debug for EntityManager {
 
 #[cfg(test)]
 mod entity_manager_tests {
-    use components::{TestComponent};
     use super::*;
+
+    #[derive(Debug, PartialEq)]
+    pub struct TestComponent;
+
+    impl Component for TestComponent {
+        derive_component!();
+    }
 
     #[test]
     fn test_create_entity() {
@@ -244,18 +260,18 @@ mod entity_manager_tests {
         let mut entity_manager = EntityManager::new();
         let entity = entity_manager.create_entity();
 
-        let test_component = TestComponent;
+        // let component: Option<&Box<dyn Component>> =
+        //     entity_manager.get_component(entity, TestComponent::get_component_type());
+        // assert!(component.is_none());
 
-        let component: Option<&Box<dyn Component>> =
-            entity_manager.get_component(entity, TestComponent::get_component_type());
-        assert!(component.is_none());
+        // let test_component = TestComponent;
 
-        entity_manager.add_component(entity, test_component);
+        // entity_manager.add_component(entity, test_component);
 
-        let component: Option<&Box<dyn Component>> =
-            entity_manager.get_component(entity, TestComponent::get_component_type());
+        // let component: Option<&Box<dyn Component>> =
+        //     entity_manager.get_component(entity, TestComponent::get_component_type());
 
-        assert!(component.is_some());
+        // assert!(component.is_some());
     }
 
     #[test]
@@ -275,4 +291,19 @@ mod entity_manager_tests {
 
         assert_eq!(entities.len(), 1);
     }
+
+    #[test]
+    fn test_entity_metaname() {
+        let mut em = EntityManager::new();
+
+        let entity = em.create_entity();
+
+        em.set_entity_name(entity, "the beast");
+
+        let (expected_entity, _) = em.get_entity_by_name("the beast").unwrap();
+
+        assert_eq!(entity, expected_entity);
+    }
+
+    // IT should fail to set name if the name is already set
 }
