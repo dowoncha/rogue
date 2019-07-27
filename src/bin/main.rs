@@ -7,7 +7,7 @@ extern crate rand;
 
 extern crate rlua;
 
-use rlua::{Lua};
+use rlua::{Lua, Table, RegistryKey};
 
 extern crate rogue;
 
@@ -16,28 +16,18 @@ use rogue::{
     Component,
     file_logger, 
     EntityManager, 
-    SystemManager,
-    drop_ncurses, 
-    System, 
-    InputSystem, 
-    RenderSystem, 
-    CollisionSystem,
-    AttackSystem,
     Rect,
-    WalkSystem,
-    DamageSystem,
-    MoveSystem,
     MapBuilder,
-    Chronos,
-    EventLogSystem,
-    RandomWalkAiSystem,
     Map,
-    Janitor
 };
+
+use rogue::systems::*;
 
 use rogue::map::{simple_map_gen};
 use rogue::components::{self, Position, Input, Render, RenderLayer, Collidable, Walk};
 
+use std::sync::{Arc, Mutex};
+use std::collections::HashMap;
 use std::time::{Instant, Duration};
 
 fn create_map_entities(map: &Map, em: &mut EntityManager) {
@@ -62,14 +52,121 @@ fn create_map_entities(map: &Map, em: &mut EntityManager) {
 }
 
 fn populate_map(map: &Map, em: &mut EntityManager) {
+    // let (goblin, _) = em.get_entity_by_name("Goblin").unwrap();
+
     // Create a monster at the center of each room
     for room in &map.rooms {
         let center = room.center();
         rogue::monsters::create_zombie(em, center.0, center.1);
+
+        // let g_entity = em.create_entity();
+
+        // em.add_component(g_entity, components::Prototype { prototype: goblin });
+        // em.add_component(g_entity, components::Position { x: center.0 + 1, y: center.1 + 1 });
+
+        // em.find_entity(components::Metaname("Goblin"));
+    }
+}
+
+fn setup_register_entity(lua: &Lua) -> Arc<Mutex<HashMap<String, RegistryKey>>> {
+    let entities = Arc::new(Mutex::new(HashMap::new()));
+
+    lua.context(|lua_ctx| {
+
+        let register_entity = {
+            let entities = entities.clone();
+
+            let register_entity = lua_ctx.create_function(move |ctx, (name, table): (String, Table)| {
+                let key = ctx.create_registry_value(table)
+                    .expect("should have inserted in registry");
+
+                entities.lock().unwrap().insert(name, key);
+
+                Ok(())
+            }).unwrap();
+
+            register_entity
+        };
+
+        lua_ctx.globals().set("register_entity", register_entity).unwrap();
+    });
+
+    entities
+}
+
+struct ScriptManager {
+    lua: Lua,
+    entities: Arc<Mutex<HashMap<String, RegistryKey>>>
+}
+
+impl ScriptManager {
+    pub fn new() -> Self {
+        Self {
+            lua: Lua::new(),
+            entities: Arc::new(Mutex::new(HashMap::new()))
+        }
+    }
+
+    pub fn init(&mut self) {
+        self.load_lua_globals();
+
+        self.load_game_assets();
+    }
+
+    fn load_lua_globals(&mut self) {
+        self.entities = setup_register_entity(&self.lua);
+    }
+
+    pub fn load_game_assets(&self) {
+        self.load_asset("assets/goblin.lua");
+    }
+
+    pub fn load_asset(
+        &self, 
+        asset_name: &str
+    ) {
+        use std::io::Read;
+
+        let mut buffer = String::new();
+        let mut asset_file = std::fs::File::open(asset_name).unwrap();
+
+        asset_file.read_to_string(&mut buffer).unwrap();
+
+        self.lua.context(|lua_ctx| {
+            lua_ctx.load(&buffer)
+                .exec()
+                .unwrap();
+        });
+    }
+}
+
+fn load_entity(entity_manager: &mut EntityManager, name: &str, table: Table) {
+    let entity = entity_manager.create_entity();
+
+    entity_manager.set_entity_name(entity, name);
+
+    let glyph: rlua::Result<String> = table.get("glyph");
+
+    if let Ok(glyph) = glyph {
+        let glyph = glyph.chars().next().unwrap();
+        entity_manager.add_component(entity, components::Render { glyph: glyph, layer: components::RenderLayer::Player });
+    }
+
+    let max_health: rlua::Result<i32> = table.get("max_health");
+
+    if let Ok(max_health) = max_health {
+        entity_manager.add_component(entity, components::Health { health: max_health, max_health: max_health });
+    }
+
+    let collidable: rlua::Result<bool> = table.get("collidable");
+
+    if let Ok(collidable) = collidable {
+
     }
 }
 
 struct Game {
+    script_manager: ScriptManager,
     entity_manager: EntityManager,
     system_manager: SystemManager,
     render_system: RenderSystem,
@@ -84,6 +181,7 @@ impl Game {
             render_system: RenderSystem::new(),
             entity_manager: EntityManager::new(),
             system_manager: SystemManager::new(),
+            script_manager: ScriptManager::new(),
             running: false
         }
     }
@@ -95,7 +193,9 @@ impl Game {
 
         self.system_manager.mount(&mut self.entity_manager);
 
-        self.load_game_assets();
+        self.script_manager.init();
+
+        self.script_manager.load_game_assets();
 
         self.load_game_systems();
 
@@ -107,26 +207,24 @@ impl Game {
     fn load_game_systems(&mut self) {
         let system_manager = &mut self.system_manager;
         system_manager.register_system(Chronos::new());
-        system_manager.register_system(rogue::TurnSystem::new());
-        // system_manager.register_system(RenderSystem::new());
-        // system_manager.register_system(InputSystem::new());
+        system_manager.register_system(TurnSystem::new());
         system_manager.register_system(RandomWalkAiSystem);
         system_manager.register_system(WalkSystem);
         system_manager.register_system(CollisionSystem);
         system_manager.register_system(AttackSystem);
         system_manager.register_system(DamageSystem);
         system_manager.register_system(MoveSystem);
-        system_manager.register_system(rogue::LootSystem);
+        system_manager.register_system(LootSystem);
         system_manager.register_system(EventLogSystem);
-        system_manager.register_system(rogue::Reaper);
+        system_manager.register_system(Reaper);
         system_manager.register_system(Janitor);
     }
 
     fn load_game_entities(
         &mut self, 
     ) {
-        let map_width = 200;
-        let map_height = 200;
+        let map_width = 100;
+        let map_height = 100;
 
         // let map = create_map();
         let map = simple_map_gen(map_width, map_height);
@@ -143,60 +241,6 @@ impl Game {
         }
 
         populate_map(&map, &mut self.entity_manager);
-    }
-
-    fn load_game_assets(&mut self) {
-        self.load_asset("assets/goblin.lua");
-    }
-
-    fn load_asset(&mut self, asset_name: &str) {
-        use std::io::Read;
-
-        let lua = Lua::new();
-
-        let entities = std::sync::Arc::new(std::sync::Mutex::new(std::collections::HashMap::new()));
-
-        lua.context(|lua_ctx| {
-            let entities = std::sync::Arc::clone(&entities);
-            let register_entity = lua_ctx.create_function(move |_, (name, entity): (String, std::collections::HashMap<String, String>)| {
-                entities.lock().unwrap().insert(name, entity);
-
-                Ok(())
-            }).unwrap();
-            lua_ctx.globals().set("register_entity", register_entity).unwrap();
-        });
-
-        let mut buffer = String::new();
-        let mut asset_file = std::fs::File::open(asset_name).unwrap();
-
-        asset_file.read_to_string(&mut buffer).unwrap();
-
-        lua.context(|lua_ctx| {
-            lua_ctx.load(&buffer)
-                .exec().unwrap();
-        });
-
-        for (name, components) in entities.lock().unwrap().iter() {
-            self.load_entity(name, components);
-        }
-    }
-
-    fn load_entity(&mut self, name: &str, components: &std::collections::HashMap<String, String>) {
-        let entity = self.entity_manager.create_entity();
-
-        for (key, value) in components.iter() {
-            match key.as_str() {
-                "glyph" => {
-                    let glyph = value.chars().next().unwrap();
-                    self.entity_manager.add_component(entity, components::Render { glyph: glyph, layer: components::RenderLayer::Player });
-                }
-                "max_health" => {
-                    let max_health = value.parse::<i32>().unwrap();
-                    self.entity_manager.add_component(entity, components::Health { health: max_health, max_health: max_health });
-                }
-                _ => { }
-            }
-        }
     }
 
     fn create_player(
@@ -216,7 +260,7 @@ impl Game {
             Box::new(Walk::new()),
             Box::new(components::Log::new()),
             Box::new(components::Energy { amount: 0 }),
-            Box::new(components::Speed { amount: 50 })
+            Box::new(components::Speed { amount: 10 })
         ]
     }
 

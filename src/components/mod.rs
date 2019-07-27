@@ -6,6 +6,8 @@ use super::{Entity};
 
 pub type ComponentType = TypeId;
 
+#[macro_use]
+mod macros {
 // TODO:
 // Convert into procedural derive macro
 #[macro_export]
@@ -28,8 +30,9 @@ macro_rules! derive_component {
         }
     }
 }
+}
 
-pub trait Component {
+pub trait Component: std::fmt::Debug {
     fn get_component_type() -> ComponentType where Self: Sized;
     fn get_type(&self) -> ComponentType;
     fn as_any(&self) -> &dyn Any;
@@ -47,6 +50,7 @@ impl Component for Position {
     derive_component!();
 }
 
+#[derive(Debug)]
 pub struct TestComponent;
 
 impl Component for TestComponent {
@@ -65,6 +69,7 @@ pub enum Key {
     q
 }
 
+#[derive(Debug, Copy, Clone)]
 pub struct Input {
     pub input: i32
 }
@@ -81,19 +86,21 @@ impl Component for Input {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Timed;
 
 impl Component for Timed {
     derive_component!();
 }
 
-#[derive(PartialEq, PartialOrd, Eq, Ord, Copy, Clone)]
+#[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Copy, Clone)]
 pub enum RenderLayer {
     Player = 1000,
     Item = 100,
     Map = 10
 }
 
+#[derive(Debug)]
 pub struct Render {
     pub glyph: char,
     pub layer: RenderLayer
@@ -105,6 +112,7 @@ impl Component for Render {
     derive_component!();
 }
 
+#[derive(Debug)]
 pub struct Collidable;
 
 impl Collidable {
@@ -190,6 +198,7 @@ fn test_game_time_tick() {
     assert_eq!(new_time, new_time2);
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Health {
     pub health: i32,
     pub max_health: i32
@@ -199,7 +208,7 @@ impl Component for Health {
     derive_component!();
 }
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Damage {
     pub amount: i32,
     pub target: Entity
@@ -209,7 +218,7 @@ impl Component for Damage {
     derive_component!();
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Name {
     pub name: String
 }
@@ -218,12 +227,14 @@ impl Component for Name {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Player;
 
 impl Component for Player {
     derive_component!();
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct Log {
     pub history: Vec<String>
 }
@@ -240,7 +251,7 @@ impl Component for Log {
     derive_component!();
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Event {
     Collision(Entity)
 }
@@ -249,12 +260,14 @@ impl Component for Event {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct RandomWalkAi;
 
 impl Component for RandomWalkAi {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Energy {
     pub amount: i32
 }
@@ -263,6 +276,7 @@ impl Component for Energy {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Speed {
     pub amount: i32
 }
@@ -271,6 +285,7 @@ impl Component for Speed {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Pickup {
     target: Entity
 }
@@ -283,18 +298,21 @@ impl Command for Pickup {
 
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Item;
 
 impl Component for Item {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Consumable;
 
 impl Component for Consumable {
     derive_component!();
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct Inventory {
     items: Vec<Entity>
 }
@@ -309,12 +327,14 @@ impl Component for Inventory {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Turn;
 
 impl Component for Turn {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Prototype {
     pub prototype: Entity
 }
@@ -323,6 +343,7 @@ impl Component for Prototype {
     derive_component!();
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Attributes {
     strength: i32,
     dexterity: i32,
@@ -339,6 +360,7 @@ impl Component for Attributes {
 trait Command: Component {
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Ownable;
 
 impl Component for Ownable {

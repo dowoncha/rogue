@@ -3,8 +3,11 @@
 
 use ncurses as nc;
 
-use super::{System, EntityManager, Component, Entity};
-use components::{self, Render, Position};
+
+#[macro_use]
+use super::{System};
+use entities::*;
+use components::{Component, self, Position};
 
 /**
  * Render code
@@ -76,7 +79,7 @@ impl RenderSystem {
         let player_info_window_x = 0;
         let player_info_window_y = 0;
         let player_info_window_width = 20;
-        let player_info_window_height = 5;
+        let player_info_window_height = 10;
 
         let player_info_window = nc::newwin(
             player_info_window_height, 
@@ -98,7 +101,7 @@ impl RenderSystem {
         nc::newwin(height, width, y, x)
     }
 
-    fn get_camera_position(&self, em: &EntityManager) -> Position {
+    fn get_camera_position(&self, em: &EntityManager) -> components::Position {
         let map_window = self.map_window.unwrap();
 
         let player = em.get_entities_with_components(components::Player::get_component_type())[0];
@@ -131,7 +134,6 @@ impl RenderSystem {
 
         // Player name
         let player = entity_manager.get_entities_with_components(components::Player::get_component_type())[0];
-        let player_components = entity_manager.get_entity_all_components(player);
 
         let player_name = get_component!(entity_manager, player, components::Name).unwrap();
 
@@ -139,6 +141,12 @@ impl RenderSystem {
 
         let player_health = get_component!(entity_manager, player, components::Health).unwrap();
         nc::mvwaddstr(window, 2, 1, &format!("HP: {}/{}", player_health.health, player_health.max_health));
+
+        let energy = get_component!(entity_manager, player, components::Energy).unwrap();
+        nc::mvwaddstr(window, 3, 1, &format!("Energy: {}", energy.amount));
+
+        let speed = get_component!(entity_manager, player, components::Speed).unwrap();
+        nc::mvwaddstr(window, 4, 1, &format!("Speed: {}", speed.amount));
 
         nc::box_(window, 0, 0);
 
@@ -167,10 +175,10 @@ impl RenderSystem {
     }
 
     fn render_map(&self, entity_manager: &EntityManager) {
-        let mut entities: Vec<_> = entity_manager.get_entities_with_components(Render::get_component_type())
+        let mut entities: Vec<_> = entity_manager.get_entities_with_components(components::Render::get_component_type())
             .iter()
-            .filter_map(|entity| get_component!(entity_manager, *entity, Render).map(|render| (entity, render)))
-            .filter_map(|(entity, render)| get_component!(entity_manager, *entity, Position).map(|position| (*entity, render.clone(), position.clone())))
+            .filter_map(|entity| get_component!(entity_manager, *entity, components::Render).map(|render| (entity, render)))
+            .filter_map(|(entity, render)| get_component!(entity_manager, *entity, components::Position).map(|position| (*entity, render.clone(), position.clone())))
             .collect();
 
         entities.sort_by(|(_, render_a, _), (_, render_b, _)| render_a.layer.cmp(&render_b.layer));

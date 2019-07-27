@@ -1,7 +1,8 @@
 use ncurses as nc;
 
-use super::{System, Component, EntityManager};
-use components::{Input};
+use super::{System};
+use entities::*;
+use components::{Component, Input};
 use std::cell::RefCell;
 
 pub struct InputSystem {
@@ -140,17 +141,6 @@ mod input_system_tests {
         // let input = component.as_any_mut().downcast_mut::<Input>().unwrap();
 
         // assert_eq!(input.events[0], InputEvent::MovePlayer(0, -1));
-    }
-
-    #[test]
-    fn it_should_create_input_thread_on_mount() {
-        let mut input_system = InputSystem::new();
-
-        input_system.mount();
-
-        let input_thread_handle = input_system.get_thread_handle();
-
-        assert!(input_thread_handle.is_some());
     }
 
     // #[test]
