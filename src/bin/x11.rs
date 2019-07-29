@@ -199,7 +199,7 @@ impl<R> Game<R>
             entity_manager: EntityManager::new(),
             system_manager: SystemManager::new(),
             script_manager: ScriptManager::new(),
-            game_state: GameState::Running,
+            game_state: GameState::MainMenu,
             renderer: <R>::new(),
             headless: false,
             running: false
@@ -240,8 +240,6 @@ impl<R> Game<R>
     }
 
     fn load_game_systems(&mut self) {
-        info!("Loading game systems");
-
         let system_manager = &mut self.system_manager;
         system_manager.register_system(Chronos::new());
         system_manager.register_system(TurnSystem::new());
@@ -262,14 +260,11 @@ impl<R> Game<R>
     fn load_game_entities(
         &mut self, 
     ) {
-        info!("Loading Game Entities");
-
         let map_width = 100;
         let map_height = 100;
 
+        // let map = create_map();
         let map = simple_map_gen(map_width, map_height);
-
-        info!("Map generated");
 
         let player_pos = map.rooms.first().unwrap().center();
 
@@ -283,11 +278,7 @@ impl<R> Game<R>
             self.entity_manager.add_boxed_component(player, component);
         }
 
-        info!("Player created");
-
         populate_map(&map, &mut self.entity_manager);
-
-        info!("Map populated");
     }
 
     fn create_player(
@@ -357,7 +348,7 @@ impl<R> Game<R>
     }
 
     fn render(&mut self) {
-        if self.headless {
+        if !self.headless {
             return;
         }
 
@@ -475,4 +466,3 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
-

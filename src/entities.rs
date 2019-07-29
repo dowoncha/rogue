@@ -62,10 +62,11 @@ impl EntityManager {
         self.entity_names.insert(entity, name.to_string());
     }
 
-    pub fn get_entity_by_name(&self, name: &str) -> Option<(Entity, String)> {
+    pub fn get_entity_by_name(&self, name: &str) -> Option<Entity> {
         self.entity_names.iter()
             .find(|(_, search)| *search == name)
-            .map(|(entity, name)| (*entity, name.clone()))
+            .map(|(entity, _)| entity)
+            .cloned()
     }
 
     pub fn extend(&mut self, prototype: Entity, child: Entity) {
@@ -300,7 +301,7 @@ mod entity_manager_tests {
 
         em.set_entity_name(entity, "the beast");
 
-        let (expected_entity, _) = em.get_entity_by_name("the beast").unwrap();
+        let expected_entity = em.get_entity_by_name("the beast").unwrap();
 
         assert_eq!(entity, expected_entity);
     }

@@ -41,8 +41,6 @@ use std::cell::RefCell;
 pub mod components;
 pub use components::{Component, ComponentType};
 
-
-
 mod entities;
 pub use entities::{Entity, EntityManager};
 
@@ -50,6 +48,7 @@ pub mod map;
 mod types;
 pub mod monsters;
 pub mod items;
+pub mod renderer;
 
 #[macro_use]
 pub mod systems;
