@@ -23,6 +23,7 @@ extern crate log;
 extern crate rand;
 extern crate rand_distr;
 extern crate cgmath;
+extern crate rlua;
 
 extern crate serde;
 extern crate serde_json;

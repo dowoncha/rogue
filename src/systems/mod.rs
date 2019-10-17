@@ -44,7 +44,7 @@ mod collide_system;
 pub use self::collide_system::CollisionSystem;
 
 mod render_system;
-pub use self::render_system::RenderSystem;
+pub use self::render_system::{RenderSystem, CursesRenderer};
 
 mod input_system;
 pub use self::input_system::InputSystem;

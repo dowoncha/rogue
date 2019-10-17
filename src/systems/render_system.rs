@@ -8,6 +8,37 @@ use entities::*;
 use super::{System};
 use components::{Component, self, Position};
 
+#[derive(Debug)]
+pub struct CursesRenderer {
+    windows: Vec<*mut i8>
+}
+
+impl CursesRenderer {
+    pub fn new() -> Self {
+        Self {
+            windows: Vec::new()
+        }
+    }
+
+    pub fn init() {
+        init_ncurses();
+    }
+
+    pub fn create_window(&mut self, height: i32, width: i32, y: i32, x: i32) -> *mut i8 {
+        let handle = nc::newwin(height, width, y, x);
+
+        self.windows.push(handle);
+
+        handle
+    }
+}
+
+impl Drop for CursesRenderer {
+    fn drop(&mut self) {
+        drop_ncurses();
+    }
+}
+
 /**
  * Render code
  */
@@ -50,6 +81,7 @@ pub fn drop_ncurses() {
 
 #[derive(Debug)]
 pub struct RenderSystem {
+    renderer: CursesRenderer,
     map_window: Option<*mut i8>,
     player_info_window: Option<*mut i8>,
     log_window: Option<*mut i8>
@@ -58,6 +90,7 @@ pub struct RenderSystem {
 impl RenderSystem {
     pub fn new() -> Self {
         Self {
+            renderer: CursesRenderer::new(),
             map_window: None,
             player_info_window: None,
             log_window: None
@@ -157,17 +190,6 @@ impl RenderSystem {
         nc::box_(window, 0, 0);
 
         nc::wrefresh(window);
-    }
-
-    fn render_time(
-        &self,
-        x: i32,
-        y: i32,
-        gt: components::GameTime) 
-    {
-        let window = self.player_info_window.unwrap();
-
-        nc::mvwaddstr(window, x, y, &format!("{}-{} {}:{};{}", gt.year, gt.day, gt.hour, gt.min, gt.sec));
     }
 
     fn render_log(&self, entity_manager: &EntityManager) {
