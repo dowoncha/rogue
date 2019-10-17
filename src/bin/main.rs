@@ -67,6 +67,7 @@ struct Game {
     render_system: RenderSystem,
     input_system: InputSystem,
     headless: bool,
+    initialized: bool,
     running: bool
 }
 
@@ -80,6 +81,7 @@ impl Game {
             renderer: CursesRenderer::new(),
             // script_manager: ScriptManager::new(),
             headless: false,
+            initialized: false,
             running: false
         }
     }
@@ -105,7 +107,7 @@ impl Game {
 
         debug!("{:?}", self.entity_manager);
 
-        self.running = true;
+        self.initialized = true;
     }
 
     fn handle_args(&mut self, args: Vec<String>) {
@@ -180,6 +182,12 @@ impl Game {
     }
 
     pub fn run(&mut self) {
+        if !self.initialized {
+            panic!("Game was not initialized");
+        }
+
+        self.running = true;
+
         let mut last_time = Instant::now();
 
         while self.is_running() {
@@ -240,6 +248,52 @@ impl Game {
     fn is_running(&self) -> bool {
         self.running
     }
+}
+
+trait Renderer {
+    fn init(&mut self);
+}
+
+struct GameClient<R> {
+    renderer: R,
+    initialized: bool,
+    running: bool
+}
+
+impl<R> GameClient<R: Renderer> {
+    pub fn new() -> Self {
+        Self {
+            renderer: R,
+            initialized: false,
+            running: false
+        }
+    }
+
+    pub fn init(&mut self, args: Vec<String>) {
+        self.renderer.init();
+
+        self.initialized = true;
+    }
+
+    pub fn run(&mut self) {
+        if !self.initialized {
+            panic!("Game client was not initialized");
+        }
+
+        self.running = true;
+
+        while self.running {
+
+        }
+    }
+}
+
+#[test]
+fn game_should_init_renderer() {
+    let mut game = Game::new();
+    game.init(vec![String::from("--headless")]);
+
+    assert!(game.initialized);
 }
 
 #[test]
