@@ -5,6 +5,7 @@ authors = ["dowon Cha <dowoncha@live.unc.edu>"]
 
 [dependencies]
 backtrace = "0.3"
+cgmath = "0.17.0"
 env_logger = "0.4.3"
 log = "0.4.0"
 rand = "0.7"

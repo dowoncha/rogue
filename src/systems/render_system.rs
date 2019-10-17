@@ -192,6 +192,8 @@ impl RenderSystem {
     }
 
     fn render_map(&self, entity_manager: &EntityManager) {
+        use std::convert::TryInto;
+
         let mut entities: Vec<_> = entity_manager.get_entities_with_components(components::Render::get_component_type())
             .iter()
             .filter_map(|entity| get_component!(entity_manager, *entity, components::Render).map(|render| (entity, render)))
@@ -213,7 +215,11 @@ impl RenderSystem {
         for (_, render, position) in entities.iter() {
             let world_pos = self.get_world_position(&camera_pos, &position);
             if world_pos.x > 0 && world_pos.y > 0 && world_pos.x < map_window_width - 1 && world_pos.y < map_window_height - 1 {
-                nc::mvwaddch(map_window, world_pos.y, world_pos.x, render.glyph as u64);
+                if cfg!(macos) {
+                    nc::mvwaddch(map_window, world_pos.y, world_pos.x, (render.glyph as u32).try_into().unwrap());
+                } else {
+                    nc::mvwaddch(map_window, world_pos.y, world_pos.x, (render.glyph as u64).try_into().unwrap());
+                }
             }
         }
 

@@ -13,12 +13,9 @@ extern crate env_logger;
 extern crate rogue;
 
 use rogue::{
-    Entity,
     Component,
     file_logger, 
     EntityManager, 
-    Rect,
-    MapBuilder,
     Map,
 };
 

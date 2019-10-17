@@ -1,9 +1,8 @@
 INFO - File logger initialized
 INFO - Initializing game
 INFO - Handling args
-INFO - Screen size, 94x49
+INFO - Screen size, 182x85
 INFO - Mounting Chronos
-INFO - Mounting chronos system
 INFO - Mounting TurnSystem { entities: RefCell { value: [] } }
 INFO - Mounting RandomWalkAiSystem
 INFO - Mounting WalkSystem
@@ -18,24 +17,27 @@ INFO - Mounting Janitor
 DEBUG - Entities
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
-DEBUG - Input Thread: 100
-DEBUG - Received input 100
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
 DEBUG - Processing random walk ai system
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
 DEBUG - Processing collision
-DEBUG - Moving entity, 10004
-DEBUG - Moving entity, 10009
-DEBUG - Moving entity, 10012
-DEBUG - Moving entity, 10001
-DEBUG - Moving entity, 10011
 DEBUG - Moving entity, 10005
 DEBUG - Moving entity, 10008
-DEBUG - Moving entity, 10010
 DEBUG - Moving entity, 10007
-DEBUG - Moving entity, 10002
-DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
 DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
@@ -45,39 +47,21 @@ DEBUG - Processing random walk ai system
 DEBUG - WalkSystem ----- Processing
 DEBUG - Walking Entity { id: 10001 }, (1, 0)
 DEBUG - Processing collision
-DEBUG - Moving entity, 10004
-DEBUG - Moving entity, 10009
-DEBUG - Moving entity, 10012
-DEBUG - Moving entity, 10001
-DEBUG - Moving entity, 10011
 DEBUG - Moving entity, 10005
 DEBUG - Moving entity, 10008
-DEBUG - Moving entity, 10010
 DEBUG - Moving entity, 10007
-DEBUG - Moving entity, 10002
-DEBUG - Moving entity, 10006
-DEBUG - Moving entity, 10003
-DEBUG - Rendering
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Input Thread: 100
-DEBUG - Received input 100
-DEBUG - Processing random walk ai system
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking Entity { id: 10001 }, (1, 0)
-DEBUG - Processing collision
-DEBUG - Moving entity, 10004
-DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10014
 DEBUG - Moving entity, 10012
-DEBUG - Moving entity, 10001
-DEBUG - Moving entity, 10011
-DEBUG - Moving entity, 10005
-DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10013
 DEBUG - Moving entity, 10010
-DEBUG - Moving entity, 10007
-DEBUG - Moving entity, 10002
-DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10011
 DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
@@ -87,19 +71,257 @@ DEBUG - Processing random walk ai system
 DEBUG - WalkSystem ----- Processing
 DEBUG - Walking Entity { id: 10001 }, (0, 1)
 DEBUG - Processing collision
-DEBUG - Moving entity, 10004
-DEBUG - Moving entity, 10009
-DEBUG - Moving entity, 10012
-DEBUG - Moving entity, 10001
-DEBUG - Moving entity, 10011
 DEBUG - Moving entity, 10005
 DEBUG - Moving entity, 10008
-DEBUG - Moving entity, 10010
 DEBUG - Moving entity, 10007
-DEBUG - Moving entity, 10002
-DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
 DEBUG - Moving entity, 10003
-INFO - Collision(Entity { id: 7908 })
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 5634 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 9720 })
+INFO - Collision(Entity { id: 635 })
+DEBUG - Rendering
+DEBUG - Input Thread: 100
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 5633 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 6546 })
+INFO - Collision(Entity { id: 5634 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 5634 })
+INFO - Collision(Entity { id: 972 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 6547 })
+INFO - Collision(Entity { id: 5634 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 3024 })
+INFO - Collision(Entity { id: 9719 })
+INFO - Collision(Entity { id: 6448 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 8520 })
+INFO - Collision(Entity { id: 6547 })
+INFO - Collision(Entity { id: 5633 })
+INFO - Collision(Entity { id: 637 })
+DEBUG - Rendering
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10014
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10013
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10015
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10001
+DEBUG - Moving entity, 10009
+INFO - Collision(Entity { id: 6448 })
+INFO - Collision(Entity { id: 636 })
+INFO - Collision(Entity { id: 1957 })
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
