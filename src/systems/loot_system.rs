@@ -1,7 +1,7 @@
 use super::{System};
 
-use entities::EntityManager;
-use components::{Component, self};
+use crate::entities::EntityManager;
+use crate::components::{Component, self};
 
 /// Generate loot entity for all dead entities
 #[derive(Debug)]

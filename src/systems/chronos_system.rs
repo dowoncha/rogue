@@ -1,7 +1,7 @@
 use super::{System};
 
-use entities::*;
-use components::{self};
+use crate::entities::*;
+use crate::components::{self};
 
 /**
  * Chronos is the time keeper

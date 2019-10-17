@@ -1,7 +1,6 @@
-use entities::EntityManager;
-use components::{Component, self};
-
 use super::System;
+use crate::entities::EntityManager;
+use crate::components::{Component, self};
 
 #[derive(Debug)]
 pub struct PickupSystem;

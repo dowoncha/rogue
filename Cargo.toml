@@ -20,6 +20,7 @@ error-chain = "*"
 lazy_static = "*"
 serde_json = "*"
 rlua = "^0.16.3"
+async-std = "0.99.10"
 
 [dependencies.serde]
 version = "*"

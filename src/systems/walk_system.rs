@@ -1,6 +1,6 @@
 use super::{System};
-use entities::*;
-use components::{Component, self};
+use crate::entities::*;
+use crate::components::{Component, self};
 
 /**
  * Reads Input components and check if they have any input commands

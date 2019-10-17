@@ -1,5 +1,5 @@
 use super::System;
-use entities::{EntityManager};
+use crate::entities::{EntityManager};
 
 #[derive(Debug)]
 pub struct AiSystem;

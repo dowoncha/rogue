@@ -1,5 +1,5 @@
-use components::{Component, ComponentType};
-use entities::*;
+use crate::components::{Component, ComponentType};
+use crate::entities::*;
 
 #[macro_use]
 pub mod macros {

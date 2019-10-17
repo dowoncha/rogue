@@ -3,10 +3,9 @@
 
 use ncurses as nc;
 
-use entities::*;
-#[macro_use]
+use crate::entities::*;
 use super::{System};
-use components::{Component, self, Position};
+use crate::components::{Component, self, Position};
 
 #[derive(Debug)]
 pub struct CursesRenderer {

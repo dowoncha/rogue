@@ -1,6 +1,6 @@
 use super::{System};
-use components::{Component, self};
-use entities::*;
+use crate::components::{Component, self};
+use crate::entities::*;
 
 #[derive(Debug)]
 pub struct DamageSystem;

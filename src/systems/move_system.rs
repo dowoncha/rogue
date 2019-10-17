@@ -1,6 +1,6 @@
 use super::System;
-use components::{Component, self};
-use entities::{EntityManager};
+use crate::components::{Component, self};
+use crate::entities::{EntityManager};
 
 #[derive(Debug)]
 pub struct MoveSystem;

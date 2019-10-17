@@ -1,6 +1,6 @@
 use super::System;
-use entities::{Entity, EntityManager};
-use components::{Component, self};
+use crate::entities::{Entity, EntityManager};
+use crate::components::{Component, self};
 
 use std::cell::RefCell;
 use std::collections::VecDeque;

@@ -1,8 +1,7 @@
 use super::{System};
-use entities::{EntityManager};
-use components::{Component, self};
+use crate::entities::{EntityManager};
+use crate::components::{Component, self};
 use rand::{Rng, thread_rng};
-
 
 #[derive(Debug)]
 pub struct RandomWalkAiSystem;

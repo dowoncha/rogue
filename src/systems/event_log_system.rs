@@ -1,6 +1,6 @@
 use super::{System};
-use entities::{EntityManager};
-use components::{Component, self};
+use crate::entities::{EntityManager};
+use crate::components::{Component, self};
 
 #[derive(Debug)]
 pub struct EventLogSystem;

@@ -1,5 +1,5 @@
 use super::{System};
-use entities::{EntityManager};
+use crate::entities::{EntityManager};
 
 pub struct SystemManager {
     systems: Vec<Box<dyn System>>

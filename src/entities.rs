@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use components::{self, Component, ComponentType};
+use crate::components::{self, Component, ComponentType};
 
 #[derive(Copy, Clone, Debug, PartialEq, PartialOrd, Hash, Eq)]
 pub struct Entity {
