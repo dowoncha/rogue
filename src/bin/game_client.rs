@@ -1,18 +1,34 @@
+extern crate rogue;
+
+use rogue::systems::CursesRenderer;
+
+impl Renderer for CursesRenderer {
+  fn new() -> Self {
+    Self::new()
+  }
+
+  fn init(&mut self) {
+
+  }
+}
 
 trait Renderer {
-    fn init(&mut self);
+  fn new() -> Self; 
+  fn init(&mut self);
 }
 
-struct GameClient<R> {
-    renderer: R,
-    initialized: bool,
-    running: bool
+struct GameClient<R: Renderer> {
+  renderer: R,
+  initialized: bool,
+  running: bool
 }
 
-impl<R> GameClient<R: Renderer> {
+impl<R> GameClient<R> 
+  where R: Renderer
+{
     pub fn new() -> Self {
         Self {
-            renderer: R,
+            renderer: R::new(),
             initialized: false,
             running: false
         }
@@ -35,4 +51,14 @@ impl<R> GameClient<R: Renderer> {
 
         }
     }
+}
+
+fn main() {
+    let args = std::env::args().collect::<Vec<_>>();
+
+    let mut client = GameClient::<CursesRenderer>::new();
+
+    client.init(args); 
+
+    client.run();
 }
