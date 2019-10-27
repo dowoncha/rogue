@@ -3,10 +3,40 @@
 
 use ncurses as nc;
 
-use entities::*;
-#[macro_use]
+use crate::entities::*;
 use super::{System};
-use components::{Component, self, Position};
+use crate::components::{Component, self, Position};
+
+#[derive(Debug)]
+pub struct CursesRenderer {
+    windows: Vec<*mut i8>
+}
+
+impl CursesRenderer {
+    pub fn new() -> Self {
+        Self {
+            windows: Vec::new()
+        }
+    }
+
+    pub fn init() {
+        init_ncurses();
+    }
+
+    pub fn create_window(&mut self, height: i32, width: i32, y: i32, x: i32) -> *mut i8 {
+        let handle = nc::newwin(height, width, y, x);
+
+        self.windows.push(handle);
+
+        handle
+    }
+}
+
+impl Drop for CursesRenderer {
+    fn drop(&mut self) {
+        drop_ncurses();
+    }
+}
 
 /**
  * Render code
@@ -50,6 +80,7 @@ pub fn drop_ncurses() {
 
 #[derive(Debug)]
 pub struct RenderSystem {
+    renderer: CursesRenderer,
     map_window: Option<*mut i8>,
     player_info_window: Option<*mut i8>,
     log_window: Option<*mut i8>
@@ -58,6 +89,7 @@ pub struct RenderSystem {
 impl RenderSystem {
     pub fn new() -> Self {
         Self {
+            renderer: CursesRenderer::new(),
             map_window: None,
             player_info_window: None,
             log_window: None
@@ -159,17 +191,6 @@ impl RenderSystem {
         nc::wrefresh(window);
     }
 
-    fn render_time(
-        &self,
-        x: i32,
-        y: i32,
-        gt: components::GameTime) 
-    {
-        let window = self.player_info_window.unwrap();
-
-        nc::mvwaddstr(window, x, y, &format!("{}-{} {}:{};{}", gt.year, gt.day, gt.hour, gt.min, gt.sec));
-    }
-
     fn render_log(&self, entity_manager: &EntityManager) {
         let window = self.log_window.unwrap();
 
@@ -192,6 +213,8 @@ impl RenderSystem {
     }
 
     fn render_map(&self, entity_manager: &EntityManager) {
+        use std::convert::TryInto;
+
         let mut entities: Vec<_> = entity_manager.get_entities_with_components(components::Render::get_component_type())
             .iter()
             .filter_map(|entity| get_component!(entity_manager, *entity, components::Render).map(|render| (entity, render)))
@@ -213,7 +236,11 @@ impl RenderSystem {
         for (_, render, position) in entities.iter() {
             let world_pos = self.get_world_position(&camera_pos, &position);
             if world_pos.x > 0 && world_pos.y > 0 && world_pos.x < map_window_width - 1 && world_pos.y < map_window_height - 1 {
-                nc::mvwaddch(map_window, world_pos.y, world_pos.x, render.glyph as u64);
+                if cfg!(macos) {
+                    nc::mvwaddch(map_window, world_pos.y, world_pos.x, (render.glyph as u32).try_into().unwrap());
+                } else {
+                    nc::mvwaddch(map_window, world_pos.y, world_pos.x, (render.glyph as u64).try_into().unwrap());
+                }
             }
         }
 

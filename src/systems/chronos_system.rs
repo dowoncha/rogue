@@ -1,9 +1,7 @@
-use std::collections::VecDeque;
-
 use super::{System};
 
-use entities::*;
-use components::{Component, self};
+use crate::entities::*;
+use crate::components::{self};
 
 /**
  * Chronos is the time keeper

@@ -2,9 +2,11 @@
 name = "rogue"
 version = "0.1.0"
 authors = ["dowon Cha <dowoncha@live.unc.edu>"]
+edition = "2018"
 
 [dependencies]
 backtrace = "0.3"
+cgmath = "0.17.0"
 env_logger = "0.4.3"
 log = "0.4.0"
 rand = "0.7"
@@ -18,6 +20,7 @@ error-chain = "*"
 lazy_static = "*"
 serde_json = "*"
 rlua = "^0.16.3"
+async-std = "0.99.10"
 
 [dependencies.serde]
 version = "*"

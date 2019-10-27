@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use components::{self, Component, ComponentType};
+use crate::components::{self, Component, ComponentType};
 
 #[derive(Copy, Clone, Debug, PartialEq, PartialOrd, Hash, Eq)]
 pub struct Entity {
@@ -23,9 +23,9 @@ impl std::fmt::Display for Entity {
     }
 }
 
-pub struct ComponentTable {
-    component_data_tables: HashMap<ComponentType, HashMap<Entity, Box<dyn Component>>>,
-}
+// pub struct ComponentTable {
+//     component_data_tables: HashMap<ComponentType, HashMap<Entity, Box<dyn Component>>>,
+// }
 
 pub struct EntityManager {
     entities: Vec<Entity>,
@@ -34,11 +34,11 @@ pub struct EntityManager {
     listeners: Vec<std::sync::mpsc::Sender<String>>
 }
 
-pub struct GameObject {
-    entity: Entity,
-    name: String,
-    prototype: Option<Entity>,
-}
+// pub struct GameObject {
+//     entity: Entity,
+//     name: String,
+//     prototype: Option<Entity>,
+// }
 
 impl EntityManager {
     pub fn new() -> Self {

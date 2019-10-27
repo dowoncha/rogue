@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
 
-use types::{Rect, Dimension};
+use crate::types::{Rect, Dimension};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Cell {

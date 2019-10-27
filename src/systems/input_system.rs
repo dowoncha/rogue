@@ -1,8 +1,9 @@
 use ncurses as nc;
 
 use super::{System};
-use entities::*;
-use components::{Component, Input};
+use crate::entities::*;
+use crate::components::{Component, Input};
+
 use std::cell::RefCell;
 
 #[derive(Debug)]

@@ -1,9 +1,8 @@
 INFO - File logger initialized
 INFO - Initializing game
 INFO - Handling args
-INFO - Screen size, 94x49
+INFO - Screen size, 182x85
 INFO - Mounting Chronos
-INFO - Mounting chronos system
 INFO - Mounting TurnSystem { entities: RefCell { value: [] } }
 INFO - Mounting RandomWalkAiSystem
 INFO - Mounting WalkSystem
@@ -15,69 +14,27 @@ INFO - Mounting LootSystem
 INFO - Mounting EventLogSystem
 INFO - Mounting Reaper
 INFO - Mounting Janitor
+DEBUG - Input Thread: 97
 DEBUG - Entities
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
-DEBUG - Input Thread: 100
-DEBUG - Received input 100
+DEBUG - Received input 97
 DEBUG - Processing random walk ai system
 DEBUG - WalkSystem ----- Processing
-DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Walking Entity { id: 10001 }, (-1, 0)
 DEBUG - Processing collision
-DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10002
 DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
 DEBUG - Moving entity, 10012
 DEBUG - Moving entity, 10001
-DEBUG - Moving entity, 10011
-DEBUG - Moving entity, 10005
-DEBUG - Moving entity, 10008
-DEBUG - Moving entity, 10010
-DEBUG - Moving entity, 10007
-DEBUG - Moving entity, 10002
-DEBUG - Moving entity, 10006
-DEBUG - Moving entity, 10003
-DEBUG - Rendering
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Input Thread: 100
-DEBUG - Received input 100
-DEBUG - Processing random walk ai system
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking Entity { id: 10001 }, (1, 0)
-DEBUG - Processing collision
-DEBUG - Moving entity, 10004
-DEBUG - Moving entity, 10009
-DEBUG - Moving entity, 10012
-DEBUG - Moving entity, 10001
-DEBUG - Moving entity, 10011
-DEBUG - Moving entity, 10005
-DEBUG - Moving entity, 10008
-DEBUG - Moving entity, 10010
-DEBUG - Moving entity, 10007
-DEBUG - Moving entity, 10002
-DEBUG - Moving entity, 10006
-DEBUG - Moving entity, 10003
-DEBUG - Rendering
-DEBUG - Processing input
-DEBUG - Found 1 entities with input
-DEBUG - Input Thread: 100
-DEBUG - Received input 100
-DEBUG - Processing random walk ai system
-DEBUG - WalkSystem ----- Processing
-DEBUG - Walking Entity { id: 10001 }, (1, 0)
-DEBUG - Processing collision
-DEBUG - Moving entity, 10004
-DEBUG - Moving entity, 10009
-DEBUG - Moving entity, 10012
-DEBUG - Moving entity, 10001
-DEBUG - Moving entity, 10011
-DEBUG - Moving entity, 10005
-DEBUG - Moving entity, 10008
-DEBUG - Moving entity, 10010
-DEBUG - Moving entity, 10007
-DEBUG - Moving entity, 10002
-DEBUG - Moving entity, 10006
-DEBUG - Moving entity, 10003
 DEBUG - Rendering
 DEBUG - Processing input
 DEBUG - Found 1 entities with input
@@ -87,19 +44,1875 @@ DEBUG - Processing random walk ai system
 DEBUG - WalkSystem ----- Processing
 DEBUG - Walking Entity { id: 10001 }, (0, 1)
 DEBUG - Processing collision
-DEBUG - Moving entity, 10004
+DEBUG - Damage System - Logging Damage
+DEBUG - Moving entity, 10002
 DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
 DEBUG - Moving entity, 10012
 DEBUG - Moving entity, 10001
-DEBUG - Moving entity, 10011
-DEBUG - Moving entity, 10005
-DEBUG - Moving entity, 10008
-DEBUG - Moving entity, 10010
-DEBUG - Moving entity, 10007
-DEBUG - Moving entity, 10002
-DEBUG - Moving entity, 10006
-DEBUG - Moving entity, 10003
-INFO - Collision(Entity { id: 7908 })
+INFO - Collision(Entity { id: 10002 })
 DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 5296 })
+INFO - Collision(Entity { id: 1460 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 5396 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4534 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1160 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1361 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1361 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1160 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4538 })
+INFO - Collision(Entity { id: 1361 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4538 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4536 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4537 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4538 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1360 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1739 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 5496 })
+INFO - Collision(Entity { id: 1161 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 5396 })
+INFO - Collision(Entity { id: 1361 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 3743 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 3743 })
+INFO - Collision(Entity { id: 5296 })
+INFO - Collision(Entity { id: 9318 })
+INFO - Collision(Entity { id: 1942 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 9319 })
+INFO - Collision(Entity { id: 1944 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 3744 })
+INFO - Collision(Entity { id: 1560 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 3744 })
+INFO - Collision(Entity { id: 6023 })
+INFO - Collision(Entity { id: 8388 })
+INFO - Collision(Entity { id: 5496 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1944 })
+INFO - Collision(Entity { id: 3744 })
+INFO - Collision(Entity { id: 8188 })
+INFO - Collision(Entity { id: 5496 })
+INFO - Collision(Entity { id: 1560 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 3744 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 8183 })
+INFO - Collision(Entity { id: 1940 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 7983 })
+INFO - Collision(Entity { id: 9317 })
+INFO - Collision(Entity { id: 1942 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1941 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 479 })
+INFO - Collision(Entity { id: 1754 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 7983 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 480 })
+INFO - Collision(Entity { id: 7983 })
+INFO - Collision(Entity { id: 1754 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 6750 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 6752 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 6752 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 2446 })
+INFO - Collision(Entity { id: 6751 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 2446 })
+INFO - Collision(Entity { id: 1754 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 9318 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 100
+DEBUG - Received input 100
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 5590 })
+INFO - Collision(Entity { id: 9316 })
+INFO - Collision(Entity { id: 1352 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 9318 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1353 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 6751 })
+INFO - Collision(Entity { id: 1353 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 6750 })
+INFO - Collision(Entity { id: 1354 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 6751 })
+INFO - Collision(Entity { id: 1553 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 8383 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 8383 })
+INFO - Collision(Entity { id: 1353 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1553 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1944 })
+INFO - Collision(Entity { id: 8583 })
+INFO - Collision(Entity { id: 1553 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 8382 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Damage System - Logging Damage
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 10005 })
+INFO - Collision(Entity { id: 8581 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 9315 })
+INFO - Collision(Entity { id: 1944 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Damage System - Logging Damage
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 10005 })
+INFO - Collision(Entity { id: 9316 })
+INFO - Collision(Entity { id: 1944 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 1 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Damage System - Logging Damage
+DEBUG - Damage System - Logging Damage
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 10005 })
+INFO - Collision(Entity { id: 9316 })
+INFO - Collision(Entity { id: 10001 })
+DEBUG - Rendering
+DEBUG - Logging gromash took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Damage System - Logging Damage
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 10005 })
+INFO - Collision(Entity { id: 6223 })
+INFO - Collision(Entity { id: 8582 })
+INFO - Collision(Entity { id: 9317 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 1 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Damage System - Logging Damage
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4534 })
+INFO - Collision(Entity { id: 8382 })
+INFO - Collision(Entity { id: 10005 })
+INFO - Collision(Entity { id: 9315 })
+INFO - Collision(Entity { id: 1944 })
+DEBUG - Rendering
+DEBUG - Logging zombie took 2 damage.
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Damage System - Logging Damage
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10005
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 10005 })
+INFO - Collision(Entity { id: 9317 })
+INFO - zombie has died
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 8383 })
+INFO - Collision(Entity { id: 9317 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4636 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4536 })
+INFO - Collision(Entity { id: 8383 })
+INFO - Collision(Entity { id: 9318 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4536 })
+INFO - Collision(Entity { id: 6746 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 4636 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 101
+DEBUG - Received input 101
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 8383 })
+INFO - Collision(Entity { id: 5196 })
+INFO - Collision(Entity { id: 1460 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 119
+DEBUG - Received input 119
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, -1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1786 })
+INFO - Collision(Entity { id: 1560 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 101
+DEBUG - Received input 101
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1784 })
+INFO - Collision(Entity { id: 8582 })
+INFO - Collision(Entity { id: 1660 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 1560 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 115
+DEBUG - Received input 115
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (0, 1)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 8583 })
+INFO - Collision(Entity { id: 1560 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
+DEBUG - Processing input
+DEBUG - Found 1 entities with input
+DEBUG - Input Thread: 97
+DEBUG - Received input 97
+DEBUG - Processing random walk ai system
+DEBUG - WalkSystem ----- Processing
+DEBUG - Walking Entity { id: 10001 }, (-1, 0)
+DEBUG - Processing collision
+DEBUG - Moving entity, 10002
+DEBUG - Moving entity, 10009
+DEBUG - Moving entity, 10006
+DEBUG - Moving entity, 10010
+DEBUG - Moving entity, 10004
+DEBUG - Moving entity, 10011
+DEBUG - Moving entity, 10007
+DEBUG - Moving entity, 10008
+DEBUG - Moving entity, 10003
+DEBUG - Moving entity, 10012
+DEBUG - Moving entity, 10001
+INFO - Collision(Entity { id: 2144 })
+INFO - Collision(Entity { id: 1660 })
+DEBUG - Rendering
+DEBUG - Logging zombie has died
 DEBUG - Processing input
 DEBUG - Found 1 entities with input

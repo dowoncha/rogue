@@ -1,9 +1,8 @@
+use crate::entities::*;
+use crate::systems::*;
+use crate::components::{self, Position, Collidable};
+
 use rand::{thread_rng, Rng};
-
-use entities::*;
-use systems::*;
-
-use components::{self, Position, Collidable};
 
 #[derive(Debug)]
 pub struct CollisionSystem;

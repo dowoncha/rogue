@@ -22,6 +22,8 @@ extern crate lazy_static;
 extern crate log;
 extern crate rand;
 extern crate rand_distr;
+extern crate cgmath;
+extern crate rlua;
 
 extern crate serde;
 extern crate serde_json;
@@ -32,11 +34,6 @@ extern crate ncurses;
 
 extern crate uuid;
 
-use rand::{Rng, thread_rng};
-use std::collections::HashMap;
-use std::collections::VecDeque;
-use std::cell::RefCell;
-
 #[macro_use]
 pub mod components;
 pub use components::{Component, ComponentType};
@@ -46,6 +43,7 @@ pub use entities::{Entity, EntityManager};
 
 pub mod map;
 mod types;
+mod bresenham;
 pub mod monsters;
 pub mod items;
 pub mod renderer;

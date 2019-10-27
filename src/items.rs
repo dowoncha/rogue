@@ -1,4 +1,4 @@
-use super::{Entity, EntityManager, Component, components};
+use super::{EntityManager, components};
 
 pub fn spawn_potion_of_healing(
     em: &mut EntityManager,
